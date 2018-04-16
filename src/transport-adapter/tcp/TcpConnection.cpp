@@ -27,3 +27,7 @@ bool TcpConnection::receive(const Device &device, unsigned char *buffer, unsigne
 
   return false;
 }
+
+void TcpConnection::run() {
+
+}

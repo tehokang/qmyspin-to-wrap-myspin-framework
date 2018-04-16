@@ -2,67 +2,57 @@
 #include "Thread.h"
 #include <stdio.h>
 
-void* Thread::callback(void* arg)
-{
+void* Thread::callback(void* arg) {
     Thread* thread = static_cast<Thread*>(arg);
     thread->run();
     return nullptr;
 }
 
-Thread::~Thread()
-{
-    if (mRunning)
-    {
-        fprintf(stdout, "Thread %lx went out of scope while running!\n", (unsigned long) mThread);
+Thread::~Thread() {
+    if ( m_running ) {
+        fprintf(stdout, "Thread %lx went out of scope while running!\n", (unsigned long) m_thread);
     }
 }
 
-bool Thread::start()
-{
+bool Thread::start() {
     int ret = 0;
-    ret = pthread_create(&mThread, nullptr, callback, this);
-    mRunning = (ret == 0);
-    fprintf(stdout, "Thread created [%d] \n", mRunning);
-    return mRunning;
+    ret = pthread_create(&m_thread, nullptr, callback, this);
+    m_running = (ret == 0);
+    fprintf(stdout, "Thread created [%d] \n", m_running);
+    return m_running;
 }
 
-bool Thread::join()
-{
-    mRunning = false;
+bool Thread::join() {
+    m_running = false;
 
-    int ret = pthread_join(mThread, nullptr);
-    if (ret == 0)
-    {
+    int ret = pthread_join(m_thread, nullptr);
+    if (ret == 0) {
         return true;
     }
     return false;
 }
 
-unsigned long Thread::id()
-{
-    return (unsigned long) mThread;
+unsigned long Thread::id() {
+    return (unsigned long) m_thread;
 }
 
-void Thread::yield()
-{
+void Thread::yield() {
     sched_yield();
 }
 
-bool Thread::setPriority(int priority)
-{
+bool Thread::setPriority(int priority) {
     struct sched_param params;
     params.sched_priority = priority;
-    int ret = pthread_setschedparam(mThread, SCHED_FIFO, &params);
+    int ret = pthread_setschedparam(m_thread, SCHED_FIFO, &params);
     return ret == 0;
 }
 
-bool Thread::setName(const char* name)
-{
+bool Thread::setName(const char* name) {
 #if defined(__APPLE__) && defined(__MACH__) || defined(__MINGW32__)
     // OSX doesn't support naming a particular thread and only supports naming
     // the current thread.
     return false;
 #else
-    return pthread_setname_np(mThread, name) == 0;
+    return pthread_setname_np(m_thread, name) == 0;
 #endif
 }

@@ -4,14 +4,18 @@
 #include <list>
 using namespace std;
 
-#include "../include/QmySPIN.h"
-#include "PPCoordinator.h"
+#include "QmySPIN.h"
+#include "ProjectionHandler.h"
+#include "TransportAdapter.h"
 
-class QmySPINImpl : public QmySPIN, public ProjectionCoordinatorListener {
+class QmySPINImpl : public QmySPIN, public ProjectionListener, public TransportAdapterListener {
 public:
   QmySPINImpl();
   virtual ~QmySPINImpl();
 
+  /**
+   * @note QmySPIN implementation
+   */
   virtual bool init() override;
   virtual bool start() override;
   virtual void stop() override;
@@ -26,16 +30,27 @@ public:
   virtual bool sendTouch(int x, int y, int finger, int action) override;
   virtual bool sendVehicle(string message) override;
 
+  /**
+   * @note ProjectionListener implementation
+   */
+  virtual bool onReqSend(unsigned char *buffer, unsigned int size) override;
+  virtual bool onReqReceive(unsigned char *buffer, unsigned int size) override;
+  virtual void onFrameUpdated(unsigned char *buffer, unsigned int size) override;
+
+  /**
+   * @note TransportAdapterListener implmentation
+   */
   virtual void onScan(list<Device*> devices) override;
-  virtual void onSelect(Device *device) override;
-  virtual void onUnselect(Device *device) override;
+  virtual void onConnect(Device *device) override;
+  virtual void onDisconnect(Device *device) override;
   virtual void onError(int error) override;
-  virtual void onReady() override;
-  virtual void onStop() override;
-  virtual void onFrameUpdate() override;
 
 protected:
-  ProjectionCoordinator *m_pp_coordinator;
+  ProjectionHandler &m_projection_handler;
+  TransportAdapter &m_usb_aoa_transport_adapter;
+  TransportAdapter &m_usb_iap_transport_adapter;
+  TransportAdapter &m_bluetooth_transport_adapter;
+  TransportAdapter &m_tcp_transport_adapter;
 };
 
 #endif

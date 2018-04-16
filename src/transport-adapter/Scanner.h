@@ -3,7 +3,7 @@
 
 #include <list>
 #include "Device.h"
-#include "../utility/Thread.h"
+#include "QueueThread.h"
 
 using namespace std;
 
@@ -14,7 +14,7 @@ public:
   virtual void onDettached(Device* device) = 0;
 };
 
-class Scanner : public Thread {
+class Scanner : public QueueThread {
 public:
   Scanner(ScannerListener &listener);
   virtual ~Scanner();

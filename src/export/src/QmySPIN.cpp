@@ -1,13 +1,18 @@
-#include "../include/QmySPIN.h"
+#include "QmySPIN.h"
 #include "QmySPINImpl.h"
+#include "Macro.h"
 
 QmySPIN* QmySPIN::m_instance = nullptr;
-
-const QmySPIN* QmySPIN::createInstance() {
+QmySPIN* QmySPIN::createInstance() {
   if ( m_instance == nullptr ) {
     m_instance = new QmySPINImpl();
   }
+  LOG_DEBUG("Created QmySPIN \n");
   return m_instance;
+}
+
+QmySPIN* QmySPIN::getInstance() {
+  return createInstance();
 }
 
 void QmySPIN::destroyInstance() {
@@ -15,17 +20,19 @@ void QmySPIN::destroyInstance() {
     delete m_instance;
     m_instance = nullptr;
   }
+  LOG_DEBUG("Destoryed QmySPIN \n");
 }
 
 QmySPIN::QmySPIN() {
-
+  LOG_DEBUG("\n");
 }
 
 QmySPIN::~QmySPIN() {
-
+  LOG_DEBUG("\n");
 }
 
 void QmySPIN::addEventListener(QmySPINListener *listener) {
+  LOG_DEBUG("\n");
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     if ( (*it) == listener ) {
@@ -36,6 +43,7 @@ void QmySPIN::addEventListener(QmySPINListener *listener) {
 }
 
 void QmySPIN::removeEventListener(QmySPINListener *listener) {
+  LOG_DEBUG("\n");
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     if ( (*it) == listener ) {
@@ -46,6 +54,7 @@ void QmySPIN::removeEventListener(QmySPINListener *listener) {
 
 void QmySPIN::setFrameBuffer(
     PIXEL_FORMAT format, unsigned char *frame_buffer, unsigned int width, unsigned height) {
+  LOG_DEBUG("\n");
   m_pixel_format = format;
   m_frame_buffer = frame_buffer;
   m_width = width;

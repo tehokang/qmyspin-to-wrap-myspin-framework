@@ -30,12 +30,7 @@ using namespace std;
             case WARNING: \
                 fprintf(out, "\033[1;30;43m"); \
                 break; \
-            case KEY_CONSUMED: \
-                fprintf(out, "\033[1;32;40m"); \
-                break; \
-            case KEY_PASSED: \
-                fprintf(out, "\033[1;31;40m"); \
-                break; \
+            default: break; \
         } \
     }while(0)
 
@@ -191,16 +186,4 @@ void Logger::error(const string filename, const unsigned int linenumber, \
              const string funcname, const string format, ...)
 {
     LOGGING(m_error, LOG_TYPE::ERROR, filename, linenumber, funcname, format);
-}
-
-void Logger::consumed(const string filename, const unsigned int linenumber, \
-             const string funcname, const string format, ...)
-{
-    LOGGING(m_debug, LOG_TYPE::KEY_CONSUMED, filename, linenumber, funcname, format);
-}
-
-void Logger::passed(const string filename, const unsigned int linenumber, \
-             const string funcname, const string format, ...)
-{
-    LOGGING(m_debug, LOG_TYPE::KEY_PASSED, filename, linenumber, funcname, format);
 }

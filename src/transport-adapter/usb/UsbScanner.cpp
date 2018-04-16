@@ -14,5 +14,7 @@ bool UsbScanner::scan() {
 }
 
 void UsbScanner::run() {
+  while ( m_running ) {
 
+  }
 }

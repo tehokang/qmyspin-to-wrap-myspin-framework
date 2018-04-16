@@ -27,3 +27,10 @@ bool UsbIAPConnection::receive(const Device &device, unsigned char *buffer, unsi
 
   return false;
 }
+
+void UsbIAPConnection::run() {
+
+  while ( m_running ) {
+
+  };
+}

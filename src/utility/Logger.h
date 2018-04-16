@@ -10,22 +10,10 @@ using namespace std;
 
 #include "Logger.h"
 
-#if defined(CONFIG_DEBUG)
-#if defined(USE_HXLOG)
-/* USE-CASE of HxLOG Humax octo LOGGER */
-#define LOG_DEBUG PLATFORM_LOG_DEBUG
-#define LOG_INFO PLATFORM_LOG_INFO
-#define LOG_WARNING PLATFORM_LOG_WARNING
-#define LOG_ERROR PLATFORM_LOG_ERROR
-#define LOG_KEY PLATFORM_LOG_KEY
-#define PASSED PLATFORM_LOG_PASSED
-#define CONSUMED PLATFORM_LOG_CONSUMED
-
-#define REMOTE_DEBUG PLATFORM_REMOTE_DEBUG
-#define REMOTE_INFO PLATFORM_REMOTE_INFO
-#define REMOTE_WARNING PLATFORM_REMOTE_WARNING
-#define REMOTE_ERROR PLATFORM_REMOTE_ERROR
-#else
+#define __SHORT_FILE__ \
+(strrchr(__FILE__,'/') \
+? strrchr(__FILE__,'/')+1 \
+: __FILE__ )
 
 /* USE-CASE of LOGGER */
 #define LOG_DEBUG(fmt, ...) Logger::debug \
@@ -43,27 +31,6 @@ using namespace std;
 #define CONSUMED(fmt, ...) Logger::consumed \
         (__SHORT_FILE__, __LINE__, __FUNCTION__, fmt, ##__VA_ARGS__);
 
-#define REMOTE_DEBUG LOG_DEBUG
-#define REMOTE_INFO LOG_INFO
-#define REMOTE_WARNING LOG_WARNING
-#define REMOTE_ERROR LOG_ERROR
-
-#endif
-
-#else
-#define LOG_DEBUG(fmt, ...)
-#define LOG_INFO(fmt, ...)
-#define LOG_WARNING(fmt, ...)
-#define LOG_ERROR(fmt, ...)
-#define LOG_KEY(fmt, ...)
-#define PASSED(fmt, ...)
-#define CONSUMED(fmt, ...)
-
-#define REMOTE_DEBUG(fmt, ...)
-#define REMOTE_INFO(fmt, ...)
-#define REMOTE_WARNING(fmt, ...)
-#define REMOTE_ERROR(fmt, ...)
-#endif
 
 class Logger
 {
@@ -93,12 +60,6 @@ public:
                         const string funcname, const string format, ...);
 
     static void error(const string filename, const unsigned int linenumber, \
-                        const string funcname, const string format, ...);
-
-    static void consumed(const string filename, const unsigned int linenumber, \
-                        const string funcname, const string format, ...);
-
-    static void passed(const string filename, const unsigned int linenumber, \
                         const string funcname, const string format, ...);
 
 protected:

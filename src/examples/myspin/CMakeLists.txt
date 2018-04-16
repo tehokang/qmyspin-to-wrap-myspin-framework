@@ -13,6 +13,7 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 set(INCPATHS
   ${CMAKE_SOURCE_DIR}/src/export/include
+  ${CMAKE_SOURCE_DIR}/src/utility/
 )
 
 include_directories(

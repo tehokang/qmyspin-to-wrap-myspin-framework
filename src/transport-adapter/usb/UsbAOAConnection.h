@@ -1,7 +1,7 @@
 #ifndef __USB_AOA_CONNECTION_H__
 #define __USB_AOA_CONNECTION_H__
 
-#include "../Connection.h"
+#include "Connection.h"
 
 class UsbAOAConnection : public Connection {
 public:
@@ -14,6 +14,7 @@ public:
   virtual bool receive(const Device &device, unsigned char *buffer, unsigned int size) override;
 
 protected:
+  virtual void run() override;
 
 };
 

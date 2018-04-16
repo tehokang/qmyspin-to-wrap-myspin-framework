@@ -15,22 +15,22 @@ ProjectionHandler& ProjectionFactory::createProjection(
     ProjectionFactory::ProjectionType type) {
 
   switch ( type ) {
-    case ProjectionFactory::ProjectionType::eMYSPIN:
+    case ProjectionFactory::ProjectionType::MYSPIN:
       if ( m_myspin_handler == nullptr ) {
         m_myspin_handler = new MySPINHandler();
       }
       return *m_myspin_handler;
-    case ProjectionFactory::ProjectionType::eCINEMO:
+    case ProjectionFactory::ProjectionType::CINEMO:
       if ( m_cinemo_handler == nullptr ) {
         m_cinemo_handler = new CinemoHandler();
       }
       return *m_cinemo_handler;
-    case ProjectionFactory::ProjectionType::eABALTA:
+    case ProjectionFactory::ProjectionType::ABALTA:
       if ( m_abalta_handler == nullptr ) {
         m_abalta_handler = new AbaltaHandler();
       }
       return *m_abalta_handler;
-    case ProjectionFactory::ProjectionType::eSDL:
+    case ProjectionFactory::ProjectionType::SDL:
       if ( m_sdl_handler == nullptr ) {
         m_sdl_handler = new SdlHandler();
       }
@@ -48,25 +48,25 @@ void ProjectionFactory::destroyProjection(
     ProjectionFactory::ProjectionType type) {
 
   switch ( type ) {
-    case ProjectionFactory::ProjectionType::eMYSPIN:
+    case ProjectionFactory::ProjectionType::MYSPIN:
       if ( m_myspin_handler != nullptr ) {
         delete m_myspin_handler;
         m_myspin_handler = nullptr;
       }
       break;
-    case ProjectionFactory::ProjectionType::eCINEMO:
+    case ProjectionFactory::ProjectionType::CINEMO:
       if ( m_cinemo_handler != nullptr ) {
         delete m_cinemo_handler;
         m_cinemo_handler = nullptr;
       }
       break;
-    case ProjectionFactory::ProjectionType::eABALTA:
+    case ProjectionFactory::ProjectionType::ABALTA:
       if ( m_abalta_handler != nullptr ) {
         delete m_abalta_handler;
         m_abalta_handler = nullptr;
       }
       break;
-    case ProjectionFactory::ProjectionType::eSDL:
+    case ProjectionFactory::ProjectionType::SDL:
       if ( m_sdl_handler != nullptr ) {
         delete m_sdl_handler;
         m_sdl_handler = nullptr;

@@ -1,6 +1,7 @@
 #ifndef __CONNECTION_H__
 #define __CONNECTION_H__
 
+#include "QueueThread.h"
 #include "Device.h"
 
 class ConnectionListener {
@@ -10,7 +11,7 @@ public:
   virtual void onError(int error) = 0;
 };
 
-class Connection {
+class Connection : public QueueThread {
 public:
   Connection(ConnectionListener &listener);
   virtual ~Connection();

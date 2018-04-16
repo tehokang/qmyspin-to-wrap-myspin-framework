@@ -14,7 +14,7 @@ public:
   virtual bool receive(const Device &device, unsigned char *buffer, unsigned int size) override;
 
 protected:
-
+  virtual void run() override;
 };
 
 #endif

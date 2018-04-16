@@ -11,6 +11,10 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 # Sub directories
 #=====================================================================================
+set(INCPATHS
+    ${CMAKE_SOURCE_DIR}/src/utility
+)
+
 set(SOURCE_FILES ${SOURCE_FILES} ProjectionHandler.cpp ProjectionFactory.cpp)
 set(SOURCE_FILES ${SOURCE_FILES} abalta/AbaltaHandler.cpp)
 set(SOURCE_FILES ${SOURCE_FILES} cinemo/CinemoHandler.cpp)

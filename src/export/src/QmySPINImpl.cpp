@@ -1,38 +1,72 @@
 #include "QmySPINImpl.h"
+#include "ProjectionFactory.h"
+#include "TransportAdapterFactory.h"
+#include "Macro.h"
 
 QmySPINImpl::QmySPINImpl()
-  : QmySPIN() {
+  : QmySPIN()
+  , m_projection_handler(ProjectionFactory::createProjection(
+        ProjectionFactory::ProjectionType::MYSPIN))
+  , m_usb_aoa_transport_adapter(TransportAdapterFactory::createTransportAdapter(
+      TransportAdapterFactory::TransportAdapaterType::USB_AOA, *this))
+  , m_usb_iap_transport_adapter(TransportAdapterFactory::createTransportAdapter(
+      TransportAdapterFactory::TransportAdapaterType::USB_IAP, *this))
+  , m_bluetooth_transport_adapter(TransportAdapterFactory::createTransportAdapter(
+      TransportAdapterFactory::TransportAdapaterType::BLUETOOTH, *this))
+  , m_tcp_transport_adapter(TransportAdapterFactory::createTransportAdapter(
+      TransportAdapterFactory::TransportAdapaterType::TCP, *this)) {
 
-  m_pp_coordinator = new ProjectionCoordinator();
+  LOG_DEBUG("\n");
 }
 
 QmySPINImpl::~QmySPINImpl() {
-  if ( m_pp_coordinator ) {
-    delete m_pp_coordinator;
-    m_pp_coordinator = nullptr;
-  }
+  LOG_DEBUG("\n");
+
+  TransportAdapterFactory::destroyTransportAdapter(
+      TransportAdapterFactory::TransportAdapaterType::USB_AOA);
+
+  TransportAdapterFactory::destroyTransportAdapter(
+      TransportAdapterFactory::TransportAdapaterType::USB_IAP);
+
+  TransportAdapterFactory::destroyTransportAdapter(
+      TransportAdapterFactory::TransportAdapaterType::BLUETOOTH);
+
+  TransportAdapterFactory::destroyTransportAdapter(
+      TransportAdapterFactory::TransportAdapaterType::TCP);
+
+  ProjectionFactory::destroyProjection(ProjectionFactory::ProjectionType::MYSPIN);
 }
 
 bool QmySPINImpl::init() {
-  if ( m_pp_coordinator == nullptr ) return false;
+  LOG_DEBUG("\n");
 
-  return m_pp_coordinator->init();
+  RETURN_FALSE_IF_FALSE(m_projection_handler.init());
+  RETURN_FALSE_IF_FALSE(m_usb_aoa_transport_adapter.init());
+
+  return true;
 }
 
 bool QmySPINImpl::start() {
-  return m_pp_coordinator->start();
+  LOG_DEBUG("\n");
+
+  RETURN_FALSE_IF_FALSE(m_usb_aoa_transport_adapter.start());
+
+  return true;
 }
 
 void QmySPINImpl::stop() {
-  m_pp_coordinator->stop();
+  LOG_DEBUG("\n");
 }
 
 bool QmySPINImpl::scan() {
-  return m_pp_coordinator->scan();
+  LOG_DEBUG("\n");
+
+  return true;
 }
 
 void QmySPINImpl::setFrameBuffer(
     PIXEL_FORMAT format, unsigned char *frame_buffer, unsigned int width, unsigned height) {
+  LOG_DEBUG("\n");
 
   QmySPIN::setFrameBuffer(format, frame_buffer, width, height);
 
@@ -42,23 +76,33 @@ void QmySPINImpl::setFrameBuffer(
 }
 
 bool QmySPINImpl::select(Device *device) {
-  return m_pp_coordinator->select(device);
+  LOG_DEBUG("\n");
+
+  return true;
 }
 
 bool QmySPINImpl::unselect(Device *device) {
-  return m_pp_coordinator->unselect(device);
+  LOG_DEBUG("\n");
+
+  return true;
 }
 
 bool QmySPINImpl::sendKey(int key, int press) {
-  return m_pp_coordinator->sendKey(key, press);
+  LOG_DEBUG("\n");
+
+  return true;
 }
 
 bool QmySPINImpl::sendTouch(int x, int y, int finger, int action) {
-  return m_pp_coordinator->sendTouch(x, y, finger, action);
+  LOG_DEBUG("\n");
+
+  return true;
 }
 
 bool QmySPINImpl::sendVehicle(string message) {
-  return m_pp_coordinator->sendVehicle(message);
+  LOG_DEBUG("\n");
+
+  return true;
 }
 
 void QmySPINImpl::onScan(list<Device*> devices) {
@@ -68,14 +112,14 @@ void QmySPINImpl::onScan(list<Device*> devices) {
   }
 }
 
-void QmySPINImpl::onSelect(Device *device) {
+void QmySPINImpl::onConnect(Device *device) {
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     (*it)->onSelect(device);
   }
 }
 
-void QmySPINImpl::onUnselect(Device *device) {
+void QmySPINImpl::onDisconnect(Device *device) {
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     (*it)->onUnselect(device);
@@ -89,24 +133,19 @@ void QmySPINImpl::onError(int error) {
   }
 }
 
-void QmySPINImpl::onReady() {
-  for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
-      it != m_listeners.end(); ++it ) {
-    (*it)->onReady();
-  }
+bool QmySPINImpl::onReqSend(unsigned char *buffer, unsigned int size) {
+  LOG_DEBUG("\n");
+
+  return true;
 }
 
-void QmySPINImpl::onStop() {
-  for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
-      it != m_listeners.end(); ++it ) {
-    (*it)->onStop();
-  }
+bool QmySPINImpl::onReqReceive(unsigned char *buffer, unsigned int size) {
+  LOG_DEBUG("\n");
+
+  return true;
 }
 
-void QmySPINImpl::onFrameUpdate() {
-  for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
-      it != m_listeners.end(); ++it ) {
-    (*it)->onFrameUpdate();
-  }
-}
+void QmySPINImpl::onFrameUpdated(unsigned char *buffer, unsigned int size) {
+  LOG_DEBUG("\n");
 
+}

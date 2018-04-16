@@ -11,7 +11,10 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 # Sub directories
 #=====================================================================================
-set(INCPATHS ${CMAKE_SOURCE_DIR}/src/utility)
+set(INCPATHS
+    ${CMAKE_SOURCE_DIR}/src/utility
+    ${CMAKE_SOURCE_DIR}/src/transport-adapter
+)
 
 include_directories(
     ${INCPATHS}

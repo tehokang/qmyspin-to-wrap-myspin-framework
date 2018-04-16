@@ -14,10 +14,11 @@ cmake_minimum_required(VERSION 2.8)
 set(INCPATHS
     ${CMAKE_SOURCE_DIR}/src/projection-handler
     ${CMAKE_SOURCE_DIR}/src/transport-adapter
+    ${CMAKE_SOURCE_DIR}/src/export/include
+    ${CMAKE_SOURCE_DIR}/src/utility
 )
 
 set(SOURCE_FILES ${SOURCE_FILES}
-    src/PPCoordinator.cpp
     src/QmySPIN.cpp src/QmySPINImpl.cpp
 )
 

@@ -27,3 +27,7 @@ bool BluetoothConnection::receive(const Device &device, unsigned char *buffer, u
 
   return false;
 }
+
+void BluetoothConnection::run() {
+
+}

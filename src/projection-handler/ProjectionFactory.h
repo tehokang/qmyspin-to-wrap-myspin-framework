@@ -10,10 +10,10 @@ class ProjectionFactory
 {
 public:
   typedef enum {
-    eMYSPIN,
-    eSDL,
-    eABALTA,
-    eCINEMO,
+    MYSPIN,
+    SDL,
+    ABALTA,
+    CINEMO,
   } ProjectionType;
 
   static ProjectionHandler& createProjection(ProjectionType type);

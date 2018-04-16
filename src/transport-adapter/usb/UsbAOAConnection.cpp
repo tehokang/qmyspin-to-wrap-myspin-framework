@@ -27,3 +27,10 @@ bool UsbAOAConnection::receive(const Device &device, unsigned char *buffer, unsi
 
   return true;
 }
+
+void UsbAOAConnection::run() {
+
+  while( m_running ) {
+
+  };
+}

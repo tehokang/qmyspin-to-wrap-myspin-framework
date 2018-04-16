@@ -12,7 +12,7 @@
  */
 class Thread {
 public:
-    Thread() : mRunning(false) { }
+    Thread() : m_running(false) { }
     virtual ~Thread();
     /**
      * Call this method to start running the thread.
@@ -45,7 +45,7 @@ public:
      */
     bool setName(const char* name);
 
-    bool isRunning() { return mRunning; }
+    bool isRunning() { return m_running; }
 protected:
     /**
      * @internal
@@ -62,8 +62,8 @@ protected:
      */
     virtual void run() = 0;
 protected:
-    pthread_t mThread;
-    bool mRunning;
+    pthread_t m_thread;
+    bool m_running;
 };
 
 #endif // ANDROID_AUTO_PROJECTION_PROTOCOL_CORE_UTIL_THREAD_H
