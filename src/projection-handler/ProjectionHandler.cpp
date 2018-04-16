@@ -12,22 +12,28 @@ ProjectionHandler::~ProjectionHandler() {
    */
 }
 
-void ProjectionHandler::addEventListener(ProjectionListener *listener) {
-  for (list<ProjectionListener*>::iterator it=m_listeners.begin(); it!=m_listeners.end(); ++it)  {
-    if ( listener == (*it) )
-    {
-      return;
-    }
-  }
-  m_listeners.push_back(listener);
+void ProjectionHandler::setEventListener(ProjectionListener *listener) {
+  m_listener = listener;
 }
 
-void ProjectionHandler::removeEventListener(ProjectionListener *listener) {
-  for (list<ProjectionListener*>::iterator it=m_listeners.begin(); it!=m_listeners.end(); ++it)  {
-    if ( listener == (*it) )
-    {
-      m_listeners.remove(*it);
-    }
-  }
+bool ProjectionHandler::init() {
 
+  return false;
+}
+
+bool ProjectionHandler::start() {
+
+  return false;
+}
+
+void ProjectionHandler::stop() {
+
+}
+
+bool ProjectionHandler::sendKey(int key, int press) {
+  return false;
+}
+
+bool ProjectionHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
+  return false;
 }

@@ -32,7 +32,7 @@ bool AbaltaHandler::sendKey(int key, int press) {
    * @todo Making a buffer to send
    */
   if ( m_listener == nullptr ) return false;
-  m_listener->onReqSend(buffer, buffer_size);
+  return m_listener->onReqSend(buffer, buffer_size);
 }
 
 bool AbaltaHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
@@ -43,5 +43,5 @@ bool AbaltaHandler::sendTouch(unsigned int x, unsigned int y, int finger, int ac
    * @todo Making a buffer to send
    */
 
-  m_listener->onReqSend(buffer, buffer_size);
+  return m_listener->onReqSend(buffer, buffer_size);
 }

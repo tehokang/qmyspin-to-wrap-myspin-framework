@@ -1,0 +1,49 @@
+cmake_minimum_required(VERSION 2.8)
+
+#=====================================================================================
+# Version
+#=====================================================================================
+
+#=====================================================================================
+# Build Options
+#=====================================================================================
+
+#=====================================================================================
+# Sub directories
+#=====================================================================================
+set(INCPATHS ${CMAKE_SOURCE_DIR}/src/utility)
+
+include_directories(
+    ${INCPATHS}
+)
+
+set(SOURCE_FILES ${SOURCE_FILES}
+    Connection.cpp Scanner.cpp TransportAdapter.cpp TransportAdapterFactory.cpp)
+
+set (SOURCE_FILES ${SOURCE_FILES}
+    usb/UsbAndroidDevice.cpp usb/UsbAOAConnection.cpp usb/UsbAOATransportAdapter.cpp
+    usb/UsbAppleDevice.cpp usb/UsbIAPConnection.cpp usb/UsbIAPTransportAdapter.cpp
+    usb/UsbDevice.cpp usb/UsbScanner.cpp)
+
+set (SOURCE_FILES ${SOURCE_FILES}
+    tcp/TcpDevice.cpp tcp/TcpConnection.cpp tcp/TcpScanner.cpp tcp/TcpTransportAdapter.cpp)
+
+set (SOURCE_FILES ${SOURCE_FILES}
+    bluetooth/BluetoothDevice.cpp bluetooth/BluetoothConnection.cpp
+    bluetooth/BluetoothScanner.cpp bluetooth/BluetoothTransportAdapter.cpp)
+
+link_directories(
+    ${BIUILD_SRC_DIR}/utility
+)
+
+#=======================================================================================
+# Build sources
+#=======================================================================================
+add_library(transport-adapter SHARED ${SOURCE_FILES})
+
+target_link_libraries(transport-adapter
+    utility
+)
+#=====================================================================================
+# Install
+#=====================================================================================

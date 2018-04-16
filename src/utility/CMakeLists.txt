@@ -11,25 +11,21 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 # Sub directories
 #=====================================================================================
-set(INCPATHS
-    ${CMAKE_SOURCE_DIR}/src/projection-handler
-    ${CMAKE_SOURCE_DIR}/src/transport-adapter
-)
-
-set(SOURCE_FILES ${SOURCE_FILES}
-    src/PPCoordinator.cpp
-    src/QmySPIN.cpp src/QmySPINImpl.cpp
-)
+set(INCPATHS ${CMAKE_SOURCE_DIR}/src/utility)
 
 include_directories(
     ${INCPATHS}
 )
 
+set(SOURCE_FILES ${SOURCE_FILES}
+    Logger.cpp Thread.cpp)
+
 #=======================================================================================
 # Build sources
 #=======================================================================================
-add_library(projection-export SHARED ${SOURCE_FILES})
+add_library(utility SHARED ${SOURCE_FILES})
 
+target_link_libraries(utility pthread)
 #=====================================================================================
 # Install
 #=====================================================================================
