@@ -15,22 +15,26 @@ set(VERSION "${SDK_VERSION_MAJOR}.${SDK_VERSION_MINOR}.${SDK_VERSION_PATCH}")
 #=====================================================================================
 message(STATUS "CMAKE_TOOLCHAIN_FILE='${CMAKE_TOOLCHAIN_FILE}'")
 
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build/out/)
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+
 set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
-set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=gnu++0x -O2")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -O2")
 set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
 
-set(OUTPUT_DIR "${CMAKE_BINARY_DIR}/out/")
-SET(CMAKE_INSTALL_PREFIX "${OUTPUT_DIR}")
-message (STATUS "CMAKE_INSTALL_PREFIX='${CMAKE_INSTALL_PREFIX}'")
+set(BIUILD_SRC_DIR ${CMAKE_SOURCE_DIR}/build/src)
 
 #=====================================================================================
 # Sub directories
 #=====================================================================================
-add_subdirectory(${CMAKE_SOURCE_DIR}/device)
-add_subdirectory(${CMAKE_SOURCE_DIR}/export)
-add_subdirectory(${CMAKE_SOURCE_DIR}/example)
-add_subdirectory(${CMAKE_SOURCE_DIR}/projection_handler)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/utility)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/transport-adapter)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/projection-handler)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/export)
+add_subdirectory(${CMAKE_SOURCE_DIR}/src/examples)
 
 #=======================================================================================
 # Build sources
