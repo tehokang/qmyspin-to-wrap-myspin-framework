@@ -9,21 +9,21 @@ TcpConnection::~TcpConnection() {
 
 }
 
-bool TcpConnection::connect(const Device &device) {
+bool TcpConnection::connect(Device &device) {
 
   return false;
 }
 
-void TcpConnection::disconnect(const Device &device) {
+void TcpConnection::disconnect(Device &device) {
 
 }
 
-bool TcpConnection::send(const Device &device, unsigned char *buffer, unsigned int size) {
+bool TcpConnection::send(Device &device, unsigned char *buffer, unsigned int size) {
 
   return false;
 }
 
-bool TcpConnection::receive(const Device &device, unsigned char *buffer, unsigned int size) {
+bool TcpConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
 
   return false;
 }

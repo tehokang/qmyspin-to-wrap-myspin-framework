@@ -12,10 +12,10 @@ public:
   virtual bool start() override;
   virtual void stop() override;
   virtual bool scan() override;
-  virtual bool connect(const Device &device) override;
-  virtual void disconnect(const Device &device) override;
-  virtual bool send(const Device &device, unsigned char *buffer, unsigned int size) override;
-  virtual bool receive(const Device &device, unsigned char *buffer, unsigned int size) override;
+  virtual bool connect(Device &device) override;
+  virtual void disconnect(Device &device) override;
+  virtual bool send(Device &device, unsigned char *buffer, unsigned int size) override;
+  virtual bool receive(Device &device, unsigned char *buffer, unsigned int size) override;
 
 protected:
 

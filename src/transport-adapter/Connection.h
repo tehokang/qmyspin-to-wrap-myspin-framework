@@ -16,10 +16,10 @@ public:
   Connection(ConnectionListener &listener);
   virtual ~Connection();
 
-  virtual bool connect(const Device &device) = 0;
-  virtual void disconnect(const Device &device) = 0;
-  virtual bool send(const Device &device, unsigned char *buffer, unsigned int size) = 0;
-  virtual bool receive(const Device &device, unsigned char *buffer, unsigned int size) = 0;
+  virtual bool connect(Device &device) = 0;
+  virtual void disconnect(Device &device) = 0;
+  virtual bool send(Device &device, unsigned char *buffer, unsigned int size) = 0;
+  virtual bool receive(Device &device, unsigned char *buffer, unsigned int size) = 0;
 
 protected:
   ConnectionListener &m_listener;

@@ -24,10 +24,10 @@ public:
   virtual bool start();
   virtual void stop();
   virtual bool scan();
-  virtual bool connect(const Device &device);
-  virtual void disconnect(const Device &device);
-  virtual bool send(const Device &device, unsigned char *buffer, unsigned int size);
-  virtual bool receive(const Device &device, unsigned char *buffer, unsigned int size);
+  virtual bool connect(Device &device);
+  virtual void disconnect(Device &device);
+  virtual bool send(Device &device, unsigned char *buffer, unsigned int size);
+  virtual bool receive(Device &device, unsigned char *buffer, unsigned int size);
 
   virtual void onConnect(Device *device) override;
   virtual void onDisconnect(Device *device) override;

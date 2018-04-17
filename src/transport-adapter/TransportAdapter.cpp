@@ -35,22 +35,22 @@ bool TransportAdapter::scan() {
   return false;
 }
 
-bool TransportAdapter::connect(const Device &device) {
+bool TransportAdapter::connect(Device &device) {
   LOG_DEBUG("\n");
   return false;
 }
 
-void TransportAdapter::disconnect(const Device &device) {
+void TransportAdapter::disconnect(Device &device) {
   LOG_DEBUG("\n");
 
 }
 
-bool TransportAdapter::send(const Device &device, unsigned char *buffer, unsigned int size) {
+bool TransportAdapter::send(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   return false;
 }
 
-bool TransportAdapter::receive(const Device &device, unsigned char *buffer, unsigned int size) {
+bool TransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   return false;
 }

@@ -9,21 +9,21 @@ BluetoothConnection::~BluetoothConnection() {
 
 }
 
-bool BluetoothConnection::connect(const Device &device) {
+bool BluetoothConnection::connect(Device &device) {
 
   return false;
 }
 
-void BluetoothConnection::disconnect(const Device &device) {
+void BluetoothConnection::disconnect(Device &device) {
 
 }
 
-bool BluetoothConnection::send(const Device &device, unsigned char *buffer, unsigned int size) {
+bool BluetoothConnection::send(Device &device, unsigned char *buffer, unsigned int size) {
 
   return false;
 }
 
-bool BluetoothConnection::receive(const Device &device, unsigned char *buffer, unsigned int size) {
+bool BluetoothConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
 
   return false;
 }

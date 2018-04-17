@@ -38,22 +38,22 @@ bool UsbIAPTransportAdapter::scan() {
   return m_scanner->scan();
 }
 
-bool UsbIAPTransportAdapter::connect(const Device &device) {
+bool UsbIAPTransportAdapter::connect(Device &device) {
   LOG_DEBUG("\n");
   return m_connection->connect(device);
 }
 
-void UsbIAPTransportAdapter::disconnect(const Device &device) {
+void UsbIAPTransportAdapter::disconnect(Device &device) {
   LOG_DEBUG("\n");
   m_connection->disconnect(device);
 }
 
-bool UsbIAPTransportAdapter::send(const Device &device, unsigned char *buffer, unsigned int size) {
+bool UsbIAPTransportAdapter::send(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   return m_connection->send(device, buffer, size);
 }
 
-bool UsbIAPTransportAdapter::receive(const Device &device, unsigned char *buffer, unsigned int size) {
+bool UsbIAPTransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   return m_connection->receive(device, buffer, size);
 }

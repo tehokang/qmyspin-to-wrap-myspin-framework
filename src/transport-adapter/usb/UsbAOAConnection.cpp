@@ -1,4 +1,5 @@
 #include "UsbAOAConnection.h"
+#include "UsbDevice.h"
 #include <unistd.h>
 
 UsbAOAConnection::UsbAOAConnection(ConnectionListener &listener)
@@ -10,21 +11,22 @@ UsbAOAConnection::~UsbAOAConnection() {
 
 }
 
-bool UsbAOAConnection::connect(const Device &device) {
+bool UsbAOAConnection::connect(Device &device) {
+  UsbDevice *chosen = static_cast<UsbDevice*>(&device);
 
   return true;
 }
 
-void UsbAOAConnection::disconnect(const Device &device) {
+void UsbAOAConnection::disconnect(Device &device) {
 
 }
 
-bool UsbAOAConnection::send(const Device &device, unsigned char *buffer, unsigned int size) {
+bool UsbAOAConnection::send(Device &device, unsigned char *buffer, unsigned int size) {
 
   return true;
 }
 
-bool UsbAOAConnection::receive(const Device &device, unsigned char *buffer, unsigned int size) {
+bool UsbAOAConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
 
   return true;
 }

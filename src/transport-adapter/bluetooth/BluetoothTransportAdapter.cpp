@@ -31,18 +31,18 @@ bool BluetoothTransportAdapter::scan() {
   return m_scanner->scan();
 }
 
-bool BluetoothTransportAdapter::connect(const Device &device) {
+bool BluetoothTransportAdapter::connect(Device &device) {
   return m_connection->connect(device);
 }
 
-void BluetoothTransportAdapter::disconnect(const Device &device) {
+void BluetoothTransportAdapter::disconnect(Device &device) {
   m_connection->disconnect(device);
 }
 
-bool BluetoothTransportAdapter::send(const Device &device, unsigned char *buffer, unsigned int size) {
+bool BluetoothTransportAdapter::send(Device &device, unsigned char *buffer, unsigned int size) {
   return m_connection->send(device, buffer, size);
 }
 
-bool BluetoothTransportAdapter::receive(const Device &device, unsigned char *buffer, unsigned int size) {
+bool BluetoothTransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   return m_connection->receive(device, buffer, size);
 }

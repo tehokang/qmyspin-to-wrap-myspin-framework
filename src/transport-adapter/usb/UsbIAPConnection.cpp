@@ -10,21 +10,21 @@ UsbIAPConnection::~UsbIAPConnection() {
 
 }
 
-bool UsbIAPConnection::connect(const Device &device) {
+bool UsbIAPConnection::connect(Device &device) {
 
   return false;
 }
 
-void UsbIAPConnection::disconnect(const Device &device) {
+void UsbIAPConnection::disconnect(Device &device) {
 
 }
 
-bool UsbIAPConnection::send(const Device &device, unsigned char *buffer, unsigned int size) {
+bool UsbIAPConnection::send(Device &device, unsigned char *buffer, unsigned int size) {
 
   return false;
 }
 
-bool UsbIAPConnection::receive(const Device &device, unsigned char *buffer, unsigned int size) {
+bool UsbIAPConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
 
   return false;
 }

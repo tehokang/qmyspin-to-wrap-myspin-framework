@@ -31,18 +31,18 @@ bool TcpTransportAdapter::scan() {
   return m_scanner->scan();
 }
 
-bool TcpTransportAdapter::connect(const Device &device) {
+bool TcpTransportAdapter::connect(Device &device) {
   return m_connection->connect(device);
 }
 
-void TcpTransportAdapter::disconnect(const Device &device) {
+void TcpTransportAdapter::disconnect(Device &device) {
   m_connection->disconnect(device);
 }
 
-bool TcpTransportAdapter::send(const Device &device, unsigned char *buffer, unsigned int size) {
+bool TcpTransportAdapter::send(Device &device, unsigned char *buffer, unsigned int size) {
   return m_connection->send(device, buffer, size);
 }
 
-bool TcpTransportAdapter::receive(const Device &device, unsigned char *buffer, unsigned int size) {
+bool TcpTransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   return m_connection->receive(device, buffer, size);
 }

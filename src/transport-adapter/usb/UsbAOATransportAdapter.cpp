@@ -43,22 +43,22 @@ bool UsbAOATransportAdapter::scan() {
   return m_scanner->scan();
 }
 
-bool UsbAOATransportAdapter::connect(const Device &device) {
+bool UsbAOATransportAdapter::connect(Device &device) {
   LOG_DEBUG("\n");
   return m_connection->connect(device);
 }
 
-void UsbAOATransportAdapter::disconnect(const Device &device) {
+void UsbAOATransportAdapter::disconnect(Device &device) {
   LOG_DEBUG("\n");
   m_connection->disconnect(device);
 }
 
-bool UsbAOATransportAdapter::send(const Device &device, unsigned char *buffer, unsigned int size) {
+bool UsbAOATransportAdapter::send(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   return m_connection->send(device, buffer, size);
 }
 
-bool UsbAOATransportAdapter::receive(const Device &device, unsigned char *buffer, unsigned int size) {
+bool UsbAOATransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   return m_connection->receive(device, buffer, size);
 }
