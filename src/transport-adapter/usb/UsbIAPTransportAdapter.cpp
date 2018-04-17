@@ -18,7 +18,7 @@ UsbIAPTransportAdapter::~UsbIAPTransportAdapter() {
 bool UsbIAPTransportAdapter::init() {
   LOG_DEBUG("\n");
 
-  return true;
+  return m_scanner->init();
 }
 
 bool UsbIAPTransportAdapter::start() {

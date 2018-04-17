@@ -9,6 +9,11 @@ BluetoothScanner::~BluetoothScanner() {
 
 }
 
+bool BluetoothScanner::init() {
+
+  return true;
+}
+
 bool BluetoothScanner::scan() {
 
   return true;

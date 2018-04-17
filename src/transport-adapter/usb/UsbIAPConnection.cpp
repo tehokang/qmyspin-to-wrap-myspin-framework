@@ -1,4 +1,5 @@
 #include "UsbIAPConnection.h"
+#include <unistd.h>
 
 UsbIAPConnection::UsbIAPConnection(ConnectionListener &listener)
   : Connection(listener) {
@@ -31,6 +32,6 @@ bool UsbIAPConnection::receive(const Device &device, unsigned char *buffer, unsi
 void UsbIAPConnection::run() {
 
   while ( m_running ) {
-
+    usleep(100 * 1000);
   };
 }

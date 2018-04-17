@@ -9,6 +9,11 @@ TcpScanner::~TcpScanner() {
 
 }
 
+bool TcpScanner::init() {
+
+  return true;
+}
+
 bool TcpScanner::scan() {
 
   return true;

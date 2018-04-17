@@ -8,6 +8,7 @@ public:
   BluetoothScanner(ScannerListener &listener);
   virtual ~BluetoothScanner();
 
+  virtual bool init() override;
   virtual bool scan() override;
   virtual void run() override;
 

@@ -1,4 +1,5 @@
 #include "UsbAOAConnection.h"
+#include <unistd.h>
 
 UsbAOAConnection::UsbAOAConnection(ConnectionListener &listener)
   : Connection(listener) {
@@ -31,6 +32,6 @@ bool UsbAOAConnection::receive(const Device &device, unsigned char *buffer, unsi
 void UsbAOAConnection::run() {
 
   while( m_running ) {
-
+    usleep(100 * 1000);
   };
 }

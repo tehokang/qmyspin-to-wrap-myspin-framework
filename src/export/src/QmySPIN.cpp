@@ -17,6 +17,8 @@ QmySPIN* QmySPIN::getInstance() {
 
 void QmySPIN::destroyInstance() {
   if ( m_instance != nullptr ) {
+    m_instance->stop();
+
     delete m_instance;
     m_instance = nullptr;
   }

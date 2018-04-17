@@ -5,7 +5,7 @@
 #include <string>
 using namespace std;
 
-class Device;
+#include "Device.h"
 
 class QmySPINListener {
 public:

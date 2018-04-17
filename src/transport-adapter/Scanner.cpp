@@ -1,15 +1,12 @@
 #include "Scanner.h"
+#include "Macro.h"
 
 Scanner::Scanner(ScannerListener &listener)
-  : m_listener(listener) {
-
+  : QueueThread()
+  , m_listener(listener) {
+  LOG_DEBUG("\n");
 }
 
 Scanner::~Scanner() {
-
-}
-
-bool Scanner::scan() {
-
-  return true;
+  LOG_DEBUG("\n");
 }

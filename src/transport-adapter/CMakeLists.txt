@@ -11,9 +11,14 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 # Sub directories
 #=====================================================================================
+set (LIBUSB_INC /usr/include/)
+set (LIBUSB_LIB /usr/lib/arm-linux-gnueabihf/)
+
 set(INCPATHS
+    ${CMAKE_SOURCE_DIR}/src/export/include
     ${CMAKE_SOURCE_DIR}/src/utility
     ${CMAKE_SOURCE_DIR}/src/transport-adapter
+    ${LIBUSB_INC}
 )
 
 include_directories(
@@ -37,6 +42,7 @@ set (SOURCE_FILES ${SOURCE_FILES}
 
 link_directories(
     ${BIUILD_SRC_DIR}/utility
+    ${LIBUSB_LIB}
 )
 
 #=======================================================================================
@@ -45,7 +51,7 @@ link_directories(
 add_library(transport-adapter SHARED ${SOURCE_FILES})
 
 target_link_libraries(transport-adapter
-    utility
+    utility usb-1.0
 )
 #=====================================================================================
 # Install

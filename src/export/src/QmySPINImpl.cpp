@@ -56,10 +56,15 @@ bool QmySPINImpl::start() {
 
 void QmySPINImpl::stop() {
   LOG_DEBUG("\n");
+
+  m_usb_aoa_transport_adapter.stop();
+  m_projection_handler.stop();
 }
 
 bool QmySPINImpl::scan() {
   LOG_DEBUG("\n");
+
+  RETURN_FALSE_IF_FALSE(m_usb_aoa_transport_adapter.scan());
 
   return true;
 }
@@ -106,6 +111,7 @@ bool QmySPINImpl::sendVehicle(string message) {
 }
 
 void QmySPINImpl::onScan(list<Device*> devices) {
+  LOG_DEBUG("\n");
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     (*it)->onScan(devices);
@@ -113,6 +119,7 @@ void QmySPINImpl::onScan(list<Device*> devices) {
 }
 
 void QmySPINImpl::onConnect(Device *device) {
+  LOG_DEBUG("\n");
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     (*it)->onSelect(device);
@@ -120,6 +127,7 @@ void QmySPINImpl::onConnect(Device *device) {
 }
 
 void QmySPINImpl::onDisconnect(Device *device) {
+  LOG_DEBUG("\n");
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     (*it)->onUnselect(device);
@@ -127,6 +135,7 @@ void QmySPINImpl::onDisconnect(Device *device) {
 }
 
 void QmySPINImpl::onError(int error) {
+  LOG_DEBUG("\n");
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     (*it)->onError(error);

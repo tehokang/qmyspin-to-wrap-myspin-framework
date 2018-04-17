@@ -8,6 +8,7 @@ public:
   TcpScanner(ScannerListener &listener);
   virtual ~TcpScanner();
 
+  virtual bool init() override;
   virtual bool scan() override;
   virtual void run() override;
 protected:
