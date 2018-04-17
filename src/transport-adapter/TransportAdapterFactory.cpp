@@ -4,6 +4,7 @@
 #include "usb/UsbIAPTransportAdapter.h"
 #include "bluetooth/BluetoothTransportAdapter.h"
 #include "tcp/TcpTransportAdapter.h"
+#include "Macro.h"
 
 TransportAdapter *TransportAdapterFactory::m_usb_aoa_transport_adapter = nullptr;
 TransportAdapter *TransportAdapterFactory::m_usb_iap_transport_adapter = nullptr;
@@ -49,34 +50,19 @@ void TransportAdapterFactory::destroyTransportAdapter(
 
   switch ( type ) {
     case TransportAdapterFactory::TransportAdapaterType::USB_AOA:
-      if ( m_usb_aoa_transport_adapter != nullptr ) {
-        delete m_usb_aoa_transport_adapter;
-        m_usb_aoa_transport_adapter = nullptr;
-      }
+      SAFE_DELETE(m_usb_aoa_transport_adapter);
       break;
     case TransportAdapterFactory::TransportAdapaterType::USB_IAP:
-      if ( m_usb_iap_transport_adapter != nullptr ) {
-        delete m_usb_iap_transport_adapter;
-        m_usb_iap_transport_adapter = nullptr;
-      }
+      SAFE_DELETE(m_usb_iap_transport_adapter);
       break;
     case TransportAdapterFactory::TransportAdapaterType::BLUETOOTH:
-      if ( m_bluetooth_transport_adapater != nullptr ) {
-        delete m_bluetooth_transport_adapater;
-        m_bluetooth_transport_adapater = nullptr;
-      }
+      SAFE_DELETE(m_bluetooth_transport_adapater);
       break;
     case TransportAdapterFactory::TransportAdapaterType::TCP:
-      if ( m_tcp_transport_adapter != nullptr ) {
-        delete m_tcp_transport_adapter;
-        m_tcp_transport_adapter = nullptr;
-      }
+      SAFE_DELETE(m_tcp_transport_adapter);
       break;
     default:
-      if ( m_unknown_transport_adapter != nullptr ) {
-        delete m_unknown_transport_adapter;
-        m_unknown_transport_adapter = nullptr;
-      }
+      SAFE_DELETE(m_unknown_transport_adapter);
       break;
   }
 }
