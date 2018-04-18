@@ -13,6 +13,11 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 set(INCPATHS
     ${CMAKE_SOURCE_DIR}/src/utility
+    ${CMAKE_SOURCE_DIR}/3rdparty/myspin/1.2.3/arm/32bit/debug/include
+)
+
+include_directories(
+    ${INCPATHS}
 )
 
 set(SOURCE_FILES ${SOURCE_FILES} ProjectionHandler.cpp ProjectionFactory.cpp)

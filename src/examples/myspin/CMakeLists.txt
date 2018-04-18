@@ -25,6 +25,7 @@ link_directories(
     ${BIUILD_SRC_DIR}/projection-handler
     ${BIUILD_SRC_DIR}/transport-adapter
     ${BIUILD_SRC_DIR}/utility
+    ${CMAKE_SOURCE_DIR}/3rdparty/myspin/1.2.3/arm/32bit/debug/lib
 )
 
 set(SOURCE_FILES ${SOURCE_FILES} main.cpp)
@@ -40,6 +41,7 @@ target_link_libraries(example-myspin
   projection-handler
   transport-adapter
   utility
+  mySPIN-Core
 )
 
 #=====================================================================================

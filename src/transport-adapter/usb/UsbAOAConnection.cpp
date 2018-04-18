@@ -3,37 +3,11 @@
 #include "Macro.h"
 #include <unistd.h>
 
-#define GOOG_VENDOR 0x18d1
-#define AOAP_PRODUCT_1 0x2d00
-#define AOAP_PRODUCT_2 0x2d01
-#define AOAP_PRODUCT_3 0x2d02
-#define AOAP_PRODUCT_4 0x2d03
-#define AOAP_PRODUCT_5 0x2d04
-#define AOAP_PRODUCT_6 0x2d05
-
-#define HOST_TO_DEVICE_TYPE 0xc0
-#define DEVICE_TO_HOST_TYPE 0x40
-
-#define ACCESSORY_GET_PROTOCOL 51
-#define ACCESSORY_SEND_STRING 52
-#define ACCESSORY_START 53
-
-#define ACCESSORY_STRING_MANUFACTURER 0
-#define ACCESSORY_STRING_MODEL 1
-#define ACCESSORY_STRING_DESCRIPTION 2
-#define ACCESSORY_STRING_VERSION 3
-#define ACCESSORY_STRING_URI 4
-#define ACCESSORY_STRING_SERIAL 5
-
-#define ACCESSORY_GET_PROTOCOL 51
-#define ACCESSORY_SEND_STRING 52
-#define ACCESSORY_START 53
-
-#define ACCESSORY_MANUFACTURER_NAME "Humax"
+#define ACCESSORY_MANUFACTURER_NAME "BSOT"
 #define ACCESSORY_MODEL_NAME "mySPIN"
 #define ACCESSORY_DESCRIPTION "mySPIN"
 #define ACCESSORY_VERSION "0.1"
-#define ACCESSORY_URI "http://www.humaxdigital.com/"
+#define ACCESSORY_URI "com.bosch.myspin.launcherapp.cn"
 #define ACCESSORY_SERIAL_NUMBER "0000000012345678"
 
 UsbAOAConnection::UsbAOAConnection(ConnectionListener &listener)
@@ -119,7 +93,8 @@ bool UsbAOAConnection::__connect__(UsbDevice *device) {
 
   if ( __is_google_accessory__(d) == true ) {
     m_listener.onConnect(device);
-    LOG_DEBUG("%s is ready for communication via accessory mode \n", device->getProductName().c_str());
+    LOG_DEBUG("%s is ready for communication as accessory \n",
+        device->getProductName().c_str());
   } else {
     if ( __is_support_aoap_mode__(d, d_h) == true ) {
       __request_turn_on_aoap_mode__(d, d_h);
@@ -169,9 +144,9 @@ bool UsbAOAConnection::__open_device__(
 bool UsbAOAConnection::__is_google_accessory__(libusb_device* d) {
   libusb_device_descriptor desc = {0};
   if ( LIBUSB_SUCCESS == libusb_get_device_descriptor(d, &desc) ) {
-    if ( desc.idProduct != AOAP_PRODUCT_1 && desc.idProduct != AOAP_PRODUCT_2 &&
-      desc.idProduct != AOAP_PRODUCT_3 && desc.idProduct != AOAP_PRODUCT_4 &&
-      desc.idProduct != AOAP_PRODUCT_5 && desc.idProduct != AOAP_PRODUCT_6 ) {
+    if ( desc.idProduct != AOAPConst::AOAP_PRODUCT_1 && desc.idProduct != AOAPConst::AOAP_PRODUCT_2 &&
+      desc.idProduct != AOAPConst::AOAP_PRODUCT_3 && desc.idProduct != AOAPConst::AOAP_PRODUCT_4 &&
+      desc.idProduct != AOAPConst::AOAP_PRODUCT_5 && desc.idProduct != AOAPConst::AOAP_PRODUCT_6 ) {
       LOG_WARNING("This is not google accessory then we will ask whether it can suuport \n");
       return false;
     }
@@ -181,8 +156,8 @@ bool UsbAOAConnection::__is_google_accessory__(libusb_device* d) {
 
 bool UsbAOAConnection::__is_support_aoap_mode__(libusb_device* d, libusb_device_handle *d_h) {
   uint8_t buffer[2];
-  if ( 0 > libusb_control_transfer(d_h, HOST_TO_DEVICE_TYPE,
-          ACCESSORY_GET_PROTOCOL, 0, 0, (uint8_t*)buffer, 2, 0) ) {
+  if ( 0 > libusb_control_transfer(d_h, AOAPConst::HOST_TO_DEVICE_TYPE,
+          AOAPConst::ACCESSORY_GET_PROTOCOL, 0, 0, (uint8_t*)buffer, 2, 0) ) {
     LOG_WARNING("ACCESSORY_GET_PROTOCOL=[%u][%u] \n", buffer[0], buffer[1]);
     LOG_WARNING("This device can't support accessory mode \n\n");
     return false;
@@ -198,19 +173,19 @@ bool UsbAOAConnection::__request_turn_on_aoap_mode__(
     LOG_DEBUG("\n");
     auto sendString = [](libusb_device_handle* handle, const char* str, int index)->int
     {
-        return libusb_control_transfer(handle, DEVICE_TO_HOST_TYPE,
-                ACCESSORY_SEND_STRING, 0, index, (uint8_t*)str, strlen(str) + 1, 0);
+        return libusb_control_transfer(handle, AOAPConst::DEVICE_TO_HOST_TYPE,
+                AOAPConst::ACCESSORY_SEND_STRING, 0, index, (uint8_t*)str, strlen(str) + 1, 0);
     };
 
-    sendString(d_h, ACCESSORY_MANUFACTURER_NAME, ACCESSORY_STRING_MANUFACTURER);
-    sendString(d_h, ACCESSORY_MODEL_NAME, ACCESSORY_STRING_MODEL);
-    sendString(d_h, ACCESSORY_DESCRIPTION, ACCESSORY_STRING_DESCRIPTION);
-    sendString(d_h, ACCESSORY_VERSION, ACCESSORY_STRING_VERSION);
-    sendString(d_h, ACCESSORY_URI, ACCESSORY_STRING_URI);
-    sendString(d_h, ACCESSORY_SERIAL_NUMBER, ACCESSORY_STRING_SERIAL);
+    sendString(d_h, ACCESSORY_MANUFACTURER_NAME, AOAPConst::ACCESSORY_STRING_MANUFACTURER);
+    sendString(d_h, ACCESSORY_MODEL_NAME, AOAPConst::ACCESSORY_STRING_MODEL);
+    sendString(d_h, ACCESSORY_DESCRIPTION, AOAPConst::ACCESSORY_STRING_DESCRIPTION);
+    sendString(d_h, ACCESSORY_VERSION, AOAPConst::ACCESSORY_STRING_VERSION);
+    sendString(d_h, ACCESSORY_URI, AOAPConst::ACCESSORY_STRING_URI);
+    sendString(d_h, ACCESSORY_SERIAL_NUMBER, AOAPConst::ACCESSORY_STRING_SERIAL);
 
-    libusb_control_transfer(d_h, DEVICE_TO_HOST_TYPE,
-            ACCESSORY_START, 0, 0, nullptr, 0, 0);
+    libusb_control_transfer(d_h, AOAPConst::DEVICE_TO_HOST_TYPE,
+            AOAPConst::ACCESSORY_START, 0, 0, nullptr, 0, 0);
     return true;
   }
   return false;

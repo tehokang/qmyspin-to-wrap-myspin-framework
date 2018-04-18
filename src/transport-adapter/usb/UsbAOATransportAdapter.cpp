@@ -12,7 +12,8 @@ UsbAOATransportAdapter::UsbAOATransportAdapter(TransportAdapterListener &listene
 
 UsbAOATransportAdapter::~UsbAOATransportAdapter() {
   LOG_DEBUG("\n");
-
+  SAFE_DELETE(m_connection);
+  SAFE_DELETE(m_scanner);
 }
 
 bool UsbAOATransportAdapter::init() {

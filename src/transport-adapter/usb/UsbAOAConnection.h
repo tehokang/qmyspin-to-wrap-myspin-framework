@@ -5,6 +5,31 @@
 #include "UsbDevice.h"
 #include <libusb-1.0/libusb.h>
 
+class AOAPConst {
+public:
+  static const unsigned int GOOG_VENDOR = 0x18d1;
+  static const unsigned int AOAP_PRODUCT_1 = 0x2d00;
+  static const unsigned int AOAP_PRODUCT_2 = 0x2d01;
+  static const unsigned int AOAP_PRODUCT_3 = 0x2d02;
+  static const unsigned int AOAP_PRODUCT_4 = 0x2d03;
+  static const unsigned int AOAP_PRODUCT_5 = 0x2d04;
+  static const unsigned int AOAP_PRODUCT_6 = 0x2d05;
+
+  static const unsigned int HOST_TO_DEVICE_TYPE = 0xc0;
+  static const unsigned int DEVICE_TO_HOST_TYPE = 0x40;
+
+  static const unsigned int ACCESSORY_STRING_MANUFACTURER = 0;
+  static const unsigned int ACCESSORY_STRING_MODEL = 1;
+  static const unsigned int ACCESSORY_STRING_DESCRIPTION = 2;
+  static const unsigned int ACCESSORY_STRING_VERSION = 3;
+  static const unsigned int ACCESSORY_STRING_URI = 4;
+  static const unsigned int ACCESSORY_STRING_SERIAL = 5;
+
+  static const unsigned int ACCESSORY_GET_PROTOCOL = 51;
+  static const unsigned int ACCESSORY_SEND_STRING = 52;
+  static const unsigned int ACCESSORY_START = 53;
+};
+
 class UsbAOAConnection : public Connection {
 public:
   UsbAOAConnection(ConnectionListener &listener);

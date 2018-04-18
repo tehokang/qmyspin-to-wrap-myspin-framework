@@ -45,7 +45,6 @@ void UsbScanner::run() {
       SAFE_DELETE(msg);
     }
     usleep(100 * 1000);
-    // libusb_handle_events_timeout(nullptr, );
     struct timeval timeout = { 0, 200 };
     libusb_handle_events_timeout(nullptr, &timeout);
   }

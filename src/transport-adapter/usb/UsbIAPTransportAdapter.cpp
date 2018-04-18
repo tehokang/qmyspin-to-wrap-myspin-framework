@@ -12,7 +12,8 @@ UsbIAPTransportAdapter::UsbIAPTransportAdapter(TransportAdapterListener &listene
 
 UsbIAPTransportAdapter::~UsbIAPTransportAdapter() {
   LOG_DEBUG("\n");
-
+  SAFE_DELETE(m_connection);
+  SAFE_DELETE(m_scanner);
 }
 
 bool UsbIAPTransportAdapter::init() {

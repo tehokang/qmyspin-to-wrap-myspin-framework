@@ -11,8 +11,7 @@ TransportAdapter::TransportAdapter(TransportAdapterListener &listener)
 }
 
 TransportAdapter::~TransportAdapter() {
-  SAFE_DELETE(m_scanner);
-  SAFE_DELETE(m_connection);
+
 }
 
 bool TransportAdapter::init() {

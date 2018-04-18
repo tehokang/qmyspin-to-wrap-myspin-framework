@@ -6,7 +6,7 @@
 QmySPINImpl::QmySPINImpl()
   : QmySPIN()
   , m_projection_handler(ProjectionFactory::createProjection(
-        ProjectionFactory::ProjectionType::MYSPIN))
+      ProjectionFactory::ProjectionType::MYSPIN))
   , m_usb_aoa_transport_adapter(TransportAdapterFactory::createTransportAdapter(
       TransportAdapterFactory::TransportAdapaterType::USB_AOA, *this))
   , m_usb_iap_transport_adapter(TransportAdapterFactory::createTransportAdapter(
