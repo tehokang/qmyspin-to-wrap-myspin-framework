@@ -45,6 +45,7 @@ bool UsbAOATransportAdapter::scan() {
 
 bool UsbAOATransportAdapter::connect(Device &device) {
   LOG_DEBUG("\n");
+
   return m_connection->connect(device);
 }
 
@@ -61,4 +62,13 @@ bool UsbAOATransportAdapter::send(Device &device, unsigned char *buffer, unsigne
 bool UsbAOATransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   return m_connection->receive(device, buffer, size);
+}
+
+void UsbAOATransportAdapter::onAttached(Device *device) {
+  LOG_DEBUG("\n");
+  m_connection->connect(*device);
+}
+
+void UsbAOATransportAdapter::onDettached(Device *device) {
+  m_connection->disconnect(*device);
 }

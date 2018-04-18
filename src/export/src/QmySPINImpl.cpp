@@ -82,13 +82,17 @@ void QmySPINImpl::setFrameBuffer(
 
 bool QmySPINImpl::select(Device *device) {
   LOG_DEBUG("\n");
+  RETURN_FALSE_IF_NULL(device);
+  RETURN_FALSE_IF_FALSE(m_usb_aoa_transport_adapter.connect(*device));
 
   return true;
 }
 
 bool QmySPINImpl::unselect(Device *device) {
   LOG_DEBUG("\n");
+  RETURN_FALSE_IF_NULL(device);
 
+  m_usb_aoa_transport_adapter.disconnect(*device);
   return true;
 }
 

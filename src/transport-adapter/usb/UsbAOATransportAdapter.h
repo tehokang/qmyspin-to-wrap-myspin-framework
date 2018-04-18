@@ -17,6 +17,12 @@ public:
   virtual bool send(Device &device, unsigned char *buffer, unsigned int size) override;
   virtual bool receive(Device &device, unsigned char *buffer, unsigned int size) override;
 
+  /**
+   * @note Hooker for ScannerListener
+   */
+  virtual void onAttached(Device *device) override;
+  virtual void onDettached(Device *device) override;
+
 protected:
 
 };

@@ -13,6 +13,28 @@ public:
 
 class Connection : public QueueThread {
 public:
+  typedef enum _CONNECTION_MSG_TYPE_ {
+    CONNECT,
+    DISCONNECT,
+    SEND,
+    RECEIVE
+  } ConnectionMsgType;
+
+  class ConnectionMsg {
+  public:
+    ConnectionMsg(int type, void *msg)
+      : m_type(type)
+      , m_msg(msg) {
+
+    }
+
+    int getType() { return m_type; }
+    void* getMsg() { return m_msg; }
+  protected:
+    int m_type;
+    void *m_msg;
+  };
+
   Connection(ConnectionListener &listener);
   virtual ~Connection();
 

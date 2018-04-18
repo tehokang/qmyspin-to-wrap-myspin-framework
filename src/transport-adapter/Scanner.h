@@ -16,6 +16,10 @@ public:
 
 class Scanner : public QueueThread {
 public:
+  typedef enum _SCANNER_MSG_TYPE_ {
+    SCAN
+  } ScannerMsgType;
+
   class ScannerMsg {
   public:
     ScannerMsg(int type, void *msg)

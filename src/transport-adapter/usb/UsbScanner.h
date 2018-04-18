@@ -3,13 +3,10 @@
 
 #include "Scanner.h"
 #include <libusb-1.0/libusb.h>
+
 class Device;
 class UsbScanner : public Scanner {
 public:
-  typedef enum _USB_SCANNER_MSG_TYPE_ {
-    SCAN
-  } UsbScannerMsgType;
-
   UsbScanner(ScannerListener &listener);
   virtual ~UsbScanner();
 
@@ -20,20 +17,15 @@ public:
 protected:
 
   bool __init_usb_hotplug_callback__();
-  void __do_scan_and_notify__();
 
-  Device* __createUsbDevice__(
-      string product_name, string manufacturer_name, string serial_number,
-      unsigned int vendor_id, unsigned int product_id, unsigned int usb_class);
+  void __scan__();
+  void __notify_scanned__();
+  void __notify_attached__(Device *device);
+  void __notify__dettached__(Device *device);
 
-  Device* __findUsbDevice__(
-      string product_name, string manufacturer_name, string serial_number,
-      unsigned int vendor_id, unsigned int product_id, unsigned int usb_class);
-
-  void __removeUsbDevice__(
-      string product_name, string manufacturer_name, string serial_number,
-      unsigned int vendor_id, unsigned int product_id, unsigned int usb_class);
-
+  Device* __createUsbDevice__(libusb_device *device);
+  void __removeUsbDevice__(libusb_device *device);
+  Device* __findUsbDevice__(libusb_device *device);
   void __removeAllUsbDevice__();
 
   libusb_hotplug_callback_handle m_hotplug_callback_handle;
