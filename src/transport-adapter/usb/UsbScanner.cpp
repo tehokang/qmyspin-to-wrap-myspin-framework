@@ -85,17 +85,18 @@ void UsbScanner::__do_scan_and_notify__() {
       unsigned char manufacturer_name[100] = {0, };
       unsigned char serial_number[100] = {0, };
 
-      libusb_open(device, &device_handle);
-      libusb_get_string_descriptor_ascii(device_handle, desc.iManufacturer,
-          manufacturer_name, sizeof(manufacturer_name));
-      libusb_get_string_descriptor_ascii(device_handle, desc.iProduct,
-          product_name, sizeof(product_name));
-      libusb_get_string_descriptor_ascii(device_handle, desc.iSerialNumber,
-          serial_number, sizeof(serial_number));
+      if ( LIBUSB_SUCCESS == libusb_open(device, &device_handle) ) {
+        libusb_get_string_descriptor_ascii(device_handle, desc.iManufacturer,
+            manufacturer_name, sizeof(manufacturer_name));
+        libusb_get_string_descriptor_ascii(device_handle, desc.iProduct,
+            product_name, sizeof(product_name));
+        libusb_get_string_descriptor_ascii(device_handle, desc.iSerialNumber,
+            serial_number, sizeof(serial_number));
 
-      __createUsbDevice__(
-          (char*)product_name, (char*)manufacturer_name, (char*)serial_number,
-          desc.idProduct, desc.idVendor, desc.bDeviceClass);
+        __createUsbDevice__(
+            (char*)product_name, (char*)manufacturer_name, (char*)serial_number,
+            desc.idProduct, desc.idVendor, desc.bDeviceClass);
+      }
     }
   }
   m_listener.onScan(m_devices);
