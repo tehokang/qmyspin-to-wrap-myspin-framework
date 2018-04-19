@@ -23,13 +23,3 @@ bool AbaltaHandler::start(void *connected_device) {
 void AbaltaHandler::stop() {
 
 }
-
-bool AbaltaHandler::sendKey(int key, int press) {
-
-  return false;
-}
-
-bool AbaltaHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
-
-  return false;
-}

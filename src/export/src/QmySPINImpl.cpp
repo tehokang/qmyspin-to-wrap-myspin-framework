@@ -127,16 +127,33 @@ bool QmySPINImpl::unselect(Device *device) {
   return true;
 }
 
-bool QmySPINImpl::sendKey(int key, int press) {
-  LOG_DEBUG("\n");
-
-  return true;
+void QmySPINImpl::sendHomeKey(PRESS_TYPE press) {
+  m_projection_handler.sendHomeKey(press == QmySPINImpl::PRESS_TYPE::PRESS ?
+      ProjectionHandler::PRESS_TYPE::PRESS : ProjectionHandler::PRESS_TYPE::RELEASE );
 }
 
-bool QmySPINImpl::sendTouch(int x, int y, int finger, int action) {
-  LOG_DEBUG("\n");
+void QmySPINImpl::sendBackKey(PRESS_TYPE press) {
+  m_projection_handler.sendBackKey(press == QmySPINImpl::PRESS_TYPE::PRESS ?
+      ProjectionHandler::PRESS_TYPE::PRESS : ProjectionHandler::PRESS_TYPE::RELEASE );
+}
 
-  return true;
+void QmySPINImpl::sendMenuKey(PRESS_TYPE press) {
+  m_projection_handler.sendMenuKey(press == QmySPINImpl::PRESS_TYPE::PRESS ?
+      ProjectionHandler::PRESS_TYPE::PRESS : ProjectionHandler::PRESS_TYPE::RELEASE );
+}
+
+void QmySPINImpl::sendSearchKey(PRESS_TYPE press) {
+  m_projection_handler.sendSearchKey(press == QmySPINImpl::PRESS_TYPE::PRESS ?
+      ProjectionHandler::PRESS_TYPE::PRESS : ProjectionHandler::PRESS_TYPE::RELEASE );
+}
+
+void QmySPINImpl::sendCustomKey(PRESS_TYPE press, int key) {
+  m_projection_handler.sendCustomKey(press == QmySPINImpl::PRESS_TYPE::PRESS ?
+      ProjectionHandler::PRESS_TYPE::PRESS : ProjectionHandler::PRESS_TYPE::RELEASE, key);
+}
+
+void QmySPINImpl::sendTouch(int x, int y, int finger, int action) {
+  LOG_DEBUG("\n");
 }
 
 bool QmySPINImpl::sendVehicle(string message) {
@@ -172,6 +189,14 @@ void QmySPINImpl::onDisconnect(Device *device) {
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     (*it)->onUnselect(device);
+  }
+}
+
+void QmySPINImpl::onReady() {
+  LOG_DEBUG("\n");
+  for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
+      it != m_listeners.end(); ++it ) {
+    (*it)->onReady();
   }
 }
 

@@ -5,6 +5,11 @@
 Device *m_android_device = nullptr;
 class QmySPINListenerImpl : public QmySPINListener {
 public:
+  QmySPINListenerImpl() : m_is_ready(false) {
+
+  }
+  virtual ~QmySPINListenerImpl() { }
+
   virtual void onScan(list<Device*> devices) {
     printf("[%s:%d] \n", __FUNCTION__, __LINE__);
     int counter = 0;
@@ -32,6 +37,12 @@ public:
   virtual void onUnselect(Device *device) {
     printf("[%s:%d] \n", __FUNCTION__, __LINE__);
     m_android_device = nullptr;
+    m_is_ready = false;
+  }
+
+  virtual void onReady() {
+    printf("[%s:%d] \n", __FUNCTION__, __LINE__);
+    m_is_ready = true;
   }
 
   virtual void onError(int error) {
@@ -52,6 +63,8 @@ public:
   virtual void onFrameUpdateEnded() {
     printf("[%s:%d] \n", __FUNCTION__, __LINE__);
   }
+
+  bool m_is_ready;
 };
 
 int main(int argc, char ** argv) {
@@ -66,28 +79,25 @@ int main(int argc, char ** argv) {
   myspin->setFrameBuffer(pixel_format, frame_buffer, width, height, dpi);
   myspin->addEventListener(new QmySPINListenerImpl());
 
-  if ( myspin->init() == false ) {
-    printf("Fail to init QmySPIN \n");
-  }
-
-  if ( myspin->start() == false ) {
+  if ( !myspin->init() ||  !myspin->start() ) {
     printf("Fail to start QmySPIN \n");
   }
 
-#if 0
-  myspin->scan();
-  while ( true ) {
-    usleep(200*1000);
-  }
-#else
   char menu = '\0';
   while ( true ) {
+SHOW_MENU:
     printf("######################## \n");
     printf(" s : scan usb devices \n");
     printf(" c : connect \n");
     printf(" d : disconnect \n");
     printf(" x : exit \n");
+    printf(" 1 : send home key \n");
+    printf(" 2 : send menu key \n");
+    printf(" 3 : send back key \n");
+    printf(" 4 : send search key \n");
+    printf(" ? : show menu\n");
     printf("######################## \n");
+INPUT_MENU:
     printf("input : " );
 
     menu = getchar();//scanf("%c", &menu);
@@ -95,12 +105,16 @@ int main(int argc, char ** argv) {
       case 's' : myspin->scan(); break;
       case 'c' : myspin->select(m_android_device); break;
       case 'd' : myspin->unselect(m_android_device); break;
+      case '1' : myspin->sendHomeKey(QmySPIN::PRESS_TYPE::RELEASE); break;
+      case '2' : myspin->sendMenuKey(QmySPIN::PRESS_TYPE::RELEASE); break;
+      case '3' : myspin->sendBackKey(QmySPIN::PRESS_TYPE::RELEASE); break;
+      case '4' : myspin->sendSearchKey(QmySPIN::PRESS_TYPE::RELEASE); break;
+      case '?' : goto SHOW_MENU;
       case 'x' : goto EXIT;
-      default: break;
+      default: goto INPUT_MENU;
     }
     usleep(200*1000);
   };
-#endif
 
 EXIT:
   QmySPIN::destroyInstance();

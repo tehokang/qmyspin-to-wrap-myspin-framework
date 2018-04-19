@@ -27,8 +27,13 @@ public:
       PIXEL_FORMAT format, unsigned char *frame_buffer,
       unsigned int width, unsigned height, unsigned int dpi) override;
 
-  virtual bool sendKey(int key, int press) override;
-  virtual bool sendTouch(int x, int y, int finger, int action) override;
+  virtual void sendHomeKey(PRESS_TYPE press) override;
+  virtual void sendBackKey(PRESS_TYPE press) override;
+  virtual void sendMenuKey(PRESS_TYPE press) override;
+  virtual void sendSearchKey(PRESS_TYPE press) override;
+  virtual void sendCustomKey(PRESS_TYPE press, int key) override;
+  virtual void sendTouch(int x, int y, int finger, int action) override;
+
   virtual bool sendVehicle(string message) override;
 
   /**
@@ -38,8 +43,9 @@ public:
   virtual unsigned int onReqReceive(unsigned char *buffer, unsigned int size, void *connection) override;
   virtual void onFrameUpdateStarted(unsigned int numOfRectangles) override;
   virtual void onFrameUpdating(unsigned int currentNumber, unsigned int x, unsigned int y,
-    unsigned int width, unsigned int height, unsigned char* buffer, unsigned int bufferSize) override;
+      unsigned int width, unsigned int height, unsigned char* buffer, unsigned int bufferSize) override;
   virtual void onFrameUpdateEnded() override;
+  virtual void onReady() override;
 
   /**
    * @note TransportAdapterListener implmentation

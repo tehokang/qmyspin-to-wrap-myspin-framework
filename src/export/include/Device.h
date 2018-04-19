@@ -16,7 +16,9 @@ public:
   }
 
   virtual ~Device() {
-
+    m_product_name = "";
+    m_manufacturer_name = "";
+    m_serial_number = "";
   }
 
   int getKey() { return m_hash_key; };

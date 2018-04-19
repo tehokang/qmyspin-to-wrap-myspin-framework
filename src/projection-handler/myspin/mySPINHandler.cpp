@@ -30,24 +30,32 @@ bool MySPINHandler::start(void *connected_device) {
 
   m_myspin_handle = mySpin_CreateInstance(connected_device, "MySPINHandler of Humax");
 
-  mySpin_SetTraceOutput(m_myspin_handle, __on_trace_output__);
   mySpin_SetTraceClass(m_myspin_handle,
       (eTraceClass) (eTRACECLASS_ERROR | eTRACECLASS_WARNING |
       eTRACECLASS_INFORMATION  | eTRACECLASS_VERBOSE));
 
+  mySpin_SetTraceOutput(m_myspin_handle,
+      MySPINHandler::CoreCallBack::__on_trace_output__);
+
   mySpin_SetCallbackContext(m_myspin_handle, (void*)this);
-  mySpin_SetSenderLink(m_myspin_handle, __on_send__);
-  mySpin_SetReceiverLink(m_myspin_handle, __on_receive__);
-  mySpin_SetProtocolCallback(m_myspin_handle, __on_protocol__);
-  mySpin_SetFrameUpdateStartCallback(m_myspin_handle, __on_frame_update_start__);
-  mySpin_SetFrameUpdateCallback(m_myspin_handle, __on_frame_update__);
-  mySpin_SetFrameUpdateEndCallback(m_myspin_handle, __on_frame_update_end__);
-  mySpin_SetErrorCallback(m_myspin_handle, __on_error__);
-  mySpin_SetAppTransitionStatusCallback(m_myspin_handle, __on_app_transition_status__);
-  mySpin_SetAppInactiveCallback(m_myspin_handle, __on_app_inactive__);
-  mySpin_SetCustomDataStringCallback(m_myspin_handle, __on_custom_data_string__);
-  mySpin_SetCustomDataIntCallback(m_myspin_handle, __on_custom_data_int__);
-  mySpin_SetVehicleDataRequestCallback(m_myspin_handle, __on_vehicle_data_request__);
+  mySpin_SetSenderLink(m_myspin_handle, MySPINHandler::CoreCallBack::__on_send__);
+  mySpin_SetReceiverLink(m_myspin_handle, MySPINHandler::CoreCallBack::__on_receive__);
+  mySpin_SetProtocolCallback(m_myspin_handle, MySPINHandler::CoreCallBack::__on_protocol__);
+  mySpin_SetFrameUpdateStartCallback(m_myspin_handle,
+      MySPINHandler::CoreCallBack::__on_frame_update_start__);
+  mySpin_SetFrameUpdateCallback(m_myspin_handle, MySPINHandler::CoreCallBack::__on_frame_update__);
+  mySpin_SetFrameUpdateEndCallback(m_myspin_handle,
+      MySPINHandler::CoreCallBack::__on_frame_update_end__);
+  mySpin_SetErrorCallback(m_myspin_handle, MySPINHandler::CoreCallBack::__on_error__);
+  mySpin_SetAppTransitionStatusCallback(m_myspin_handle,
+      MySPINHandler::CoreCallBack::__on_app_transition_status__);
+  mySpin_SetAppInactiveCallback(m_myspin_handle, MySPINHandler::CoreCallBack::__on_app_inactive__);
+  mySpin_SetCustomDataStringCallback(m_myspin_handle,
+      MySPINHandler::CoreCallBack::__on_custom_data_string__);
+  mySpin_SetCustomDataIntCallback(m_myspin_handle,
+      MySPINHandler::CoreCallBack::__on_custom_data_int__);
+  mySpin_SetVehicleDataRequestCallback(m_myspin_handle,
+      MySPINHandler::CoreCallBack::__on_vehicle_data_request__);
 
   mySpin_SetFrameOutputType(m_myspin_handle, eFLAG_FALSE);
   mySpin_SetPixelFormat(m_myspin_handle, m_pixel_format, 4, ePIXELENDIANESS_BigEndian);
@@ -94,49 +102,52 @@ void MySPINHandler::stop() {
   }
 }
 
-bool MySPINHandler::sendKey(int key, int press) {
-  unsigned char buffer[1024] = {0, };
-  unsigned int buffer_size = 0;
+void MySPINHandler::sendHomeKey(PRESS_TYPE press) {
+  LOG_DEBUG("\n");
+  RETURN_IF_NULL(m_myspin_handle);
+  mySpin_SoftkeyEvent(m_myspin_handle,
+      eSOFTKEY_Home, press == PRESS_TYPE::PRESS ?
+      eSOFTKEYEVENTTYPE_Press : eSOFTKEYEVENTTYPE_Release);
+}
 
+void MySPINHandler::sendBackKey(PRESS_TYPE press) {
+  LOG_DEBUG("\n");
+  RETURN_IF_NULL(m_myspin_handle);
+  mySpin_SoftkeyEvent(m_myspin_handle,
+      eSOFTKEY_Back, press == PRESS_TYPE::PRESS ?
+      eSOFTKEYEVENTTYPE_Press : eSOFTKEYEVENTTYPE_Release);
+
+}
+
+void MySPINHandler::sendMenuKey(PRESS_TYPE press) {
+  LOG_DEBUG("\n");
+  RETURN_IF_NULL(m_myspin_handle);
+  mySpin_SoftkeyEvent(m_myspin_handle,
+      eSOFTKEY_Menu, press == PRESS_TYPE::PRESS ?
+      eSOFTKEYEVENTTYPE_Press : eSOFTKEYEVENTTYPE_Release);
+}
+
+void MySPINHandler::sendSearchKey(PRESS_TYPE press) {
+  LOG_DEBUG("\n");
+  RETURN_IF_NULL(m_myspin_handle);
+  mySpin_SoftkeyEvent(m_myspin_handle,
+      eSOFTKEY_Search, press == PRESS_TYPE::PRESS ?
+      eSOFTKEYEVENTTYPE_Press : eSOFTKEYEVENTTYPE_Release);
+}
+
+void MySPINHandler::sendCustomKey(PRESS_TYPE press, int key) {
   /**
-   * @todo Making a buffer to send
+   * @note NOTHING TO DO
    */
-  if ( m_listener == nullptr ) return false;
-  return m_listener->onReqSend(buffer, buffer_size, m_connected_device);
 }
 
-bool MySPINHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
-  unsigned char buffer[1024] = {0, };
-  unsigned int buffer_size = 0;
-
-  /**
-   * @todo Making a buffer to send
-   */
-  if ( m_listener == nullptr ) return false;
-  return m_listener->onReqSend(buffer, buffer_size, m_connected_device);
+void MySPINHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
+  LOG_DEBUG("\n");
 }
 
-void MySPINHandler::__on_trace_output__(
-    void* context, eTraceClass traceClass, char* traceString) {
-  LOG_DEBUG("mySPIN-CORE : %s %s\n", mySpin_getTraceClassPrefix(traceClass), traceString );
-}
-
-void* MySPINHandler::__on_send__(
-    void* context, UInt8* buffer, size_t bufferSize, void* connection) {
-  auto *handler = static_cast<MySPINHandler*>(context);
-  RETURN_NULL_IF_NULL(handler);
-  handler->__request_to_send__(buffer, bufferSize, connection);
-
-  return nullptr;
-}
-
-unsigned int MySPINHandler::__on_receive__(
-  void* context, UInt8* buffer, size_t bufferSize, void* connection) {
-  auto *handler = static_cast<MySPINHandler*>(context);
-  if ( handler ) {
-    return handler->__request_to_receive__(buffer, bufferSize, connection);
-  }
-  return 0;
+void MySPINHandler::__request_to_notify_ready__() {
+  RETURN_IF_NULL(m_listener);
+  m_listener->onReady();
 }
 
 bool MySPINHandler::__request_to_send__(UInt8 *buffer, size_t size, void* connection) {
@@ -162,19 +173,48 @@ void MySPINHandler::__request_to_notify_frameupdating__(UInt8 currentNumber, UIn
 void MySPINHandler::__request_to_notify_frameupdate_ended__() {
   RETURN_IF_FALSE(m_listener);
   m_listener->onFrameUpdateEnded();
+#if 1
+  mySpin_FramebufferUpdateRequest(__get_myspin_handle__(),
+      (UInt16)(0 & 0xFFFF), (UInt16)(0 & 0xFFFF),
+      (UInt16)(getWidth() & 0xFFFF), (UInt16)(getHeight() & 0xFFFF), eFLAG_TRUE);
+#endif
 }
 
-void MySPINHandler::__on_protocol__(void* context, eProtocolState newState) {
+void MySPINHandler::CoreCallBack::__on_trace_output__(
+    void* context, eTraceClass traceClass, char* traceString) {
+  LOG_DEBUG("mySPIN-CORE : %s %s\n", mySpin_getTraceClassPrefix(traceClass), traceString );
+}
+
+void* MySPINHandler::CoreCallBack::__on_send__(
+    void* context, UInt8* buffer, size_t bufferSize, void* connection) {
+  auto *handler = static_cast<MySPINHandler*>(context);
+  RETURN_NULL_IF_NULL(handler);
+  handler->__request_to_send__(buffer, bufferSize, connection);
+
+  return nullptr;
+}
+
+unsigned int MySPINHandler::CoreCallBack::__on_receive__(
+  void* context, UInt8* buffer, size_t bufferSize, void* connection) {
+  auto *handler = static_cast<MySPINHandler*>(context);
+  if ( handler ) {
+    return handler->__request_to_receive__(buffer, bufferSize, connection);
+  }
+  return 0;
+}
+
+void MySPINHandler::CoreCallBack::__on_protocol__(void* context, eProtocolState newState) {
   LOG_DEBUG("\n");
   auto *handler = static_cast<MySPINHandler*>(context);
   RETURN_IF_NULL(handler);
 
 	switch(newState) {
     case ePROTOCOL_STATE_RUN:
-    		mySpin_FramebufferUpdateRequest(handler->__get_myspin_handle__(),
-				(UInt16)(0 & 0xFFFF), (UInt16)(0 & 0xFFFF),
-        (UInt16)(handler->getWidth() & 0xFFFF), (UInt16)(handler->getHeight() & 0xFFFF),
-				eFLAG_TRUE);
+      handler->__request_to_notify_ready__();
+      mySpin_FramebufferUpdateRequest(handler->__get_myspin_handle__(),
+          (UInt16)(0 & 0xFFFF), (UInt16)(0 & 0xFFFF),
+          (UInt16)(handler->getWidth() & 0xFFFF), (UInt16)(handler->getHeight() & 0xFFFF),
+          eFLAG_TRUE);
       break;
     case ePROTOCOL_STATE_STOP:
       break;
@@ -191,52 +231,60 @@ void MySPINHandler::__on_protocol__(void* context, eProtocolState newState) {
   }
 }
 
-void MySPINHandler::__on_frame_update_start__(void* context, UInt8 numOfRectangles) {
+void MySPINHandler::CoreCallBack::__on_frame_update_start__(void* context, UInt8 numOfRectangles) {
   LOG_DEBUG("\n");
   auto *handler = static_cast<MySPINHandler*>(context);
   RETURN_IF_NULL(handler);
   handler->__request_to_notify_frameupdate_started__(numOfRectangles);
 }
 
-void MySPINHandler::__on_frame_update__(
+void MySPINHandler::CoreCallBack::__on_frame_update__(
     void* context, UInt8 currentNumber, UInt16 x0, UInt16 y0,
     UInt16 width, UInt16 height, UInt8* buffer, UInt32 bufferSize) {
   LOG_DEBUG("\n");
   auto *handler = static_cast<MySPINHandler*>(context);
   RETURN_IF_NULL(handler);
+  /**
+   * @note Moment when it can dump
+   */
+
   handler->__request_to_notify_frameupdating__(
     currentNumber, x0, y0, width, height, buffer, bufferSize);
 }
 
-void MySPINHandler::__on_frame_update_end__(void* context) {
+void MySPINHandler::CoreCallBack::__on_frame_update_end__(void* context) {
 	LOG_DEBUG("\n");
   auto *handler = static_cast<MySPINHandler*>(context);
   RETURN_IF_NULL(handler);
   handler->__request_to_notify_frameupdate_ended__();
 }
 
-void MySPINHandler::__on_error__(void* context, eErrorCode error) {
+void MySPINHandler::CoreCallBack::__on_error__(void* context, eErrorCode error) {
 	LOG_ERROR("error callback with code %d\n", error);
 }
 
-void MySPINHandler::__on_app_transition_status__(void* context, Flag transitionStarts) {
+void MySPINHandler::CoreCallBack::__on_app_transition_status__(void* context, Flag transitionStarts) {
 	LOG_DEBUG("OnAppTransitionStatus with value %s\n", transitionStarts == eFLAG_TRUE ? "TRUE" : "FALSE");
 }
 
-void MySPINHandler::__on_app_inactive__(void* context, Flag appInactive) {
+void MySPINHandler::CoreCallBack::__on_app_inactive__(void* context, Flag appInactive) {
 	LOG_DEBUG("OnAppInactive with value %s\n", appInactive == eFLAG_TRUE ? "TRUE" : "FALSE");
 }
 
-void MySPINHandler::__on_custom_data_string__(
+void MySPINHandler::CoreCallBack::__on_custom_data_string__(
     void* context, ServerCustomDataStringType type, StringEncoding encoding, char* data) {
 	LOG_DEBUG("OnCustomMessage with type %d and string '%s'\n", type, data);
 }
 
-void MySPINHandler::__on_custom_data_int__(
+void MySPINHandler::CoreCallBack::__on_custom_data_int__(
     void* context, ServerCustomDataIntType type, UInt16 length, UInt8* data) {
 	LOG_DEBUG("OnCustomDataInt with type %d and length %d\n", type, length);
 }
 
-void MySPINHandler::__on_vehicle_data_request__(
+void MySPINHandler::CoreCallBack::__on_vehicle_data_request__(
     void* context, Flag request, UInt8 length, UInt32* keyList) {
+  LOG_DEBUG("request : %d, length : %d\n");
+  for ( unsigned int i = 0; i < length; i++ ) {
+    LOG_DEBUG("key[%d] : %x \n", i, keyList[i]);
+  }
 }

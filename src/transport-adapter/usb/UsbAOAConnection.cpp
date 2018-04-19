@@ -94,8 +94,10 @@ bool UsbAOAConnection::__connect__(UsbDevice *device) {
         d, &m_interface, &m_read_endpoint, &m_write_endpoint ) == LIBUSB_SUCCESS);
     RETURN_FALSE_IF_FALSE(__do_ready_communication__(d, d_h));
 
-    m_listener.onConnect(device);
+    m_connected_device = d;
+    m_connected_device_handle = d_h;
 
+    m_listener.onConnect(device);
     LOG_DEBUG("%s is ready for communication as accessory \n", device->getProductName().c_str());
   } else {
     if ( __is_support_aoap_mode__(d, d_h) == true ) {
@@ -104,9 +106,6 @@ bool UsbAOAConnection::__connect__(UsbDevice *device) {
       return false;
     }
   }
-
-  m_connected_device = d;
-  m_connected_device_handle = d_h;
   return true;
 }
 

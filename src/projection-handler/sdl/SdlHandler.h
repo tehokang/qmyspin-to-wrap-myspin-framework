@@ -12,8 +12,6 @@ public:
   virtual bool init() override;
   virtual bool start(void *connected_device) override;
   virtual void stop() override;
-  virtual bool sendKey(int key, int press) override;
-  virtual bool sendTouch(unsigned int x, unsigned int y, int finger, int action) override;
 
 };
 

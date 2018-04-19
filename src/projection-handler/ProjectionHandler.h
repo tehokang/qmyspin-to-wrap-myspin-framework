@@ -13,6 +13,7 @@ public:
   virtual void onFrameUpdating(unsigned int currentNumber, unsigned int x, unsigned int y,
     unsigned int width, unsigned int height, unsigned char* buffer, unsigned int bufferSize) = 0;
   virtual void onFrameUpdateEnded() = 0;
+  virtual void onReady() = 0;
 
 };
 
@@ -25,19 +26,29 @@ public:
     ePIXELFORMAT_RGBA8888
   } PIXEL_FORMAT;
 
+  typedef enum PRESS_TYPE {
+    PRESS,
+    RELEASE,
+  } PRESS_TYPE;
+
   ProjectionHandler();
   virtual ~ProjectionHandler();
 
   virtual bool init();
   virtual bool start(void *connected_device);
   virtual void stop();
-  virtual bool sendKey(int key, int press);
-  virtual bool sendTouch(unsigned int x, unsigned int y, int finger, int action);
+
+  void setEventListener(ProjectionListener *listener);
   virtual void setFrameBuffer(
       ProjectionHandler::PIXEL_FORMAT format, unsigned char *frame_buffer,
       unsigned int width, unsigned height, unsigned int dpi);
 
-  void setEventListener(ProjectionListener *listener);
+  virtual void sendHomeKey(PRESS_TYPE press);
+  virtual void sendBackKey(PRESS_TYPE press);
+  virtual void sendMenuKey(PRESS_TYPE press);
+  virtual void sendSearchKey(PRESS_TYPE press);
+  virtual void sendCustomKey(PRESS_TYPE press, int key);
+  virtual void sendTouch(unsigned int x, unsigned int y, int finger, int action);
 
   string getAccessoryManufacturerName() { return m_accessory_manufacturer_name; }
   string getAccessoryModelName() { return m_accessory_model_name; }

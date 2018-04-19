@@ -17,6 +17,7 @@ public:
   virtual void onFrameUpdating(unsigned int currentNumber, unsigned int x, unsigned int y,
     unsigned int width, unsigned int height, unsigned char* buffer, unsigned int bufferSize) = 0;
   virtual void onFrameUpdateEnded() = 0;
+  virtual void onReady() = 0;
 };
 
 class QmySPIN {
@@ -32,6 +33,11 @@ public:
     ePIXELFORMAT_RGBA8888
   } PIXEL_FORMAT;
 
+  typedef enum PRESS_TYPE {
+    PRESS,
+    RELEASE,
+  } PRESS_TYPE;
+
   virtual bool init() = 0;
   virtual bool start() = 0;
   virtual void stop() = 0;
@@ -39,15 +45,20 @@ public:
   virtual bool select(Device *device) = 0;
   virtual bool unselect(Device *device) = 0;
 
-  virtual bool sendKey(int key, int press) = 0;
-  virtual bool sendTouch(int x, int y, int finger, int action) = 0;
+  virtual void sendHomeKey(PRESS_TYPE press) = 0;
+  virtual void sendBackKey(PRESS_TYPE press) = 0;
+  virtual void sendMenuKey(PRESS_TYPE press) = 0;
+  virtual void sendSearchKey(PRESS_TYPE press) = 0;
+  virtual void sendCustomKey(PRESS_TYPE press, int key) = 0;
+  virtual void sendTouch(int x, int y, int finger, int action) = 0;
+  virtual void setFrameBuffer(
+      PIXEL_FORMAT format, unsigned char *frame_buffer,
+      unsigned int width, unsigned height, unsigned int dpi) = 0;
+
   virtual bool sendVehicle(string message) = 0;
 
   virtual void addEventListener(QmySPINListener *listener);
   virtual void removeEventListener(QmySPINListener *listener);
-  virtual void setFrameBuffer(
-      PIXEL_FORMAT format, unsigned char *frame_buffer,
-      unsigned int width, unsigned height, unsigned int dpi);
 
   virtual void setLogLevel(bool info, bool debug, bool warn, bool error);
 protected:

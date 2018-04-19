@@ -23,13 +23,3 @@ bool SdlHandler::start(void *connected_device) {
 void SdlHandler::stop() {
 
 }
-
-bool SdlHandler::sendKey(int key, int press) {
-
-  return false;
-}
-
-bool SdlHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
-
-  return false;
-}

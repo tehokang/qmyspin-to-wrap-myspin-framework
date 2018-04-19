@@ -23,13 +23,19 @@ void ProjectionHandler::setEventListener(ProjectionListener *listener) {
 }
 
 bool ProjectionHandler::init() {
-
+  /**
+   * @warning PLEASE OVERRIDE ON YOUR OWN PROJECT HANDLER
+   * DO NOTHING HERE
+   */
   return false;
 }
 
 bool ProjectionHandler::start(void *connected_device) {
   m_connected_device = connected_device;
-
+  /**
+   * @warning PLEASE OVERRIDE ON YOUR OWN PROJECT HANDLER
+   * DO NOTHING HERE
+   */
   return false;
 }
 
@@ -37,12 +43,46 @@ void ProjectionHandler::stop() {
 
 }
 
-bool ProjectionHandler::sendKey(int key, int press) {
-  return false;
+void ProjectionHandler::sendHomeKey(PRESS_TYPE press) {
+  /**
+   * @warning PLEASE OVERRIDE ON YOUR OWN PROJECT HANDLER
+   * DO NOTHING HERE
+   */
 }
 
-bool ProjectionHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
-  return false;
+void ProjectionHandler::sendBackKey(PRESS_TYPE press) {
+  /**
+   * @warning PLEASE OVERRIDE ON YOUR OWN PROJECT HANDLER
+   * DO NOTHING HERE
+   */
+}
+
+void ProjectionHandler::sendMenuKey(PRESS_TYPE press) {
+  /**
+   * @warning PLEASE OVERRIDE ON YOUR OWN PROJECT HANDLER
+   * DO NOTHING HERE
+   */
+}
+
+void ProjectionHandler::sendSearchKey(PRESS_TYPE press) {
+  /**
+   * @warning PLEASE OVERRIDE ON YOUR OWN PROJECT HANDLER
+   * DO NOTHING HERE
+   */
+}
+
+void ProjectionHandler::sendCustomKey(PRESS_TYPE press, int key) {
+  /**
+   * @warning PLEASE OVERRIDE ON YOUR OWN PROJECT HANDLER
+   * DO NOTHING HERE
+   */
+}
+
+void ProjectionHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
+  /**
+   * @warning PLEASE OVERRIDE ON YOUR OWN PROJECT HANDLER
+   * DO NOTHING HERE
+   */
 }
 
 void ProjectionHandler::setFrameBuffer(
