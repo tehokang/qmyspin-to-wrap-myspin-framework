@@ -30,6 +30,13 @@ public:
   static const unsigned int ACCESSORY_START = 53;
 };
 
+#define ACCESSORY_MANUFACTURER_NAME "BSOT"
+#define ACCESSORY_MODEL_NAME "mySPIN"
+#define ACCESSORY_DESCRIPTION "mySPIN"
+#define ACCESSORY_VERSION "0.1"
+#define ACCESSORY_URI "com.bosch.myspin.launcherapp.cn"
+#define ACCESSORY_SERIAL_NUMBER "0000000012345678"
+
 class UsbAOAConnection : public Connection {
 public:
   UsbAOAConnection(ConnectionListener &listener);
@@ -54,6 +61,7 @@ protected:
   libusb_device_handle *m_connected_device_handle;
   uint8_t m_read_endpoint;
   uint8_t m_write_endpoint;
+
 };
 
 #endif

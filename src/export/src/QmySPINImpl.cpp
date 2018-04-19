@@ -41,6 +41,20 @@ bool QmySPINImpl::init() {
   LOG_DEBUG("\n");
 
   RETURN_FALSE_IF_FALSE(m_projection_handler.init());
+
+  m_usb_aoa_transport_adapter.setAccessoryManufacturerName(
+      m_projection_handler.getAccessoryManufacturerName());
+  m_usb_aoa_transport_adapter.setAccessoryDescription(
+      m_projection_handler.getAccessoryDescription());
+  m_usb_aoa_transport_adapter.setAccessoryModelName(
+      m_projection_handler.getAccessoryModelName());
+  m_usb_aoa_transport_adapter.setAccessoryVersion(
+      m_projection_handler.getAccessoryVersion());
+  m_usb_aoa_transport_adapter.setAccessoryUri(
+      m_projection_handler.getAccessoryUri());
+  m_usb_aoa_transport_adapter.setAccessorySerialNumber(
+      m_projection_handler.getAccessorySerialNumber());
+
   RETURN_FALSE_IF_FALSE(m_usb_aoa_transport_adapter.init());
 
   return true;

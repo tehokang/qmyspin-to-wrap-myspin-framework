@@ -2,12 +2,16 @@
 #include "Macro.h"
 
 MySPINHandler::MySPINHandler()
-{
-
+  : ProjectionHandler() {
+  m_accessory_manufacturer_name = "BSOT";
+  m_accessory_model_name = "mySPIN";
+  m_accessory_description = "mySPIN";
+  m_accessory_version = "0.1";
+  m_accessory_uri = "com.bosch.myspin.launcherapp.cn";
+  m_accessory_serial_number = "0000000012345678";
 }
 
-MySPINHandler::~MySPINHandler()
-{
+MySPINHandler::~MySPINHandler() {
   mySpin_Shutdown();
 }
 

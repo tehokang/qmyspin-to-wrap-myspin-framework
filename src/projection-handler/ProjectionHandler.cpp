@@ -1,6 +1,12 @@
 #include "ProjectionHandler.h"
 
-ProjectionHandler::ProjectionHandler() {
+ProjectionHandler::ProjectionHandler()
+  : m_accessory_manufacturer_name("Please assign in your projection handler, not here")
+  , m_accessory_model_name("Please assign in your projection handler, not here")
+  , m_accessory_description("Please assign in your projection handler, not here")
+  , m_accessory_version("Please assign in your projection handler, not here")
+  , m_accessory_uri("Please assign in your projection handler, not here")
+  , m_accessory_serial_number("Please assign in your projection handler, not here") {
   /**
    * @note NOTHING TO DO
    */

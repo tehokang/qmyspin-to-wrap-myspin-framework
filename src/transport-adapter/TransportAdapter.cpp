@@ -81,3 +81,33 @@ void TransportAdapter::onAttached(Device *device) {
 void TransportAdapter::onDettached(Device *device) {
   LOG_DEBUG("\n");
 }
+
+void TransportAdapter::setAccessoryManufacturerName(string accessory_manufacturer_name) {
+  RETURN_IF_NULL(m_connection);
+  m_connection->setAccessoryManufacturerName(accessory_manufacturer_name);
+}
+
+void TransportAdapter::setAccessoryModelName(string accessory_model_name) {
+  RETURN_IF_NULL(m_connection);
+  m_connection->setAccessoryModelName(accessory_model_name);
+}
+
+void TransportAdapter::setAccessoryDescription(string accessory_description) {
+  RETURN_IF_NULL(m_connection);
+  m_connection->setAccessoryDescription(accessory_description);
+}
+
+void TransportAdapter::setAccessoryVersion(string accessory_version) {
+  RETURN_IF_NULL(m_connection);
+  m_connection->setAccessoryVersion(accessory_version);
+}
+
+void TransportAdapter::setAccessoryUri(string accessory_uri) {
+  RETURN_IF_NULL(m_connection);
+  m_connection->setAccessoryUri(accessory_uri);
+}
+
+void TransportAdapter::setAccessorySerialNumber(string accessory_serial_number) {
+  RETURN_IF_NULL(m_connection);
+  m_connection->setAccessorySerialNumber(accessory_serial_number);
+}

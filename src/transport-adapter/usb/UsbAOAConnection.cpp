@@ -3,13 +3,6 @@
 #include "Macro.h"
 #include <unistd.h>
 
-#define ACCESSORY_MANUFACTURER_NAME "BSOT"
-#define ACCESSORY_MODEL_NAME "mySPIN"
-#define ACCESSORY_DESCRIPTION "mySPIN"
-#define ACCESSORY_VERSION "0.1"
-#define ACCESSORY_URI "com.bosch.myspin.launcherapp.cn"
-#define ACCESSORY_SERIAL_NUMBER "0000000012345678"
-
 UsbAOAConnection::UsbAOAConnection(ConnectionListener &listener)
   : Connection(listener) {
 
@@ -177,12 +170,12 @@ bool UsbAOAConnection::__request_turn_on_aoap_mode__(
                 AOAPConst::ACCESSORY_SEND_STRING, 0, index, (uint8_t*)str, strlen(str) + 1, 0);
     };
 
-    sendString(d_h, ACCESSORY_MANUFACTURER_NAME, AOAPConst::ACCESSORY_STRING_MANUFACTURER);
-    sendString(d_h, ACCESSORY_MODEL_NAME, AOAPConst::ACCESSORY_STRING_MODEL);
-    sendString(d_h, ACCESSORY_DESCRIPTION, AOAPConst::ACCESSORY_STRING_DESCRIPTION);
-    sendString(d_h, ACCESSORY_VERSION, AOAPConst::ACCESSORY_STRING_VERSION);
-    sendString(d_h, ACCESSORY_URI, AOAPConst::ACCESSORY_STRING_URI);
-    sendString(d_h, ACCESSORY_SERIAL_NUMBER, AOAPConst::ACCESSORY_STRING_SERIAL);
+    sendString(d_h, m_accessory_manufacturer_name.c_str(), AOAPConst::ACCESSORY_STRING_MANUFACTURER);
+    sendString(d_h, m_accessory_model_name.c_str(), AOAPConst::ACCESSORY_STRING_MODEL);
+    sendString(d_h, m_accessory_description.c_str(), AOAPConst::ACCESSORY_STRING_DESCRIPTION);
+    sendString(d_h, m_accessory_version.c_str(), AOAPConst::ACCESSORY_STRING_VERSION);
+    sendString(d_h, m_accessory_uri.c_str(), AOAPConst::ACCESSORY_STRING_URI);
+    sendString(d_h, m_accessory_serial_number.c_str(), AOAPConst::ACCESSORY_STRING_SERIAL);
 
     libusb_control_transfer(d_h, AOAPConst::DEVICE_TO_HOST_TYPE,
             AOAPConst::ACCESSORY_START, 0, 0, nullptr, 0, 0);

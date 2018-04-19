@@ -36,6 +36,13 @@ public:
   virtual void onAttached(Device *device) override;
   virtual void onDettached(Device *device) override;
 
+  virtual void setAccessoryManufacturerName(string accessory_manufacturer_name);
+  virtual void setAccessoryModelName(string accessory_model_name);
+  virtual void setAccessoryDescription(string accessory_description);
+  virtual void setAccessoryVersion(string accessory_version);
+  virtual void setAccessoryUri(string accessory_uri);
+  virtual void setAccessorySerialNumber(string accessory_serial_number);
+
 protected:
   int m_type;
   Scanner *m_scanner;

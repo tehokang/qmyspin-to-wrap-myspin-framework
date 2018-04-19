@@ -3,6 +3,8 @@
 
 #include "QueueThread.h"
 #include "Device.h"
+#include <string>
+using namespace std;
 
 class ConnectionListener {
 public:
@@ -38,6 +40,13 @@ public:
   Connection(ConnectionListener &listener);
   virtual ~Connection();
 
+  virtual void setAccessoryManufacturerName(string accessory_manufacturer_name);
+  virtual void setAccessoryModelName(string accessory_model_name);
+  virtual void setAccessoryDescription(string accessory_description);
+  virtual void setAccessoryVersion(string accessory_version);
+  virtual void setAccessoryUri(string accessory_uri);
+  virtual void setAccessorySerialNumber(string accessory_serial_number);
+
   virtual bool connect(Device &device) = 0;
   virtual void disconnect(Device &device) = 0;
   virtual bool send(Device &device, unsigned char *buffer, unsigned int size) = 0;
@@ -45,6 +54,13 @@ public:
 
 protected:
   ConnectionListener &m_listener;
+
+  string m_accessory_manufacturer_name;
+  string m_accessory_model_name;
+  string m_accessory_description;
+  string m_accessory_version;
+  string m_accessory_uri;
+  string m_accessory_serial_number;
 };
 
 
