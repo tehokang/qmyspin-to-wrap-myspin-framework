@@ -27,7 +27,8 @@ bool ProjectionHandler::init() {
   return false;
 }
 
-bool ProjectionHandler::start() {
+bool ProjectionHandler::start(void *connected_device) {
+  m_connected_device = connected_device;
 
   return false;
 }
@@ -42,4 +43,14 @@ bool ProjectionHandler::sendKey(int key, int press) {
 
 bool ProjectionHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
   return false;
+}
+
+void ProjectionHandler::setFrameBuffer(
+    ProjectionHandler::PIXEL_FORMAT format, unsigned char *frame_buffer,
+    unsigned int width, unsigned height, unsigned int dpi) {
+  m_pixel_format = format;
+  m_frame_buffer = frame_buffer;
+  m_width = width;
+  m_height = height;
+  m_dpi = dpi;
 }

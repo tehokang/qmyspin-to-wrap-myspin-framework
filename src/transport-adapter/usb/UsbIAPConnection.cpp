@@ -24,9 +24,9 @@ bool UsbIAPConnection::send(Device &device, unsigned char *buffer, unsigned int 
   return false;
 }
 
-bool UsbIAPConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
+unsigned int UsbIAPConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
 
-  return false;
+  return 0;
 }
 
 void UsbIAPConnection::run() {

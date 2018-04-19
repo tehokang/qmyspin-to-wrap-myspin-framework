@@ -43,6 +43,6 @@ bool TcpTransportAdapter::send(Device &device, unsigned char *buffer, unsigned i
   return m_connection->send(device, buffer, size);
 }
 
-bool TcpTransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
+unsigned int TcpTransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   return m_connection->receive(device, buffer, size);
 }

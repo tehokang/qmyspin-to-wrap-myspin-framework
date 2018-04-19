@@ -14,13 +14,18 @@ public:
   virtual ~MySPINHandler();
 
   virtual bool init() override;
-  virtual bool start() override;
+  virtual bool start(void *connected_device) override;
   virtual void stop() override;
   virtual bool sendKey(int key, int press) override;
   virtual bool sendTouch(unsigned int x, unsigned int y, int finger, int action) override;
 
 protected:
-  void *m_myspin_handle;
+  virtual bool __request_to_send__(UInt8 *buffer, size_t bufferSize, void* connection);
+  virtual unsigned int __request_to_receive__(UInt8 *buffer, size_t size, void* connection);
+  virtual void __request_to_notify_frameupdate_started__(UInt8 numOfRectangles);
+  virtual void __request_to_notify_frameupdating__(UInt8 currentNumber, UInt16 x0, UInt16 y0,
+      UInt16 width, UInt16 height, UInt8* buffer, UInt32 bufferSize);
+  virtual void __request_to_notify_frameupdate_ended__();
 
   static void __on_trace_output__(void* context, eTraceClass traceClass, char* traceString);
   static void* __on_send__(void* context, UInt8* buffer, size_t bufferSize, void* connection);
@@ -42,7 +47,8 @@ protected:
   static void __on_vehicle_data_request__(
       void* context, Flag request, UInt8 length, UInt32* keyList);
 
-
+  void* __get_myspin_handle__() { return m_myspin_handle; }
+  void *m_myspin_handle;
 };
 
 #endif

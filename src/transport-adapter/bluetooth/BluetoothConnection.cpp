@@ -23,7 +23,7 @@ bool BluetoothConnection::send(Device &device, unsigned char *buffer, unsigned i
   return false;
 }
 
-bool BluetoothConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
+unsigned int BluetoothConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
 
   return false;
 }

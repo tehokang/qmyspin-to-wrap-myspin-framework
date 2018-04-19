@@ -60,7 +60,7 @@ bool UsbAOATransportAdapter::send(Device &device, unsigned char *buffer, unsigne
   return m_connection->send(device, buffer, size);
 }
 
-bool UsbAOATransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
+unsigned int UsbAOATransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   return m_connection->receive(device, buffer, size);
 }

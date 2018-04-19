@@ -12,12 +12,12 @@ AbaltaHandler::~AbaltaHandler()
 
 bool AbaltaHandler::init() {
 
-  return true;
+  return false;
 }
 
-bool AbaltaHandler::start() {
+bool AbaltaHandler::start(void *connected_device) {
 
-  return true;
+  return false;
 }
 
 void AbaltaHandler::stop() {
@@ -25,23 +25,11 @@ void AbaltaHandler::stop() {
 }
 
 bool AbaltaHandler::sendKey(int key, int press) {
-  unsigned char buffer[1024] = {0, };
-  unsigned int buffer_size = 0;
 
-  /**
-   * @todo Making a buffer to send
-   */
-  if ( m_listener == nullptr ) return false;
-  return m_listener->onReqSend(buffer, buffer_size);
+  return false;
 }
 
 bool AbaltaHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
-  unsigned char buffer[1024] = {0, };
-  unsigned int buffer_size = 0;
 
-  /**
-   * @todo Making a buffer to send
-   */
-
-  return m_listener->onReqSend(buffer, buffer_size);
+  return false;
 }

@@ -28,14 +28,13 @@ public:
   static const unsigned int ACCESSORY_GET_PROTOCOL = 51;
   static const unsigned int ACCESSORY_SEND_STRING = 52;
   static const unsigned int ACCESSORY_START = 53;
+
+  static const unsigned int AOA_CLASS = 255;
+  static const unsigned int AOA_SUBCLASS = 255;
+  static const unsigned int AOA_PROTOCOL = 0;
 };
 
-#define ACCESSORY_MANUFACTURER_NAME "BSOT"
-#define ACCESSORY_MODEL_NAME "mySPIN"
-#define ACCESSORY_DESCRIPTION "mySPIN"
-#define ACCESSORY_VERSION "0.1"
-#define ACCESSORY_URI "com.bosch.myspin.launcherapp.cn"
-#define ACCESSORY_SERIAL_NUMBER "0000000012345678"
+
 
 class UsbAOAConnection : public Connection {
 public:
@@ -45,7 +44,7 @@ public:
   virtual bool connect(Device &device) override;
   virtual void disconnect(Device &device) override;
   virtual bool send(Device &device, unsigned char *buffer, unsigned int size) override;
-  virtual bool receive(Device &device, unsigned char *buffer, unsigned int size) override;
+  virtual unsigned int receive(Device &device, unsigned char *buffer, unsigned int size) override;
 
 protected:
   virtual void run() override;
@@ -56,9 +55,14 @@ protected:
   virtual bool __is_google_accessory__(libusb_device *d);
   virtual bool __is_support_aoap_mode__(libusb_device* d, libusb_device_handle *d_h);
   virtual bool __request_turn_on_aoap_mode__(libusb_device* d, libusb_device_handle *d_h);
+  virtual bool __do_ready_communication__(libusb_device *d, libusb_device_handle *d_h);
+  virtual int __parse_interfaces__(
+      libusb_device* dev, uint8_t* ifnum, uint8_t* readEndpoint,uint8_t* writeEndpoint);
 
   libusb_device *m_connected_device;
   libusb_device_handle *m_connected_device_handle;
+
+  uint8_t m_interface;
   uint8_t m_read_endpoint;
   uint8_t m_write_endpoint;
 

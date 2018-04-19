@@ -55,10 +55,11 @@ void QmySPIN::removeEventListener(QmySPINListener *listener) {
 }
 
 void QmySPIN::setFrameBuffer(
-    PIXEL_FORMAT format, unsigned char *frame_buffer, unsigned int width, unsigned height) {
+    PIXEL_FORMAT format, unsigned char *frame_buffer,
+    unsigned int width, unsigned height, unsigned int dpi) {
   LOG_DEBUG("\n");
-  m_pixel_format = format;
-  m_frame_buffer = frame_buffer;
-  m_width = width;
-  m_height = height;
+}
+
+void QmySPIN::setLogLevel(bool info, bool debug, bool warn, bool error) {
+  Logger::setLogLevel(info, debug, warn, error);
 }

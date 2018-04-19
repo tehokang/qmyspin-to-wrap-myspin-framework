@@ -41,6 +41,7 @@ bool QmySPINImpl::init() {
   LOG_DEBUG("\n");
 
   RETURN_FALSE_IF_FALSE(m_projection_handler.init());
+  m_projection_handler.setEventListener(this);
 
   m_usb_aoa_transport_adapter.setAccessoryManufacturerName(
       m_projection_handler.getAccessoryManufacturerName());
@@ -84,11 +85,27 @@ bool QmySPINImpl::scan() {
 }
 
 void QmySPINImpl::setFrameBuffer(
-    PIXEL_FORMAT format, unsigned char *frame_buffer, unsigned int width, unsigned height) {
+    PIXEL_FORMAT format, unsigned char *frame_buffer,
+    unsigned int width, unsigned height, unsigned int dpi) {
   LOG_DEBUG("\n");
+  ProjectionHandler::PIXEL_FORMAT pixel_format =
+      ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_ARGB8888;
 
-  QmySPIN::setFrameBuffer(format, frame_buffer, width, height);
-
+  switch ( format ) {
+    case QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_RGB888:
+      pixel_format = ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_RGB888;
+      break;
+    case QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_RGB565:
+      pixel_format = ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_RGB565;
+      break;
+    case QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_ARGB8888:
+      pixel_format = ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_ARGB8888;
+      break;
+    case QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_RGBA8888:
+      pixel_format = ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_RGBA8888;
+      break;
+  }
+  m_projection_handler.setFrameBuffer(pixel_format, frame_buffer, width, height, dpi);
   /**
    * @todo Do we need to pass frame buffer into PPCoordinator
    */
@@ -138,6 +155,9 @@ void QmySPINImpl::onScan(list<Device*> devices) {
 
 void QmySPINImpl::onConnect(Device *device) {
   LOG_DEBUG("\n");
+
+  RETURN_IF_FALSE(m_projection_handler.start((void*)device));
+
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     (*it)->onSelect(device);
@@ -146,6 +166,9 @@ void QmySPINImpl::onConnect(Device *device) {
 
 void QmySPINImpl::onDisconnect(Device *device) {
   LOG_DEBUG("\n");
+
+  m_projection_handler.stop();
+
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {
     (*it)->onUnselect(device);
@@ -160,19 +183,39 @@ void QmySPINImpl::onError(int error) {
   }
 }
 
-bool QmySPINImpl::onReqSend(unsigned char *buffer, unsigned int size) {
+bool QmySPINImpl::onReqSend(unsigned char *buffer, unsigned int size, void *connection) {
   LOG_DEBUG("\n");
-
-  return true;
+  Device *device = static_cast<Device*>(connection);
+  return m_usb_aoa_transport_adapter.send(*device, buffer, size);
 }
 
-bool QmySPINImpl::onReqReceive(unsigned char *buffer, unsigned int size) {
+unsigned int QmySPINImpl::onReqReceive(unsigned char *buffer, unsigned int size, void *connection) {
   LOG_DEBUG("\n");
-
-  return true;
+  Device *device = static_cast<Device*>(connection);
+  return m_usb_aoa_transport_adapter.receive(*device, buffer, size);
 }
 
-void QmySPINImpl::onFrameUpdated(unsigned char *buffer, unsigned int size) {
+void QmySPINImpl::onFrameUpdateStarted(unsigned int numOfRectangles) {
   LOG_DEBUG("\n");
+  for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
+      it != m_listeners.end(); ++it ) {
+    (*it)->onFrameUpdateStarted(numOfRectangles);
+  }
+}
 
+void QmySPINImpl::onFrameUpdating(unsigned int currentNumber, unsigned int x, unsigned int y,
+  unsigned int width, unsigned int height, unsigned char* buffer, unsigned int bufferSize) {
+  LOG_DEBUG("\n");
+  for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
+      it != m_listeners.end(); ++it ) {
+    (*it)->onFrameUpdating(currentNumber, x, y, width, height, buffer, bufferSize);
+  }
+}
+
+void QmySPINImpl::onFrameUpdateEnded() {
+  LOG_DEBUG("\n");
+  for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
+      it != m_listeners.end(); ++it ) {
+    (*it)->onFrameUpdateEnded();
+  }
 }

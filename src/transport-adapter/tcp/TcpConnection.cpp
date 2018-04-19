@@ -23,9 +23,9 @@ bool TcpConnection::send(Device &device, unsigned char *buffer, unsigned int siz
   return false;
 }
 
-bool TcpConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
+unsigned int TcpConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
 
-  return false;
+  return 0;
 }
 
 void TcpConnection::run() {

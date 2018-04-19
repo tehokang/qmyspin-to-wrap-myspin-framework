@@ -13,7 +13,10 @@ public:
   virtual void onSelect(Device *device) = 0;
   virtual void onUnselect(Device *device) = 0;
   virtual void onError(int error) = 0;
-  virtual void onFrameUpdate() = 0;
+  virtual void onFrameUpdateStarted(unsigned int numOfRectangles) = 0;
+  virtual void onFrameUpdating(unsigned int currentNumber, unsigned int x, unsigned int y,
+    unsigned int width, unsigned int height, unsigned char* buffer, unsigned int bufferSize) = 0;
+  virtual void onFrameUpdateEnded() = 0;
 };
 
 class QmySPIN {
@@ -22,11 +25,11 @@ public:
   static QmySPIN* getInstance();
   static void destroyInstance();
 
-  typedef enum {
-    ePIXELFORMAT_RGB888 = 1,
-    ePIXELFORMAT_RGB565 = 2,
-    ePIXELFORMAT_ARGB8888 = 3,
-    ePIXELFORMAT_RGBA8888 = 4
+  typedef enum PIXEL_FORMAT {
+    ePIXELFORMAT_RGB888,
+    ePIXELFORMAT_RGB565,
+    ePIXELFORMAT_ARGB8888,
+    ePIXELFORMAT_RGBA8888
   } PIXEL_FORMAT;
 
   virtual bool init() = 0;
@@ -43,19 +46,16 @@ public:
   virtual void addEventListener(QmySPINListener *listener);
   virtual void removeEventListener(QmySPINListener *listener);
   virtual void setFrameBuffer(
-      PIXEL_FORMAT format, unsigned char *frame_buffer, unsigned int width, unsigned height);
+      PIXEL_FORMAT format, unsigned char *frame_buffer,
+      unsigned int width, unsigned height, unsigned int dpi);
 
-
+  virtual void setLogLevel(bool info, bool debug, bool warn, bool error);
 protected:
   QmySPIN();
   virtual ~QmySPIN();
 
   static QmySPIN *m_instance;
   list<QmySPINListener*> m_listeners;
-  PIXEL_FORMAT m_pixel_format;
-  unsigned int m_width;
-  unsigned int m_height;
-  unsigned char *m_frame_buffer;
 };
 
 #endif

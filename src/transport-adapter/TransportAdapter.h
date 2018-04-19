@@ -27,7 +27,7 @@ public:
   virtual bool connect(Device &device);
   virtual void disconnect(Device &device);
   virtual bool send(Device &device, unsigned char *buffer, unsigned int size);
-  virtual bool receive(Device &device, unsigned char *buffer, unsigned int size);
+  virtual unsigned int receive(Device &device, unsigned char *buffer, unsigned int size);
 
   virtual void onConnect(Device *device) override;
   virtual void onDisconnect(Device *device) override;

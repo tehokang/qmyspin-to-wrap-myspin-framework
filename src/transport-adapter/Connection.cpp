@@ -1,5 +1,6 @@
 #include "Connection.h"
 #include "Macro.h"
+using namespace std;
 
 Connection::Connection(ConnectionListener &listener)
   : m_listener(listener) {
@@ -32,4 +33,12 @@ void Connection::setAccessoryUri(string accessory_uri) {
 
 void Connection::setAccessorySerialNumber(string accessory_serial_number) {
   m_accessory_serial_number = accessory_serial_number;
+}
+
+void Connection::__logging_buffer__(unsigned char *buffer, unsigned int size) {
+  fprintf(stdout, "Buffering data(%d) : \n", size);
+  for ( unsigned int i = 0 ; i < size ; i++ ) {
+    printf("%x ", buffer[i]);
+  }
+  fprintf(stdout, "\n");
 }

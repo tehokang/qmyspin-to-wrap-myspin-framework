@@ -24,7 +24,8 @@ public:
   virtual bool unselect(Device *device) override;
 
   virtual void setFrameBuffer(
-      PIXEL_FORMAT format, unsigned char *frame_buffer, unsigned int width, unsigned height) override;
+      PIXEL_FORMAT format, unsigned char *frame_buffer,
+      unsigned int width, unsigned height, unsigned int dpi) override;
 
   virtual bool sendKey(int key, int press) override;
   virtual bool sendTouch(int x, int y, int finger, int action) override;
@@ -33,9 +34,12 @@ public:
   /**
    * @note ProjectionListener implementation
    */
-  virtual bool onReqSend(unsigned char *buffer, unsigned int size) override;
-  virtual bool onReqReceive(unsigned char *buffer, unsigned int size) override;
-  virtual void onFrameUpdated(unsigned char *buffer, unsigned int size) override;
+  virtual bool onReqSend(unsigned char *buffer, unsigned int size, void *connection) override;
+  virtual unsigned int onReqReceive(unsigned char *buffer, unsigned int size, void *connection) override;
+  virtual void onFrameUpdateStarted(unsigned int numOfRectangles) override;
+  virtual void onFrameUpdating(unsigned int currentNumber, unsigned int x, unsigned int y,
+    unsigned int width, unsigned int height, unsigned char* buffer, unsigned int bufferSize) override;
+  virtual void onFrameUpdateEnded() override;
 
   /**
    * @note TransportAdapterListener implmentation

@@ -26,6 +26,8 @@ bool UsbAOAConnection::send(Device &device, unsigned char *buffer, unsigned int 
   LOG_DEBUG("\n");
   RETURN_FALSE_IF_NULL(m_connected_device_handle);
 
+  __logging_buffer__(buffer, size);
+
   int sizeout = 0;
   int ret = libusb_bulk_transfer(m_connected_device_handle, m_write_endpoint,
           (uint8_t*) buffer, size, &sizeout, 1000);
@@ -40,7 +42,7 @@ bool UsbAOAConnection::send(Device &device, unsigned char *buffer, unsigned int 
   return true;
 }
 
-bool UsbAOAConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
+unsigned int UsbAOAConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   RETURN_FALSE_IF_NULL(m_connected_device_handle);
 
@@ -51,9 +53,11 @@ bool UsbAOAConnection::receive(Device &device, unsigned char *buffer, unsigned i
   if ( ret != LIBUSB_SUCCESS && ret != LIBUSB_ERROR_TIMEOUT )
   {
       LOG_ERROR("Error when reading from usb: %s\n", libusb_error_name(ret));
-      return false;
   }
-  return true;
+
+  __logging_buffer__(buffer, sizeout);
+
+  return sizeout;
 }
 
 void UsbAOAConnection::run() {
@@ -79,15 +83,20 @@ void UsbAOAConnection::run() {
 }
 
 bool UsbAOAConnection::__connect__(UsbDevice *device) {
+  LOG_DEBUG("\n");
   libusb_device *d = nullptr;
   libusb_device_handle *d_h = nullptr;
 
   RETURN_FALSE_IF_FALSE(__open_device__(*device, &d, &d_h));
 
   if ( __is_google_accessory__(d) == true ) {
+    RETURN_FALSE_IF_FALSE(__parse_interfaces__(
+        d, &m_interface, &m_read_endpoint, &m_write_endpoint ) == LIBUSB_SUCCESS);
+    RETURN_FALSE_IF_FALSE(__do_ready_communication__(d, d_h));
+
     m_listener.onConnect(device);
-    LOG_DEBUG("%s is ready for communication as accessory \n",
-        device->getProductName().c_str());
+
+    LOG_DEBUG("%s is ready for communication as accessory \n", device->getProductName().c_str());
   } else {
     if ( __is_support_aoap_mode__(d, d_h) == true ) {
       __request_turn_on_aoap_mode__(d, d_h);
@@ -98,6 +107,66 @@ bool UsbAOAConnection::__connect__(UsbDevice *device) {
 
   m_connected_device = d;
   m_connected_device_handle = d_h;
+  return true;
+}
+
+int UsbAOAConnection::__parse_interfaces__(libusb_device* dev, uint8_t* ifnum,
+    uint8_t* readEndpoint,uint8_t* writeEndpoint) {
+    int ret = LIBUSB_ERROR_OTHER;
+    libusb_config_descriptor* config_descriptor;
+    libusb_get_active_config_descriptor(dev, &config_descriptor);
+
+    LOG_DEBUG("number of interfaces : %d \n", config_descriptor->bNumInterfaces);
+
+    for (int j = 0; j < config_descriptor->bNumInterfaces; ++j)
+    {
+        const libusb_interface* interface = &config_descriptor->interface[j];
+        LOG_DEBUG("\tnumber of [%d] interface settings : %d \n",
+                j, interface->num_altsetting);
+
+        for (int k = 0; k < interface->num_altsetting; ++k)
+        {
+            const libusb_interface_descriptor* interface_descriptor =
+                    &interface->altsetting[k];
+            LOG_DEBUG("\t\tnumber of endpoint : %d \n",
+                    interface_descriptor->bNumEndpoints);
+
+            for (int l = 0; l < interface_descriptor->bNumEndpoints; ++l)
+            {
+                const libusb_endpoint_descriptor* endpoint_descriptor =
+                        &interface_descriptor->endpoint[l];
+
+                if (interface_descriptor->bInterfaceClass == AOAPConst::AOA_CLASS &&
+                        interface_descriptor->bInterfaceSubClass == AOAPConst::AOA_SUBCLASS &&
+                        interface_descriptor->bInterfaceProtocol == AOAPConst::AOA_PROTOCOL)
+                {
+                    ret = LIBUSB_SUCCESS;
+                    *ifnum = j;
+                    if ( (LIBUSB_ENDPOINT_IN & endpoint_descriptor->bEndpointAddress) != 0 )
+                    {
+                        *readEndpoint = endpoint_descriptor->bEndpointAddress;
+                        LOG_DEBUG("\t\t\tread-endpoint for AOAP : %d \n",
+                                endpoint_descriptor->bEndpointAddress);
+                    }
+                    else
+                    {
+                        *writeEndpoint = endpoint_descriptor->bEndpointAddress;
+                        LOG_DEBUG("\t\t\twrite-endpoint for AOAP : %d \n",
+                                endpoint_descriptor->bEndpointAddress);
+                    }
+                }
+            }
+        }
+    }
+
+    LOG_DEBUG("\n");
+    libusb_free_config_descriptor(config_descriptor);
+    return ret;
+}
+
+bool UsbAOAConnection::__do_ready_communication__(libusb_device *d, libusb_device_handle *d_h) {
+  RETURN_FALSE_IF_FALSE(libusb_set_configuration(d_h, 1) == LIBUSB_SUCCESS);
+  RETURN_FALSE_IF_FALSE(libusb_claim_interface(d_h, m_interface) == LIBUSB_SUCCESS);
   return true;
 }
 

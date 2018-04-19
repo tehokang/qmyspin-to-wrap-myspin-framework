@@ -50,9 +50,11 @@ public:
   virtual bool connect(Device &device) = 0;
   virtual void disconnect(Device &device) = 0;
   virtual bool send(Device &device, unsigned char *buffer, unsigned int size) = 0;
-  virtual bool receive(Device &device, unsigned char *buffer, unsigned int size) = 0;
+  virtual unsigned int receive(Device &device, unsigned char *buffer, unsigned int size) = 0;
 
 protected:
+  void __logging_buffer__(unsigned char *buffer, unsigned int size);
+
   ConnectionListener &m_listener;
 
   string m_accessory_manufacturer_name;

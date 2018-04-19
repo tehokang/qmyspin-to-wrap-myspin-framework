@@ -54,7 +54,7 @@ bool UsbIAPTransportAdapter::send(Device &device, unsigned char *buffer, unsigne
   return m_connection->send(device, buffer, size);
 }
 
-bool UsbIAPTransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
+unsigned int UsbIAPTransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
   return m_connection->receive(device, buffer, size);
 }

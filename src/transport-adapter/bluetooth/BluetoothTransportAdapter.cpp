@@ -43,6 +43,6 @@ bool BluetoothTransportAdapter::send(Device &device, unsigned char *buffer, unsi
   return m_connection->send(device, buffer, size);
 }
 
-bool BluetoothTransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
+unsigned int BluetoothTransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   return m_connection->receive(device, buffer, size);
 }

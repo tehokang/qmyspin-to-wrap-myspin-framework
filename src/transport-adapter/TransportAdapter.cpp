@@ -49,9 +49,9 @@ bool TransportAdapter::send(Device &device, unsigned char *buffer, unsigned int 
   return false;
 }
 
-bool TransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
+unsigned int TransportAdapter::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
-  return false;
+  return 0;
 }
 
 void TransportAdapter::onConnect(Device *device) {

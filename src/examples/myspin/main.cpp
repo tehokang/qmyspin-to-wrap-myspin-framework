@@ -1,17 +1,17 @@
 #include "QmySPIN.h"
-#include "Macro.h"
 #include <unistd.h>
+#include <stdio.h>
 
 Device *m_android_device = nullptr;
 class QmySPINListenerImpl : public QmySPINListener {
 public:
   virtual void onScan(list<Device*> devices) {
-    LOG_DEBUG("\n");
+    printf("[%s:%d] \n", __FUNCTION__, __LINE__);
     int counter = 0;
     for ( list<Device*>::iterator it=devices.begin();
         it!=devices.end(); ++it ) {
       Device *device = (Device*)(*it);
-      LOG_DEBUG("[%d] key : %x, product : %s, manufacturer : %s \n",
+      printf("[%d] key : %x, product : %s, manufacturer : %s \n",
           ++counter,
           device->getKey(),
           device->getProductName().c_str(),
@@ -19,40 +19,59 @@ public:
 
       if ( device->getProductName().compare("SAMSUNG_Android") == 0 ) {
         m_android_device = device;
-        LOG_DEBUG("!!!\n");
+        printf("!!!\n");
       }
     }
   }
 
   virtual void onSelect(Device *device) {
-    LOG_DEBUG("\n");
+    printf("[%s:%d] \n", __FUNCTION__, __LINE__);
+    m_android_device = device;
   }
 
   virtual void onUnselect(Device *device) {
-    LOG_DEBUG("\n");
+    printf("[%s:%d] \n", __FUNCTION__, __LINE__);
+    m_android_device = nullptr;
   }
 
   virtual void onError(int error) {
-    LOG_DEBUG("\n");
+    printf("[%s:%d] \n", __FUNCTION__, __LINE__);
   }
 
-  virtual void onFrameUpdate() {
-    LOG_DEBUG("\n");
+  virtual void onFrameUpdateStarted(unsigned int numOfRectangles) {
+    printf("[%s:%d] rectangles : %d \n", __FUNCTION__, __LINE__, numOfRectangles);
+
+  }
+
+  virtual void onFrameUpdating(unsigned int currentNumber, unsigned int x, unsigned int y,
+    unsigned int width, unsigned int height, unsigned char* buffer, unsigned int bufferSize) {
+    printf("[%s:%d] currentNumber : %d \n", __FUNCTION__, __LINE__, currentNumber);
+
+  }
+
+  virtual void onFrameUpdateEnded() {
+    printf("[%s:%d] \n", __FUNCTION__, __LINE__);
   }
 };
 
 int main(int argc, char ** argv) {
-  Logger::setLogLevel(true, true, true, true);
+  unsigned int width = 800;
+  unsigned int height = 480;
+  unsigned int dpi = 96;
+  unsigned char frame_buffer[width*height*4];
+  QmySPIN::PIXEL_FORMAT pixel_format = QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_RGBA8888;
 
   QmySPIN *myspin = QmySPIN::createInstance();
+  myspin->setLogLevel(true, true, true, true);
+  myspin->setFrameBuffer(pixel_format, frame_buffer, width, height, dpi);
   myspin->addEventListener(new QmySPINListenerImpl());
 
   if ( myspin->init() == false ) {
-    LOG_ERROR("Fail to init QmySPIN \n");
+    printf("Fail to init QmySPIN \n");
   }
 
   if ( myspin->start() == false ) {
-    LOG_ERROR("Fail to start QmySPIN \n");
+    printf("Fail to start QmySPIN \n");
   }
 
 #if 0
@@ -63,13 +82,13 @@ int main(int argc, char ** argv) {
 #else
   char menu = '\0';
   while ( true ) {
-    LOG_DEBUG("######################## \n");
-    LOG_DEBUG(" s : scan usb devices \n");
-    LOG_DEBUG(" c : connect \n");
-    LOG_DEBUG(" d : disconnect \n");
-    LOG_DEBUG(" x : exit \n");
-    LOG_DEBUG("######################## \n");
-    LOG_DEBUG("input : " );
+    printf("######################## \n");
+    printf(" s : scan usb devices \n");
+    printf(" c : connect \n");
+    printf(" d : disconnect \n");
+    printf(" x : exit \n");
+    printf("######################## \n");
+    printf("input : " );
 
     menu = getchar();//scanf("%c", &menu);
     switch ( menu ) {
