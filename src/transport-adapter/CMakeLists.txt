@@ -13,18 +13,18 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 set (LIBUSB_INC
     # For Raspberry pi3
-    ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/pi3/32bit/include
+    #${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/pi3/32bit/include
     # For Telechips
-    #${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/tcc/include
+    ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/tcc/include
     # For x86 linux like Ubutun
     #${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/x86/64bit/include
 )
 
 set (LIBUSB_LIB
     # For Raspberry pi3
-    ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/pi3/32bit/lib
+    #${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/pi3/32bit/lib
     # For Telechips
-    #${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/tcc/lib
+    ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/tcc/lib
     # For x86 linux like Ubutun
     #${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/x86/64bit/lib
 
