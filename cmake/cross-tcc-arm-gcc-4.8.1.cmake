@@ -8,8 +8,8 @@
 #
 set(CMAKE_SYSTEM_NAME Linux)
 
-set(CROSS_PATH "/home/ssyoo/tcc_rootfs/sysroots/x86_64-oesdk-linux/usr/bin/arm-telechips-linux/arm-telechips-linux-")
-set(SYSROOT "/home/ssyoo/tcc_rootfs/sysroots/cortexa7-vfp-neon-telechips-linux-gnueabi" )
+set(CROSS_PATH "/opt/arm-2013.11/bin/arm-none-linux-gnueabi-")
+set(SYSROOT "/opt/arm-2013.11/arm-none-linux-gnueabi/libc/")
 
 set(CMAKE_C_COMPILER "${CROSS_PATH}gcc")
 set(CMAKE_CXX_COMPILER "${CROSS_PATH}g++")
