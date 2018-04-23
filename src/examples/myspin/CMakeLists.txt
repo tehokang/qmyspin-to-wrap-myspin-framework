@@ -11,19 +11,28 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 # Sub directories
 #=====================================================================================
+
+if ( ${TARGET_PLATFORM} EQUAL "pi-arm" )
 set (LIBUSB_LIB
   # For Raspberry pi3
-  #${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/pi3/32bit/lib
+  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/pi3/32bit/lib
+)
+elseif ( ${TARGET_PLATFORM} EQUAL "tcc-arm" )
+set (LIBUSB_LIB
   # For Telechips
   ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/tcc/lib
-  # For x86 linux like Ubutun
-  #${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/x86/64bit/lib
 )
+elseif ( ${TARGET_PLATFORM} EQUAL "brcm-arm" )
+set (LIBUSB_LIB
+  # For x86 linux like Ubutun
+  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/x86/64bit/lib
+)
+endif()
 
 set (MYSPIN_LIB
   # For Raspberry pi3
   #${CMAKE_SOURCE_DIR}/3rdparty/myspin/1.2.3/arm/32bit/debug/lib
-  # For Telechips 
+  # For Telechips
   ${CMAKE_SOURCE_DIR}/3rdparty/myspin/1.2.3/tcc/32bit/debug/lib
 )
 
