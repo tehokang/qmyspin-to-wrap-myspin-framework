@@ -82,7 +82,7 @@ QmySPIN will be initialized by User creating QmySPIN::createInstance() and calli
 
 ### 3.1 Build Tree
 
-You can download sources via Subversion [here](http://svn.humaxdigital.com/browser/home/thkang2/myspin/) as temporary.
+You can download sources via Subversion [here](http://svn.humaxdigital.com/browser/home/thkang2/qmyspin/) as temporary.
 
 The modules you saw right before are in src directory of following, 
 As you can see, 3rdparty is having libraries so that src can use 3rdparty phoneprojection framework as library and system library like libusb.
@@ -140,8 +140,8 @@ After building, there are output files in build/out directory
 * libtransport-adapter.so : TransportAdapter library
 * libutility.so : Utilities QmySPIN using
 
-To execute example-myspin you need 3rdparty phone projections's original libraries, <br>
-For instance, in case of myspin you need libmySPIN-Core.so and you can look for them via 3rdparty directory.
+To execute example-myspin you need 3rdparty phone projections's core libraries, <br>
+For instance, case of myspin you need libmySPIN-Core.so and you can look for them via 3rdparty directory.
 
 
 
