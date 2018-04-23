@@ -47,7 +47,10 @@ The diagram consist of main three block, User, SDK and Platform.
 
 <center><img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/QmySPIN-relation-flow.png?raw=true"/> QmySPIN-relation-diagram </center>
 
-This is relation diagram to represent the flow when working. It will help you to understand easily the each steps from connecting to communicating like sending, receiving and disconnecting. Let's see how they are working. <br>
+I will use this relation diagram to represent the flow when working. <br>
+It will help you to understand easily the each steps from connecting to communicating like sending, receiving and disconnecting. <br>
+Where is Phone-Projection Coordinator? That's right, it will be merged into QmySPIN. <br>
+Phone-Projection Coordinator just mean abstract layer. Let's see how they are working. <br>
 
 ##### 2.2.2.1 Initialize
 
@@ -119,7 +122,7 @@ As you can see, 3rdparty is having libraries so that src can use 3rdparty phonep
 
 ### 3.2 How to build
 
-QmySPIN for various platform toolchain(Raspberry pi3, Linux and so on) is prepared and you can see the configurations of each toolchain cmake directory like following.
+QmySPIN for various platform toolchain(Raspberry pi3, Linux and so on) is prepared and you can see the configurations of each toolchain cmake directory like following BTW sometimes you should modify them if you meet compile error.
 * cross-general-arm-gcc-4.8.1.cmake
 * cross-brcm-arm-gcc-4.8.1.cmake
 * cross-tcc-arm-gcc-4.8.1.cmake
