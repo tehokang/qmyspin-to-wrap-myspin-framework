@@ -31,7 +31,9 @@ Originally our framework supporting to mySPIN is made for covering all of multis
 
 Following is the architecture of QmySPIN including myspin and more.
 
-<center><img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/qmyspin-architecture.png"> QmySPIN-Architecture </img></center>
+<center>
+<img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/qmyspin-architecture.png?raw=true"/>
+</center>
 
 The diagram consist of main three block, User, SDK and Platform. 
 * User : Normally user will make their own application, e.g. HMI(Human Machin Interface) Application like head unit application. The application will use QmySPIN wrapper class.
@@ -41,13 +43,81 @@ The diagram consist of main three block, User, SDK and Platform.
 * Platform : System libraries are deployed which QmySPIN can use, like libusb.so, libbluetooth.so, libsocket.so and so on. Our SDK will use these resource from Platform.<br>
 
 
-<center><img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/qmyspin-relation-diagram.png"> QmySPIN-relation-diagram</img></center>
+#### 2.2.2 Relations
 
-This is relation diagram to represent the flow when working. It will help you to understand easily the each steps from connecting to communicating like sending, receiving and disconnecting. As you can see, HMI User application should use libraries of QmySPIN, 
+<center><img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/QmySPIN-relation-flow.png?raw=true"/> QmySPIN-relation-diagram </center>
+
+This is relation diagram to represent the flow when working. It will help you to understand easily the each steps from connecting to communicating like sending, receiving and disconnecting. Let's see how they are working. <br>
+
+##### 2.2.2.1 Initialize
+
+<center><img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/QmySPIN-relation-flow-initialize.png?raw=true"/> Fig. Initializing QmySPIN </center>
+
+QmySPIN will be initialized by User creating QmySPIN::createInstance() and calling init(). Then QmySPIN will initialize internal resources like ProjectionHandler and TransportAdapter.
+* ProjectionHandler : This is to control 3rdparty PhoneProjection framework
+* TransportAdapter : This is to control USB, Bluetooth, TCP devices which can be connected to head unit.
+
+(The red colored-number means the sequence of calling order)
+
+##### 2.2.2.2 Scan
+
+<center><img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/QmySPIN-relation-flow-scan.png?raw=true"/> Fig. Scanning </center>
+
+##### 2.2.2.3 Connect
+
+<center><img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/QmySPIN-relation-flow-connect.png?raw=true"/> Fig. Connecting </center>
+
+##### 2.2.2.4 Attached event and connect
+
+<center><img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/QmySPIN-relation-flow-attached-event.png?raw=true"/> Fig. Attached Event and Connecting </center>
+
+##### 2.2.2.5 Dettached event and disconnect
+
+<center><img src="https://github.com/tehokang/public-figures/blob/master/qmyspin/QmySPIN-relation-flow-dettached-event.png?raw=true"/> Fig. Dettached Event and Disconnecting </center>
 
 ## 3. How QmySPIN builds
 
-### 3.1 How to build
+### 3.1 Build Tree
+
+You can download sources via Subversion [here](http://svn.humaxdigital.com/browser/home/thkang2/myspin/) as temporary.
+
+The modules you saw right before are in src directory of following, 
+As you can see, 3rdparty is having libraries so that src can use 3rdparty phoneprojection framework as library and system library like libusb.
+
+<pre>
+.
+├── 3rdparty
+│   ├── libusb
+│   │   └── 1.0
+│   │       ├── pi3
+│   │       ├── tcc
+│   │       └── x86
+│   └── myspin
+│       └── 1.2.3
+│           ├── arm
+│           └── tcc
+├── cmake
+├── docs
+│   └── figures
+└── src
+    ├── examples
+    │   └── myspin : HMI Example Application, Not perfect ;)
+    ├── export
+    │   ├── include
+    │   └── src
+    ├── projection-handler
+    │   ├── abalta
+    │   ├── cinemo
+    │   ├── myspin
+    │   └── sdl
+    ├── transport-adapter
+    │   ├── bluetooth
+    │   ├── tcp
+    │   └── usb
+    └── utility
+</pre>
+
+### 3.2 How to build
 
 QmySPIN for various platform toolchain(Raspberry pi3, Linux and so on) is prepared and you can see the configurations of each toolchain cmake directory like following.
 * cross-general-arm-gcc-4.8.1.cmake
@@ -83,6 +153,21 @@ Probably you can't run it since you didn't set library path of mySPIN's core lib
 Please do setting like LD_LIBRARY_PATH, for instance,
 > LD_LIBRARY_PATH=../3rdparty/myspin/1.2.3/arm/32bit/debug/lib/ ./out/example-myspin
 
+Then finally you will meet menu on console
+<pre>
+########################
+ s : scan usb devices
+ c : connect
+ d : disconnect
+ x : exit
+ 1 : send home key
+ 2 : send menu key
+ 3 : send back key
+ 4 : send search key
+ ? : show menu
+########################
+input :
+</pre>
 
 Sometimes you need root right to do that. I couldn't listen event of USB on my MacBook Pro.
 After executing, please attach your Android phone via USB-cable then you can see logging example-myspin can receive data can represent from your phone.
