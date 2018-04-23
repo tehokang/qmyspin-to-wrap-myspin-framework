@@ -18,7 +18,7 @@ s'.<br>
 First of all to understand How QmySPIN works, you need to watch introduction of mySPIN from Bosch-SoftTec of following. <br>
 
 * <a href="https://www.youtube.com/watch?v=W-oRnY5G5WQ"> EICMA2016 Demo mySPIN </a>
-* <a href="https://www.youtube.com/watch?v=Xm8vdCJfDZs"> infoware.de Review mySPIN </a>
+* <a href="https://www.youtube.com/watch?v=Xm8vdCJfDZs"> infoware.de Review mySPIN </a> (recommended)
 
 If you get understanding original mySPIN then let's get more thing to understand QmySPIN. <br>
 Originally our framework supporting to mySPIN is made for covering all of multiscreen framework like mySPIN, SDL, Abalta and more things.<br>
