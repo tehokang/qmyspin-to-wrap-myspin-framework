@@ -154,20 +154,18 @@ Please do setting like LD_LIBRARY_PATH, for instance,
 > LD_LIBRARY_PATH=../3rdparty/myspin/1.2.3/arm/32bit/debug/lib/ ./out/example-myspin
 
 Then finally you will meet menu on console
-<pre>
-########################
- s : scan usb devices
- c : connect
- d : disconnect
- x : exit
- 1 : send home key
- 2 : send menu key
- 3 : send back key
- 4 : send search key
- ? : show menu
-########################
-input :
-</pre>
+>######################## <br>
+> s : scan usb devices <br>
+> c : connect <br>
+> d : disconnect <br>
+> x : exit <br>
+> 1 : send home key <br>
+> 2 : send menu key <br>
+> 3 : send back key <br>
+> 4 : send search key <br>
+> ? : show menu <br>
+>######################## <br>
+>input : <br>
 
 Sometimes you need root right to do that. I couldn't listen event of USB on my MacBook Pro.
 After executing, please attach your Android phone via USB-cable then you can see logging example-myspin can receive data can represent from your phone.
