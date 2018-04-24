@@ -1,1 +1,0 @@
-/usr/bin/g++  -fPIC  -Wall -std=c++11 -O2  -shared -Wl,-soname,libutility.so -o ../../out/libutility.so CMakeFiles/utility.dir/Logger.cpp.o CMakeFiles/utility.dir/Thread.cpp.o -lpthread 
