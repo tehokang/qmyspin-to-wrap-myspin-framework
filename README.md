@@ -38,8 +38,9 @@ Following is the architecture of QmySPIN including myspin and more.
 The diagram consist of main three block, User, SDK and Platform. 
 * User : Normally user will make their own application, e.g. HMI(Human Machin Interface) Application like head unit application. The application will use QmySPIN wrapper class.
 * SDK : The core of SDK will consist of libraries, 
+> transport-adapter : released by Humax to control devices like USB, Bluetooth, TCP to connect/disconnect/send/receive <br>
+> projection-handler : released by Humax to control 3rdparty like mySPIN, Abalta, SDL and so on.<br>
 > mySPIN library : released by Bosch-SoftTec to control mySPIN core <br>
-> transport-adapter : released by Humax to control devices like USB, Bluetooth, TCP to connect/disconnect/send/receive 
 * Platform : System libraries are deployed which QmySPIN can use, like libusb.so, libbluetooth.so, libsocket.so and so on. Our SDK will use these resource from Platform.<br>
 
 
