@@ -1,0 +1,1 @@
+/usr/bin/g++  -fPIC  -Wall -std=c++11 -O2  -shared -Wl,-soname,libprojection-export.so -o ../../out/libprojection-export.so CMakeFiles/projection-export.dir/src/QmySPIN.cpp.o CMakeFiles/projection-export.dir/src/QmySPINImpl.cpp.o 

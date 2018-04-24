@@ -1,0 +1,30 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+../src/export/include/Device.h
+string
+-
+sys/time.h
+-
+
+../src/export/include/QmySPIN.h
+list
+-
+string
+-
+Device.h
+../src/export/include/Device.h
+
+/home/pi/workspace/qmyspin/src/examples/myspin/main.cpp
+QmySPIN.h
+/home/pi/workspace/qmyspin/src/examples/myspin/QmySPIN.h
+unistd.h
+-
+stdio.h
+-
+
