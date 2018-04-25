@@ -2,7 +2,8 @@
 #include "Macro.h"
 
 MySPINHandler::MySPINHandler()
-  : ProjectionHandler() {
+  : ProjectionHandler()
+  , m_myspin_handle(nullptr) {
   m_accessory_manufacturer_name = "BSOT";
   m_accessory_model_name = "mySPIN";
   m_accessory_description = "mySPIN";
@@ -116,7 +117,6 @@ void MySPINHandler::sendBackKey(PRESS_TYPE press) {
   mySpin_SoftkeyEvent(m_myspin_handle,
       eSOFTKEY_Back, press == PRESS_TYPE::PRESS ?
       eSOFTKEYEVENTTYPE_Press : eSOFTKEYEVENTTYPE_Release);
-
 }
 
 void MySPINHandler::sendMenuKey(PRESS_TYPE press) {

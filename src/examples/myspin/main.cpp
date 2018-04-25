@@ -72,7 +72,7 @@ int main(int argc, char ** argv) {
   unsigned int height = 480;
   unsigned int dpi = 96;
   unsigned char frame_buffer[width*height*4];
-  QmySPIN::PIXEL_FORMAT pixel_format = QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_RGBA8888;
+  QmySPIN::PIXEL_FORMAT pixel_format = QmySPIN::ePIXELFORMAT_RGBA8888;
 
   QmySPIN *myspin = QmySPIN::createInstance();
   myspin->setLogLevel(true, true, true, true);
@@ -90,11 +90,11 @@ SHOW_MENU:
     printf(" s : scan usb devices \n");
     printf(" c : connect \n");
     printf(" d : disconnect \n");
-    printf(" x : exit \n");
     printf(" 1 : send home key \n");
     printf(" 2 : send menu key \n");
     printf(" 3 : send back key \n");
     printf(" 4 : send search key \n");
+    printf(" x : exit \n");
     printf(" ? : show menu\n");
     printf("######################## \n");
 INPUT_MENU:
