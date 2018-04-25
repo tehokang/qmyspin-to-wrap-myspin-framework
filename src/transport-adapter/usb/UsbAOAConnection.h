@@ -54,7 +54,7 @@ protected:
   virtual bool __open_device__(UsbDevice &device, libusb_device **d, libusb_device_handle **d_h);
   virtual bool __is_google_accessory__(libusb_device *d);
   virtual bool __is_support_aoap_mode__(libusb_device* d, libusb_device_handle *d_h);
-  virtual bool __request_turn_on_aoap_mode__(libusb_device* d, libusb_device_handle *d_h);
+  virtual void __request_turn_on_aoap_mode__(libusb_device* d, libusb_device_handle *d_h);
   virtual bool __do_ready_communication__(libusb_device *d, libusb_device_handle *d_h);
   virtual int __parse_interfaces__(
       libusb_device* dev, uint8_t* ifnum, uint8_t* readEndpoint,uint8_t* writeEndpoint);

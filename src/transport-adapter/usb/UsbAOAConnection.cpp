@@ -4,7 +4,9 @@
 #include <unistd.h>
 
 UsbAOAConnection::UsbAOAConnection(ConnectionListener &listener)
-  : Connection(listener) {
+  : Connection(listener)
+  , m_connected_device(nullptr)
+  , m_connected_device_handle(nullptr) {
 
 }
 
@@ -227,27 +229,23 @@ bool UsbAOAConnection::__is_support_aoap_mode__(libusb_device* d, libusb_device_
   return true;
 }
 
-bool UsbAOAConnection::__request_turn_on_aoap_mode__(
-    libusb_device* d, libusb_device_handle *d_h) {
+void UsbAOAConnection::__request_turn_on_aoap_mode__(
+  libusb_device* d, libusb_device_handle *d_h) {
 
-  if ( LIBUSB_SUCCESS == libusb_open(d, &d_h) ) {
-    LOG_DEBUG("\n");
-    auto sendString = [](libusb_device_handle* handle, const char* str, int index)->int
-    {
-        return libusb_control_transfer(handle, AOAPConst::DEVICE_TO_HOST_TYPE,
-                AOAPConst::ACCESSORY_SEND_STRING, 0, index, (uint8_t*)str, strlen(str) + 1, 0);
-    };
+  LOG_DEBUG("\n");
+  auto sendString = [](libusb_device_handle* handle, const char* str, int index)->int
+  {
+      return libusb_control_transfer(handle, AOAPConst::DEVICE_TO_HOST_TYPE,
+              AOAPConst::ACCESSORY_SEND_STRING, 0, index, (uint8_t*)str, strlen(str) + 1, 0);
+  };
 
-    sendString(d_h, m_accessory_manufacturer_name.c_str(), AOAPConst::ACCESSORY_STRING_MANUFACTURER);
-    sendString(d_h, m_accessory_model_name.c_str(), AOAPConst::ACCESSORY_STRING_MODEL);
-    sendString(d_h, m_accessory_description.c_str(), AOAPConst::ACCESSORY_STRING_DESCRIPTION);
-    sendString(d_h, m_accessory_version.c_str(), AOAPConst::ACCESSORY_STRING_VERSION);
-    sendString(d_h, m_accessory_uri.c_str(), AOAPConst::ACCESSORY_STRING_URI);
-    sendString(d_h, m_accessory_serial_number.c_str(), AOAPConst::ACCESSORY_STRING_SERIAL);
+  sendString(d_h, m_accessory_manufacturer_name.c_str(), AOAPConst::ACCESSORY_STRING_MANUFACTURER);
+  sendString(d_h, m_accessory_model_name.c_str(), AOAPConst::ACCESSORY_STRING_MODEL);
+  sendString(d_h, m_accessory_description.c_str(), AOAPConst::ACCESSORY_STRING_DESCRIPTION);
+  sendString(d_h, m_accessory_version.c_str(), AOAPConst::ACCESSORY_STRING_VERSION);
+  sendString(d_h, m_accessory_uri.c_str(), AOAPConst::ACCESSORY_STRING_URI);
+  sendString(d_h, m_accessory_serial_number.c_str(), AOAPConst::ACCESSORY_STRING_SERIAL);
 
-    libusb_control_transfer(d_h, AOAPConst::DEVICE_TO_HOST_TYPE,
-            AOAPConst::ACCESSORY_START, 0, 0, nullptr, 0, 0);
-    return true;
-  }
-  return false;
+  libusb_control_transfer(d_h, AOAPConst::DEVICE_TO_HOST_TYPE,
+      AOAPConst::ACCESSORY_START, 0, 0, nullptr, 0, 0);
 }
