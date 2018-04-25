@@ -123,6 +123,7 @@ bool QmySPINImpl::unselect(Device *device) {
   LOG_DEBUG("\n");
   RETURN_FALSE_IF_NULL(device);
 
+  m_projection_handler.stop();
   m_usb_aoa_transport_adapter.disconnect(*device);
   return true;
 }
@@ -183,8 +184,6 @@ void QmySPINImpl::onConnect(Device *device) {
 
 void QmySPINImpl::onDisconnect(Device *device) {
   LOG_DEBUG("\n");
-
-  m_projection_handler.stop();
 
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
       it != m_listeners.end(); ++it ) {

@@ -44,7 +44,6 @@ void UsbScanner::run() {
       }
       SAFE_DELETE(msg);
     }
-    usleep(100 * 1000);
     struct timeval timeout = { 0, 200 };
     libusb_handle_events_timeout(nullptr, &timeout);
   }
@@ -73,7 +72,8 @@ bool UsbScanner::__init_usb_hotplug_callback__() {
 }
 
 void UsbScanner::__scan__() {
-  libusb_device **list = NULL;
+  LOG_DEBUG("\n");
+  libusb_device **list = nullptr;
   int count = libusb_get_device_list(nullptr, &list);
 
   for ( int idx = 0; idx < count; ++idx ) {
@@ -83,18 +83,22 @@ void UsbScanner::__scan__() {
 }
 
 void UsbScanner::__notify_scanned__() {
+  LOG_DEBUG("\n");
   m_listener.onScan(m_devices);
 }
 
 void UsbScanner::__notify_attached__(Device *device) {
+  LOG_DEBUG("\n");
   m_listener.onAttached(device);
 }
 
 void UsbScanner::__notify__dettached__(Device *device) {
+  LOG_DEBUG("\n");
   m_listener.onDettached(device);
 }
 
 void UsbScanner::__removeAllUsbDevice__() {
+  LOG_DEBUG("\n");
   list<Device*>::iterator it = m_devices.begin();
   while ( it != m_devices.end() ) {
     Device *device = static_cast<UsbDevice*>(*it);
