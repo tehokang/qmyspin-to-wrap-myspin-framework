@@ -37,6 +37,9 @@ endif()
 #=====================================================================================
 message(STATUS "CMAKE_TOOLCHAIN_FILE='${CMAKE_TOOLCHAIN_FILE}'")
 
+# Temporary for Debug or Do comment or make param via CLI
+set(CMAKE_BUILD_TYPE Debug)
+
 set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build/out/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
 set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/out/lib)
