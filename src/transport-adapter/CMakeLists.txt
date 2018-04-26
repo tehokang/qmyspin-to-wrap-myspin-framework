@@ -11,20 +11,6 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 # Sub directories
 #=====================================================================================
-if ( ${TARGET_PLATFORM} MATCHES "pi-arm" )
-set (LIBUSB_LIB
-  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/pi3/32bit/lib
-)
-elseif ( ${TARGET_PLATFORM} MATCHES "tcc-arm" )
-set (LIBUSB_LIB
-  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/tcc/lib
-)
-elseif ( ${TARGET_PLATFORM} MATCHES "brcm-arm" )
-set (LIBUSB_LIB
-  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/x86/64bit/lib
-)
-endif()
-
 set(INCPATHS
     ${CMAKE_SOURCE_DIR}/src/export/include
     ${CMAKE_SOURCE_DIR}/src/utility

@@ -10,15 +10,38 @@ set(VERSION_MINOR "1")
 set(VERSION_PATCH "0")
 set(VERSION "${SDK_VERSION_MAJOR}.${SDK_VERSION_MINOR}.${SDK_VERSION_PATCH}")
 
+if ( ${TARGET_PLATFORM} MATCHES "pi-arm" )
+set (LIBUSB_LIB
+  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/pi3/32bit/lib
+)
+set (MYSPIN_LIB
+  ${CMAKE_SOURCE_DIR}/3rdparty/myspin/1.2.3/arm/32bit/debug/lib
+)
+
+elseif ( ${TARGET_PLATFORM} MATCHES "tcc-arm" )
+set (LIBUSB_LIB
+  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/tcc/lib
+)
+set (MYSPIN_LIB
+  ${CMAKE_SOURCE_DIR}/3rdparty/myspin/1.2.3/tcc/32bit/debug/lib
+)
+
+elseif ( ${TARGET_PLATFORM} MATCHES "brcm-arm" )
+set (LIBUSB_LIB
+  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/x86/64bit/lib
+)
+endif()
+
 #=====================================================================================
 # Build Options
 #=====================================================================================
 message(STATUS "CMAKE_TOOLCHAIN_FILE='${CMAKE_TOOLCHAIN_FILE}'")
 
-set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build/out/)
-set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
-set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_BINARY_DIR ${CMAKE_SOURCE_DIR}/build/out/bin)
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${CMAKE_BINARY_DIR})
+set(CMAKE_LIBRARY_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/out/lib)
+set(CMAKE_ARCHIVE_OUTPUT_DIRECTORY ${CMAKE_SOURCE_DIR}/build/out/lib)
+
 
 set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2")
 set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
@@ -44,3 +67,8 @@ add_subdirectory(${CMAKE_SOURCE_DIR}/src/examples)
 #=====================================================================================
 # Install
 #=====================================================================================
+file( GLOB_RECURSE LIBUSB_LIB_FILES ${LIBUSB_LIB}/libusb*.so* )
+file(INSTALL ${LIBUSB_LIB_FILES} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} )
+
+file( GLOB_RECURSE MYSPIN_LIB_FILES ${MYSPIN_LIB}/libmySPIN*.so* )
+file(INSTALL ${MYSPIN_LIB_FILES} DESTINATION ${CMAKE_LIBRARY_OUTPUT_DIRECTORY} )
