@@ -55,8 +55,12 @@ bool MySPINHandler::start(void *connected_device) {
       MySPINHandler::CoreCallBack::__on_custom_data_string__);
   mySpin_SetCustomDataIntCallback(m_myspin_handle,
       MySPINHandler::CoreCallBack::__on_custom_data_int__);
+  mySpin_SetLauncherStateCallback(m_myspin_handle,
+      MySPINHandler::CoreCallBack::__on_launcher_state_changed__);
+#if 0
   mySpin_SetVehicleDataRequestCallback(m_myspin_handle,
       MySPINHandler::CoreCallBack::__on_vehicle_data_request__);
+#endif
 
   mySpin_SetFrameOutputType(m_myspin_handle, eFLAG_FALSE);
   mySpin_SetPixelFormat(m_myspin_handle, m_pixel_format, 4, ePIXELENDIANESS_BigEndian);
@@ -69,12 +73,10 @@ bool MySPINHandler::start(void *connected_device) {
   keys[2] = eCLIENTCUSTOMDATAKEYCODE_KnobTickCW;
   keys[3] = eCLIENTCUSTOMDATAKEYCODE_KnobTickCCW;
   mySpin_SetCustomKeysSupported(m_myspin_handle, 4, keys);
-  mySpin_SetClientCapabilities(m_myspin_handle, eCLIENTCAPABILITIES_RequiresFocusControl, eFLAG_TRUE);
-  // set language before starting communication
-  mySpin_SetISO639LanguageCode(m_myspin_handle, (UInt8*)"epo");
+  mySpin_SetClientCapabilities(m_myspin_handle, eCLIENTCAPABILITIES_All, eFLAG_TRUE);
+  mySpin_SetISO639LanguageCode(m_myspin_handle, (UInt8*)"eng");
+  mySpin_SetInitialisationTimeout(m_myspin_handle, 0);
 
-  // start the receiver thread
-  mySpin_SetInitialisationTimeout(m_myspin_handle, 20);
   Int32 retErr;
   if ( mySpin_StartMainThreadEx(m_myspin_handle, &retErr) == eFLAG_FALSE ) {
     LOG_ERROR("ADAPTER: mySpin_StartMainThread() returned error code %d.\n", retErr);
@@ -84,7 +86,7 @@ bool MySPINHandler::start(void *connected_device) {
 }
 
 void MySPINHandler::stop() {
-
+  LOG_DEBUG("\n");
   if ( m_myspin_handle != nullptr ) {
     mySpin_SetProtocolCallback(m_myspin_handle, nullptr);
     mySpin_SetFrameUpdateStartCallback(m_myspin_handle, nullptr);
@@ -95,12 +97,16 @@ void MySPINHandler::stop() {
     mySpin_SetAppInactiveCallback(m_myspin_handle, nullptr);
     mySpin_SetCustomDataStringCallback(m_myspin_handle, nullptr);
     mySpin_SetCustomDataIntCallback(m_myspin_handle, nullptr);
+    mySpin_SetVehicleDataRequestCallback(m_myspin_handle, nullptr);
     mySpin_SetSenderLink(m_myspin_handle, nullptr);
     mySpin_SetReceiverLink(m_myspin_handle, nullptr);
     mySpin_SetTraceOutput(m_myspin_handle, nullptr);
+    mySpin_SetLauncherStateCallback(m_myspin_handle, nullptr);
     mySpin_DeleteInstance(m_myspin_handle);
     m_myspin_handle = nullptr;
   }
+
+  ProjectionHandler::stop();
 }
 
 void MySPINHandler::sendHomeKey(PRESS_TYPE press) {
@@ -210,6 +216,7 @@ void MySPINHandler::CoreCallBack::__on_protocol__(void* context, eProtocolState 
 
 	switch(newState) {
     case ePROTOCOL_STATE_RUN:
+      LOG_DEBUG("ePROTOCOL_STATE_RUN \n");
       handler->__request_to_notify_ready__();
       mySpin_FramebufferUpdateRequest(handler->__get_myspin_handle__(),
           (UInt16)(0 & 0xFFFF), (UInt16)(0 & 0xFFFF),
@@ -217,14 +224,19 @@ void MySPINHandler::CoreCallBack::__on_protocol__(void* context, eProtocolState 
           eFLAG_TRUE);
       break;
     case ePROTOCOL_STATE_STOP:
+      LOG_DEBUG("ePROTOCOL_STATE_STOP \n");
       break;
     case ePROTOCOL_STATE_HANDSHAKE:
+      LOG_DEBUG("ePROTOCOL_STATE_HANDSHAKE \n");
       break;
 	  case ePROTOCOL_STATE_INIT_CLIENT:
+      LOG_DEBUG("ePROTOCOL_STATE_INIT_CLIENT \n");
       break;
 	  case ePROTOCOL_STATE_INIT_SERVER:
+      LOG_DEBUG("ePROTOCOL_STATE_INIT_SERVER \n");
       break;
 	  case ePROTOCOL_STATE_INIT_DONE:
+      LOG_DEBUG("ePROTOCOL_STATE_INIT_DONE \n");
       break;
     default:
       break;
@@ -283,8 +295,25 @@ void MySPINHandler::CoreCallBack::__on_custom_data_int__(
 
 void MySPINHandler::CoreCallBack::__on_vehicle_data_request__(
     void* context, Flag request, UInt8 length, UInt32* keyList) {
-  LOG_DEBUG("request : %d, length : %d\n");
+  LOG_DEBUG("request : %d, length : %d\n", request, length);
   for ( unsigned int i = 0; i < length; i++ ) {
     LOG_DEBUG("key[%d] : %x \n", i, keyList[i]);
+  }
+}
+
+void MySPINHandler::CoreCallBack::__on_launcher_state_changed__(
+    void *context, LauncherState value) {
+  LOG_DEBUG("\n");
+
+  switch ( value ) {
+    case eLAUNCHERSTATE_NotVisible:
+      LOG_DEBUG("eLAUNCHERSTATE_NotVisible\n");
+      break;
+    case eLAUNCHERSTATE_VisibleFirst:
+      LOG_DEBUG("eLAUNCHERSTATE_VisibleFirst\n");
+      break;
+    case eLAUNCHERSTATE_VisibleOther:
+      LOG_DEBUG("eLAUNCHERSTATE_VisibleOther\n");
+      break;
   }
 }

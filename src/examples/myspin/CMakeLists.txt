@@ -11,28 +11,6 @@ cmake_minimum_required(VERSION 2.8)
 #=====================================================================================
 # Sub directories
 #=====================================================================================
-if ( ${TARGET_PLATFORM} MATCHES "pi-arm" )
-set (LIBUSB_LIB
-  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/pi3/32bit/lib
-)
-set (MYSPIN_LIB
-  ${CMAKE_SOURCE_DIR}/3rdparty/myspin/1.2.3/arm/32bit/debug/lib
-)
-
-elseif ( ${TARGET_PLATFORM} MATCHES "tcc-arm" )
-set (LIBUSB_LIB
-  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/tcc/lib
-)
-set (MYSPIN_LIB
-  ${CMAKE_SOURCE_DIR}/3rdparty/myspin/1.2.3/tcc/32bit/debug/lib
-)
-
-elseif ( ${TARGET_PLATFORM} MATCHES "brcm-arm" )
-set (LIBUSB_LIB
-  ${CMAKE_SOURCE_DIR}/3rdparty/libusb/1.0/x86/64bit/lib
-)
-endif()
-
 set(INCPATHS
   ${CMAKE_SOURCE_DIR}/src/export/include
   ${CMAKE_SOURCE_DIR}/src/utility/
@@ -52,6 +30,11 @@ link_directories(
 )
 
 set(SOURCE_FILES ${SOURCE_FILES} main.cpp)
+
+set(CMAKE_C_FLAGS "${CMAKE_CXX_FLAGS} -Wall -O2")
+set(CMAKE_C_FLAGS_DEBUG "-O0 -ggdb")
+set(CMAKE_CXX_FLAGS "${CMAKE_CXX_FLAGS} -Wall -std=c++11 -O2")
+set(CMAKE_CXX_FLAGS_DEBUG "-O0 -ggdb")
 
 #=======================================================================================
 # Build sources

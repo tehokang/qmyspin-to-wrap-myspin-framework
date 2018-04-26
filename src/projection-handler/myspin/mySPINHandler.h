@@ -53,6 +53,8 @@ protected:
         void* context, ServerCustomDataIntType type, UInt16 length, UInt8* data);
     static void __on_vehicle_data_request__(
         void* context, Flag request, UInt8 length, UInt32* keyList);
+    static void __on_launcher_state_changed__(void *context, LauncherState value);
+
   };
 
   void* __get_myspin_handle__() { return m_myspin_handle; }

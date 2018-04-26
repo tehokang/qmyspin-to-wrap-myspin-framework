@@ -11,7 +11,7 @@ UsbAOAConnection::UsbAOAConnection(ConnectionListener &listener)
 }
 
 UsbAOAConnection::~UsbAOAConnection() {
-
+  LOG_DEBUG("\n");
 }
 
 bool UsbAOAConnection::connect(Device &device) {
@@ -46,7 +46,7 @@ bool UsbAOAConnection::send(Device &device, unsigned char *buffer, unsigned int 
 
 unsigned int UsbAOAConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
-  RETURN_FALSE_IF_NULL(m_connected_device_handle);
+  if ( m_connected_device_handle == nullptr ) return 0;
 
   int sizeout = 0;
   int ret = libusb_bulk_transfer(m_connected_device_handle, m_read_endpoint,
@@ -67,6 +67,7 @@ void UsbAOAConnection::run() {
 
   while ( m_running ) {
     if ( ( msg = static_cast<ConnectionMsg*>(popMsg()) ) != nullptr ) {
+      LOG_DEBUG("\n");
       switch ( msg->getType() ) {
         case ConnectionMsgType::CONNECT:
           __connect__(static_cast<UsbDevice*>(msg->getMsg()));
@@ -80,7 +81,9 @@ void UsbAOAConnection::run() {
       }
       SAFE_DELETE(msg);
     }
-    usleep(100 * 1000);
+    struct timeval timeout = { 1, 0 };
+    int completed = 0;
+    libusb_handle_events_timeout_completed(nullptr, &timeout, &completed);
   }
 }
 
@@ -168,6 +171,7 @@ int UsbAOAConnection::__parse_interfaces__(libusb_device* dev, uint8_t* ifnum,
 bool UsbAOAConnection::__do_ready_communication__(libusb_device *d, libusb_device_handle *d_h) {
   RETURN_FALSE_IF_FALSE(libusb_set_configuration(d_h, 1) == LIBUSB_SUCCESS);
   RETURN_FALSE_IF_FALSE(libusb_claim_interface(d_h, m_interface) == LIBUSB_SUCCESS);
+  RETURN_FALSE_IF_FALSE(libusb_reset_device(d_h) == LIBUSB_SUCCESS);
   return true;
 }
 
@@ -238,6 +242,12 @@ void UsbAOAConnection::__request_turn_on_aoap_mode__(
       return libusb_control_transfer(handle, AOAPConst::DEVICE_TO_HOST_TYPE,
               AOAPConst::ACCESSORY_SEND_STRING, 0, index, (uint8_t*)str, strlen(str) + 1, 0);
   };
+  LOG_INFO("Accessory Manufacturer Name : %s \n", m_accessory_manufacturer_name.c_str());
+  LOG_INFO("Accessory Model Name : %s \n", m_accessory_model_name.c_str());
+  LOG_INFO("Accessory Description: : %s \n", m_accessory_description.c_str());
+  LOG_INFO("Accessory Version : %s \n", m_accessory_version.c_str());
+  LOG_INFO("Accessory URI : %s \n", m_accessory_uri.c_str());
+  LOG_INFO("Accessory Serial Number : %s \n", m_accessory_serial_number.c_str());
 
   sendString(d_h, m_accessory_manufacturer_name.c_str(), AOAPConst::ACCESSORY_STRING_MANUFACTURER);
   sendString(d_h, m_accessory_model_name.c_str(), AOAPConst::ACCESSORY_STRING_MODEL);

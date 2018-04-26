@@ -13,9 +13,7 @@ ProjectionHandler::ProjectionHandler()
 }
 
 ProjectionHandler::~ProjectionHandler() {
-  /**
-   * @note NOTHING TO DO
-   */
+  m_connected_device = nullptr;
 }
 
 void ProjectionHandler::setEventListener(ProjectionListener *listener) {
@@ -40,7 +38,7 @@ bool ProjectionHandler::start(void *connected_device) {
 }
 
 void ProjectionHandler::stop() {
-
+   m_connected_device = nullptr;
 }
 
 void ProjectionHandler::sendHomeKey(PRESS_TYPE press) {

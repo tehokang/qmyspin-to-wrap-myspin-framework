@@ -9,7 +9,7 @@ UsbScanner::UsbScanner(ScannerListener &listener)
 }
 
 UsbScanner::~UsbScanner() {
-
+  __removeAllUsbDevice__();
 }
 
 bool UsbScanner::init() {
@@ -44,8 +44,7 @@ void UsbScanner::run() {
       }
       SAFE_DELETE(msg);
     }
-    struct timeval timeout = { 0, 200 };
-    libusb_handle_events_timeout(nullptr, &timeout);
+    usleep(10*1000);
   }
 }
 
@@ -103,6 +102,7 @@ void UsbScanner::__removeAllUsbDevice__() {
   while ( it != m_devices.end() ) {
     Device *device = static_cast<UsbDevice*>(*it);
     delete device;
+    device = nullptr;
     it = m_devices.erase(it);
   }
 }
@@ -192,14 +192,14 @@ Device* UsbScanner::__createUsbDevice__(libusb_device *device) {
       (const char*)(serial_number),
       product_id, vendor_id, usb_class);
 
-  LOG_DEBUG("============== Connected ====================\n");
-  LOG_DEBUG("product-name: %s \n", new_device->getProductName().c_str());
-  LOG_DEBUG("manufacturer-name: %s \n", new_device->getManufacturerName().c_str());
-  LOG_DEBUG("vendor-id: 0x%04x \n", new_device->getVendorId());
-  LOG_DEBUG("product-id: 0x%04x \n", new_device->getProductId());
-  LOG_DEBUG("serial-number: %s \n", new_device->getSerialNumber().c_str());
-  LOG_DEBUG("usb-class : %d\n", new_device->getUsbClass());
-  LOG_DEBUG("=============================================\n\n");
+  LOG_INFO("============== Connected ====================\n");
+  LOG_INFO("product-name: %s \n", new_device->getProductName().c_str());
+  LOG_INFO("manufacturer-name: %s \n", new_device->getManufacturerName().c_str());
+  LOG_INFO("vendor-id: 0x%04x \n", new_device->getVendorId());
+  LOG_INFO("product-id: 0x%04x \n", new_device->getProductId());
+  LOG_INFO("serial-number: %s \n", new_device->getSerialNumber().c_str());
+  LOG_INFO("usb-class : %d\n", new_device->getUsbClass());
+  LOG_INFO("=============================================\n\n");
   m_devices.push_back(new_device);
 
   return new_device;

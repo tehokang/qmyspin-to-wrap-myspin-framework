@@ -3,6 +3,7 @@
 #include <stdio.h>
 
 Device *m_android_device = nullptr;
+QmySPIN *myspin = QmySPIN::createInstance();
 class QmySPINListenerImpl : public QmySPINListener {
 public:
   QmySPINListenerImpl() : m_is_ready(false) {
@@ -74,7 +75,6 @@ int main(int argc, char ** argv) {
   unsigned char frame_buffer[width*height*4];
   QmySPIN::PIXEL_FORMAT pixel_format = QmySPIN::ePIXELFORMAT_RGBA8888;
 
-  QmySPIN *myspin = QmySPIN::createInstance();
   myspin->setLogLevel(true, true, true, true);
   myspin->setFrameBuffer(pixel_format, frame_buffer, width, height, dpi);
   myspin->addEventListener(new QmySPINListenerImpl());

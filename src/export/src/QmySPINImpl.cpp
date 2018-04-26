@@ -72,8 +72,8 @@ bool QmySPINImpl::start() {
 void QmySPINImpl::stop() {
   LOG_DEBUG("\n");
 
-  m_usb_aoa_transport_adapter.stop();
   m_projection_handler.stop();
+  m_usb_aoa_transport_adapter.stop();
 }
 
 bool QmySPINImpl::scan() {
@@ -216,6 +216,7 @@ bool QmySPINImpl::onReqSend(unsigned char *buffer, unsigned int size, void *conn
 unsigned int QmySPINImpl::onReqReceive(unsigned char *buffer, unsigned int size, void *connection) {
   LOG_DEBUG("\n");
   Device *device = static_cast<Device*>(connection);
+  LOG_DEBUG("device : %p \n", device);
   return m_usb_aoa_transport_adapter.receive(*device, buffer, size);
 }
 
