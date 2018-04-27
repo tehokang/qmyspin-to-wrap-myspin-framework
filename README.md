@@ -134,6 +134,10 @@ Please following below scripts to build for Raspberry Pi3
 > cmake ../ -DCMAKE_TOOLCHAIN_FILE=../cmake/cross-general-arm-gcc-4.8.1.cmake <br>
 > make <br>
 
+For debugging, you may need more option when you build like below, building is a release by default.
+> cmake ../ -DCMAKE_TOOLCHAIN_FILE=../cmake/cross-general-arm-gcc-4.8.1.cmake -DCMAKE_BUILD_TYPE=Debug
+
+
 After building, there are output files in build/out directory
 * example-myspin : HMI User Example applicaiton 
 * libproject-export.so : QmySPIN wrapper library
