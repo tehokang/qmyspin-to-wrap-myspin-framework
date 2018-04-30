@@ -191,6 +191,15 @@ void QmySPINImpl::onDisconnect(Device *device) {
   }
 }
 
+void QmySPINImpl::onAttached(Device *device) {
+  LOG_DEBUG("\n");
+}
+
+void QmySPINImpl::onDettached(Device *device) {
+  LOG_DEBUG("\n");
+  m_projection_handler.stop();
+}
+
 void QmySPINImpl::onReady() {
   LOG_DEBUG("\n");
   for ( list<QmySPINListener*>::iterator it = m_listeners.begin();
@@ -243,4 +252,9 @@ void QmySPINImpl::onFrameUpdateEnded() {
       it != m_listeners.end(); ++it ) {
     (*it)->onFrameUpdateEnded();
   }
+}
+
+void QmySPINImpl::requestFrameBuffer() {
+  LOG_DEBUG("\n");
+  m_projection_handler.requestFrameBuffer();
 }

@@ -27,6 +27,7 @@ public:
       PIXEL_FORMAT format, unsigned char *frame_buffer,
       unsigned int width, unsigned height, unsigned int dpi) override;
 
+  virtual void requestFrameBuffer() override;
   virtual void sendHomeKey(PRESS_TYPE press) override;
   virtual void sendBackKey(PRESS_TYPE press) override;
   virtual void sendMenuKey(PRESS_TYPE press) override;
@@ -54,6 +55,9 @@ public:
   virtual void onConnect(Device *device) override;
   virtual void onDisconnect(Device *device) override;
   virtual void onError(int error) override;
+  virtual void onAttached(Device *device) override;
+  virtual void onDettached(Device *device) override;
+
 
 protected:
   ProjectionHandler &m_projection_handler;

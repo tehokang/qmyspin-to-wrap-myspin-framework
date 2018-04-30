@@ -13,6 +13,8 @@ public:
   virtual void onConnect(Device* device) = 0;
   virtual void onDisconnect(Device* device) = 0;
   virtual void onError(int error) = 0;
+  virtual void onAttached(Device *device) = 0;
+  virtual void onDettached(Device *device) = 0;
 };
 
 class TransportAdapter : public ScannerListener, public ConnectionListener {

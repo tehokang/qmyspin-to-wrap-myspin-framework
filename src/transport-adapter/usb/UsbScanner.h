@@ -14,6 +14,8 @@ public:
   virtual bool scan() override;
   virtual void run() override;
 
+  virtual bool start() override;
+
 protected:
 
   bool __init_usb_hotplug_callback__();
@@ -21,7 +23,7 @@ protected:
   void __scan__();
   void __notify_scanned__();
   void __notify_attached__(Device *device);
-  void __notify__dettached__(Device *device);
+  void __notify_dettached__(Device *device);
 
   Device* __createUsbDevice__(libusb_device *device);
   void __removeUsbDevice__(libusb_device *device);

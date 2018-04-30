@@ -90,6 +90,7 @@ SHOW_MENU:
     printf(" s : scan usb devices \n");
     printf(" c : connect \n");
     printf(" d : disconnect \n");
+    printf(" f : request frame buffer \n");
     printf(" 1 : send home key \n");
     printf(" 2 : send menu key \n");
     printf(" 3 : send back key \n");
@@ -98,20 +99,23 @@ SHOW_MENU:
     printf(" ? : show menu\n");
     printf("######################## \n");
 INPUT_MENU:
-    printf("input : " );
+    printf("Select menu : " );
 
-    menu = getchar();//scanf("%c", &menu);
+NOTHING_MENU:
+    menu = getchar();
     switch ( menu ) {
       case 's' : myspin->scan(); break;
       case 'c' : myspin->select(m_android_device); break;
       case 'd' : myspin->unselect(m_android_device); break;
+      case 'f' : myspin->requestFrameBuffer(); break;
       case '1' : myspin->sendHomeKey(QmySPIN::PRESS_TYPE::RELEASE); break;
       case '2' : myspin->sendMenuKey(QmySPIN::PRESS_TYPE::RELEASE); break;
       case '3' : myspin->sendBackKey(QmySPIN::PRESS_TYPE::RELEASE); break;
       case '4' : myspin->sendSearchKey(QmySPIN::PRESS_TYPE::RELEASE); break;
-      case '?' : goto SHOW_MENU;
-      case 'x' : goto EXIT;
-      default: goto INPUT_MENU;
+      case '?' : printf("\n"); goto SHOW_MENU;
+      case 'x' : printf("\n"); goto EXIT;
+      case '\n' : goto NOTHING_MENU;
+      default: printf("\n"); goto INPUT_MENU;
     }
     usleep(200*1000);
   };

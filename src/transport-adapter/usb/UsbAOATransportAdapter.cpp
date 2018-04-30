@@ -66,11 +66,13 @@ unsigned int UsbAOATransportAdapter::receive(Device &device, unsigned char *buff
 }
 
 void UsbAOATransportAdapter::onAttached(Device *device) {
-  LOG_INFO("\n");
+  LOG_DEBUG("\n");
+  TransportAdapter::onAttached(device);
   m_connection->connect(*device);
 }
 
 void UsbAOATransportAdapter::onDettached(Device *device) {
-  LOG_INFO("\n");
+  LOG_DEBUG("\n");
+  TransportAdapter::onDettached(device);
   m_connection->disconnect(*device);
 }

@@ -26,8 +26,8 @@ set(SOURCE_FILES ${SOURCE_FILES}
     Connection.cpp Scanner.cpp TransportAdapter.cpp TransportAdapterFactory.cpp)
 
 set (SOURCE_FILES ${SOURCE_FILES}
-    usb/UsbAndroidDevice.cpp usb/UsbAOAConnection.cpp usb/UsbAOATransportAdapter.cpp
-    usb/UsbAppleDevice.cpp usb/UsbIAPConnection.cpp usb/UsbIAPTransportAdapter.cpp
+    usb/UsbAOAConnection.cpp usb/UsbAOATransportAdapter.cpp
+    usb/UsbIAPConnection.cpp usb/UsbIAPTransportAdapter.cpp
     usb/UsbDevice.cpp usb/UsbScanner.cpp)
 
 set (SOURCE_FILES ${SOURCE_FILES}

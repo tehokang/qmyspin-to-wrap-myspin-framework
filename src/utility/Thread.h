@@ -17,7 +17,7 @@ public:
     /**
      * Call this method to start running the thread.
      */
-    bool start();
+    virtual bool start();
     /**
      * Call this method to wait for the thread represented by this object to terminate.
      * You are responsible for actually making the thread shutdown somehow.

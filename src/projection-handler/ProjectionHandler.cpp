@@ -1,7 +1,8 @@
 #include "ProjectionHandler.h"
 
 ProjectionHandler::ProjectionHandler()
-  : m_accessory_manufacturer_name("Please assign in your projection handler, not here")
+  : m_connected_device(nullptr)
+  , m_accessory_manufacturer_name("Please assign in your projection handler, not here")
   , m_accessory_model_name("Please assign in your projection handler, not here")
   , m_accessory_description("Please assign in your projection handler, not here")
   , m_accessory_version("Please assign in your projection handler, not here")
@@ -91,4 +92,8 @@ void ProjectionHandler::setFrameBuffer(
   m_width = width;
   m_height = height;
   m_dpi = dpi;
+}
+
+void ProjectionHandler::requestFrameBuffer() {
+
 }

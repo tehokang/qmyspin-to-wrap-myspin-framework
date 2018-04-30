@@ -5,8 +5,9 @@
 
 UsbAOAConnection::UsbAOAConnection(ConnectionListener &listener)
   : Connection(listener)
-  , m_connected_device(nullptr)
-  , m_connected_device_handle(nullptr) {
+  , m_interface(-1)
+  , m_read_endpoint(-1)
+  , m_write_endpoint(-1) {
 
 }
 
@@ -16,29 +17,30 @@ UsbAOAConnection::~UsbAOAConnection() {
 
 bool UsbAOAConnection::connect(Device &device) {
   LOG_DEBUG("\n");
-  return pushMsg(new ConnectionMsg(ConnectionMsgType::CONNECT, &device));
+  return __connect__(static_cast<UsbDevice*>(&device));
 }
 
 void UsbAOAConnection::disconnect(Device &device) {
   LOG_DEBUG("\n");
-  pushMsg(new ConnectionMsg(ConnectionMsgType::DISCONNECT, &device));
+  __disconnect__(static_cast<UsbDevice*>(&device));
 }
 
 bool UsbAOAConnection::send(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
-  RETURN_FALSE_IF_NULL(m_connected_device_handle);
+  UsbDevice *usb = static_cast<UsbDevice*>(&device);
+  RETURN_FALSE_IF_TRUE( !usb || !usb->getDeviceHandle() );
 
   __logging_buffer__(buffer, size);
 
   int sizeout = 0;
-  int ret = libusb_bulk_transfer(m_connected_device_handle, m_write_endpoint,
+  int ret = libusb_bulk_transfer(usb->getDeviceHandle(), m_write_endpoint,
           (uint8_t*) buffer, size, &sizeout, 1000);
 
   if ( ret != LIBUSB_SUCCESS && ret != LIBUSB_ERROR_TIMEOUT ) {
-      LOG_WARNING("Error when writing to usb: %s\n", libusb_error_name(ret));
+      // LOG_WARNING("Error when writing to usb: %s\n", libusb_error_name(ret));
       return false;
   } else if (ret == LIBUSB_ERROR_TIMEOUT) {
-      LOG_ERROR("Timeout on usb write\n");
+      // LOG_ERROR("Timeout on usb write\n");
       return false;
   }
   return true;
@@ -46,20 +48,53 @@ bool UsbAOAConnection::send(Device &device, unsigned char *buffer, unsigned int 
 
 unsigned int UsbAOAConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
   LOG_DEBUG("\n");
-  if ( m_connected_device_handle == nullptr ) return 0;
+  UsbDevice *usb = static_cast<UsbDevice*>(&device);
+  if ( !usb || !usb->getDeviceHandle() ) return 0;
 
   int sizeout = 0;
-  int ret = libusb_bulk_transfer(m_connected_device_handle, m_read_endpoint,
+  int ret = libusb_bulk_transfer(usb->getDeviceHandle(), m_read_endpoint,
       buffer, size, &sizeout, 1000);
 
   if ( ret != LIBUSB_SUCCESS && ret != LIBUSB_ERROR_TIMEOUT )
   {
-      LOG_ERROR("Error when reading from usb: %s\n", libusb_error_name(ret));
+      // LOG_ERROR("Error when reading from usb: %s\n", libusb_error_name(ret));
   }
 
   __logging_buffer__(buffer, sizeout);
 
   return sizeout;
+}
+
+bool UsbAOAConnection::__connect__(UsbDevice *device) {
+  LOG_DEBUG("\n");
+  RETURN_FALSE_IF_NULL(device);
+
+  libusb_device *d = device->getDevice();
+  libusb_device_handle *d_h = device->getDeviceHandle();
+
+  if ( __is_google_accessory__(d) == true ) {
+    RETURN_FALSE_IF_FALSE(__parse_interfaces__(d) == LIBUSB_SUCCESS);
+    RETURN_FALSE_IF_FALSE(__turn_on_communication__(d, d_h));
+    m_listener.onConnect(device);
+  } else {
+    if ( __is_support_aoap_mode__(d, d_h) == true ) {
+      __request_turn_on_aoap_mode__(d, d_h);
+    } else {
+      m_listener.onError(-1);
+      return false;
+    }
+  }
+  return true;
+}
+
+void UsbAOAConnection::__disconnect__(UsbDevice *device) {
+  LOG_DEBUG("\n");
+  if ( device && device->getDeviceHandle() ) {
+    __turn_off_communication__(device->getDevice(), device->getDeviceHandle());
+    libusb_close(device->getDeviceHandle());
+  }
+
+  m_listener.onDisconnect(device);
 }
 
 void UsbAOAConnection::run() {
@@ -69,53 +104,18 @@ void UsbAOAConnection::run() {
     if ( ( msg = static_cast<ConnectionMsg*>(popMsg()) ) != nullptr ) {
       LOG_DEBUG("\n");
       switch ( msg->getType() ) {
-        case ConnectionMsgType::CONNECT:
-          __connect__(static_cast<UsbDevice*>(msg->getMsg()));
-          break;
-        case ConnectionMsgType::DISCONNECT:
-          __disconnect__(static_cast<UsbDevice*>(msg->getMsg()));
-          break;
         default:
           LOG_WARNING("Unknown message : %d \n", msg->getType());
           break;
       }
       SAFE_DELETE(msg);
     }
-    struct timeval timeout = { 1, 0 };
-    int completed = 0;
-    libusb_handle_events_timeout_completed(nullptr, &timeout, &completed);
+    struct timeval timeout = { 0, 100 };
+    libusb_handle_events_timeout(nullptr, &timeout);
   }
 }
 
-bool UsbAOAConnection::__connect__(UsbDevice *device) {
-  LOG_DEBUG("\n");
-  libusb_device *d = nullptr;
-  libusb_device_handle *d_h = nullptr;
-
-  RETURN_FALSE_IF_FALSE(__open_device__(*device, &d, &d_h));
-
-  if ( __is_google_accessory__(d) == true ) {
-    RETURN_FALSE_IF_FALSE(__parse_interfaces__(
-        d, &m_interface, &m_read_endpoint, &m_write_endpoint ) == LIBUSB_SUCCESS);
-    RETURN_FALSE_IF_FALSE(__do_ready_communication__(d, d_h));
-
-    m_connected_device = d;
-    m_connected_device_handle = d_h;
-
-    m_listener.onConnect(device);
-    LOG_DEBUG("%s is ready for communication as accessory \n", device->getProductName().c_str());
-  } else {
-    if ( __is_support_aoap_mode__(d, d_h) == true ) {
-      __request_turn_on_aoap_mode__(d, d_h);
-    } else {
-      return false;
-    }
-  }
-  return true;
-}
-
-int UsbAOAConnection::__parse_interfaces__(libusb_device* dev, uint8_t* ifnum,
-    uint8_t* readEndpoint,uint8_t* writeEndpoint) {
+int UsbAOAConnection::__parse_interfaces__(libusb_device* dev) {
     int ret = LIBUSB_ERROR_OTHER;
     libusb_config_descriptor* config_descriptor;
     libusb_get_active_config_descriptor(dev, &config_descriptor);
@@ -145,16 +145,16 @@ int UsbAOAConnection::__parse_interfaces__(libusb_device* dev, uint8_t* ifnum,
                         interface_descriptor->bInterfaceProtocol == AOAPConst::AOA_PROTOCOL)
                 {
                     ret = LIBUSB_SUCCESS;
-                    *ifnum = j;
+                    m_interface = j;
                     if ( (LIBUSB_ENDPOINT_IN & endpoint_descriptor->bEndpointAddress) != 0 )
                     {
-                        *readEndpoint = endpoint_descriptor->bEndpointAddress;
+                        m_read_endpoint = endpoint_descriptor->bEndpointAddress;
                         LOG_DEBUG("\t\t\tread-endpoint for AOAP : %d \n",
                                 endpoint_descriptor->bEndpointAddress);
                     }
                     else
                     {
-                        *writeEndpoint = endpoint_descriptor->bEndpointAddress;
+                        m_write_endpoint = endpoint_descriptor->bEndpointAddress;
                         LOG_DEBUG("\t\t\twrite-endpoint for AOAP : %d \n",
                                 endpoint_descriptor->bEndpointAddress);
                     }
@@ -168,44 +168,18 @@ int UsbAOAConnection::__parse_interfaces__(libusb_device* dev, uint8_t* ifnum,
     return ret;
 }
 
-bool UsbAOAConnection::__do_ready_communication__(libusb_device *d, libusb_device_handle *d_h) {
+void UsbAOAConnection::__turn_off_communication__(libusb_device *d, libusb_device_handle *d_h) {
+  LOG_DEBUG("\n");
+  RETURN_IF_TRUE(m_interface == -1);
+  libusb_release_interface(d_h, m_interface);
+}
+
+bool UsbAOAConnection::__turn_on_communication__(libusb_device *d, libusb_device_handle *d_h) {
+  LOG_DEBUG("\n");
+  RETURN_FALSE_IF_TRUE(m_interface == -1);
   RETURN_FALSE_IF_FALSE(libusb_set_configuration(d_h, 1) == LIBUSB_SUCCESS);
   RETURN_FALSE_IF_FALSE(libusb_claim_interface(d_h, m_interface) == LIBUSB_SUCCESS);
-  RETURN_FALSE_IF_FALSE(libusb_reset_device(d_h) == LIBUSB_SUCCESS);
   return true;
-}
-
-void UsbAOAConnection::__disconnect__(UsbDevice *device) {
-  LOG_DEBUG("\n");
-  if ( m_connected_device_handle ) {
-    libusb_close(m_connected_device_handle);
-    m_connected_device_handle = nullptr;
-    m_connected_device = nullptr;
-  }
-
-  m_listener.onDisconnect(device);
-}
-
-bool UsbAOAConnection::__open_device__(
-  UsbDevice &device, libusb_device **d, libusb_device_handle **d_h) {
-  libusb_device **list;
-  int cnt = libusb_get_device_list(NULL, &list);
-
-  for (int i = 0; i < cnt; i++) {
-      libusb_device *tmp = list[i];
-
-      libusb_device_descriptor desc = {0};
-      if ( LIBUSB_SUCCESS == libusb_get_device_descriptor(tmp, &desc) &&
-          device.getProductId() == desc.idProduct &&
-          device.getVendorId() == desc.idVendor ) {
-        libusb_free_device_list(list, 1);
-        *d = tmp;
-        if ( LIBUSB_SUCCESS == libusb_open(*d, &(*d_h)) ) {
-          return true;
-        }
-      }
-  }
-  return false;
 }
 
 bool UsbAOAConnection::__is_google_accessory__(libusb_device* d) {

@@ -18,7 +18,7 @@ public:
   virtual unsigned int receive(Device &device, unsigned char *buffer, unsigned int size) override;
 
   /**
-   * @note Hooker for ScannerListener
+   * @note Override events of TransportAdapter to hook
    */
   virtual void onAttached(Device *device) override;
   virtual void onDettached(Device *device) override;

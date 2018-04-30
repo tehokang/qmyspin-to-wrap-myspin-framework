@@ -16,6 +16,8 @@ public:
   virtual bool start(void *connected_device) override;
   virtual void stop() override;
 
+  virtual void requestFrameBuffer() override;
+
   virtual void sendHomeKey(PRESS_TYPE press) override;
   virtual void sendBackKey(PRESS_TYPE press) override;
   virtual void sendMenuKey(PRESS_TYPE press) override;

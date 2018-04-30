@@ -17,7 +17,11 @@ bool UsbScanner::init() {
     libusb_exit(nullptr);
     return false;
   }
+  return true;
+}
 
+bool UsbScanner::start() {
+  Scanner::start();
   return __init_usb_hotplug_callback__();
 }
 
@@ -91,7 +95,7 @@ void UsbScanner::__notify_attached__(Device *device) {
   m_listener.onAttached(device);
 }
 
-void UsbScanner::__notify__dettached__(Device *device) {
+void UsbScanner::__notify_dettached__(Device *device) {
   LOG_DEBUG("\n");
   m_listener.onDettached(device);
 }
@@ -175,11 +179,14 @@ Device* UsbScanner::__createUsbDevice__(libusb_device *device) {
    */
   for ( list<Device*>::iterator it = m_devices.begin();
       it != m_devices.end(); ++it ) {
-    UsbDevice *device = static_cast<UsbDevice*>(*it);
-    if ( device->getProductName().compare((char*)product_name) == 0 &&
-        device->getManufacturerName().compare((char*)manufacturer_name) == 0 &&
-        device->getSerialNumber().compare((char*)serial_number) == 0 ) {
-      return device;
+    UsbDevice *usb = static_cast<UsbDevice*>(*it);
+    if ( usb->getProductName().compare((char*)product_name) == 0 &&
+        usb->getManufacturerName().compare((char*)manufacturer_name) == 0 &&
+        usb->getSerialNumber().compare((char*)serial_number) == 0 &&
+        usb->getDevice() == device ) {
+      LOG_INFO("This already exist \n");
+      usb->updateDeviceHandle(device_handle);
+      return usb;
     }
   }
 
@@ -190,6 +197,7 @@ Device* UsbScanner::__createUsbDevice__(libusb_device *device) {
       (const char*)(product_name),
       (const char*)(manufacturer_name),
       (const char*)(serial_number),
+      device, device_handle,
       product_id, vendor_id, usb_class);
 
   LOG_INFO("============== Connected ====================\n");
@@ -199,6 +207,8 @@ Device* UsbScanner::__createUsbDevice__(libusb_device *device) {
   LOG_INFO("product-id: 0x%04x \n", new_device->getProductId());
   LOG_INFO("serial-number: %s \n", new_device->getSerialNumber().c_str());
   LOG_INFO("usb-class : %d\n", new_device->getUsbClass());
+  LOG_INFO("device : %p \n", new_device->getDevice());
+  LOG_INFO("device-handle : %p \n", new_device->getDeviceHandle());
   LOG_INFO("=============================================\n\n");
   m_devices.push_back(new_device);
 
@@ -214,15 +224,17 @@ int UsbScanner::__onUsbHotplugged__(struct libusb_context* ctx, struct libusb_de
   {
     case LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED:
       {
+        LOG_DEBUG("LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED \n");
         UsbDevice* plugin_device = static_cast<UsbDevice*>(scanner->__createUsbDevice__(device));
         if ( plugin_device) scanner->__notify_attached__(plugin_device);
       }
       break;
     case LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT:
       {
+        LOG_DEBUG("LIBUSB_HOTPLUG_EVENT_DEVICE_LEFT \n");
         UsbDevice* plugout_device = static_cast<UsbDevice*>(scanner->__findUsbDevice__(device));
         if ( plugout_device) {
-          scanner->__notify__dettached__(plugout_device);
+          scanner->__notify_dettached__(plugout_device);
           scanner->__removeUsbDevice__(device);
         }
       }

@@ -86,7 +86,7 @@ bool MySPINHandler::start(void *connected_device) {
 }
 
 void MySPINHandler::stop() {
-  LOG_DEBUG("\n");
+  LOG_DEBUG("m_myspin_handle : %p \n", m_myspin_handle);
   if ( m_myspin_handle != nullptr ) {
     mySpin_SetProtocolCallback(m_myspin_handle, nullptr);
     mySpin_SetFrameUpdateStartCallback(m_myspin_handle, nullptr);
@@ -104,6 +104,8 @@ void MySPINHandler::stop() {
     mySpin_SetLauncherStateCallback(m_myspin_handle, nullptr);
     mySpin_DeleteInstance(m_myspin_handle);
     m_myspin_handle = nullptr;
+  } else {
+    LOG_WARNING("mySPIN already shut down \n");
   }
 
   ProjectionHandler::stop();
@@ -149,6 +151,13 @@ void MySPINHandler::sendCustomKey(PRESS_TYPE press, int key) {
 
 void MySPINHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
   LOG_DEBUG("\n");
+}
+
+void MySPINHandler::requestFrameBuffer() {
+  LOG_DEBUG("\n");
+  mySpin_FramebufferUpdateRequest(__get_myspin_handle__(),
+      (UInt16)(0 & 0xFFFF), (UInt16)(0 & 0xFFFF),
+      (UInt16)(getWidth() & 0xFFFF), (UInt16)(getHeight() & 0xFFFF), eFLAG_TRUE);
 }
 
 void MySPINHandler::__request_to_notify_ready__() {

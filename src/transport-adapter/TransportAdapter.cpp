@@ -76,10 +76,12 @@ void TransportAdapter::onScan(list<Device*> devices) {
 
 void TransportAdapter::onAttached(Device *device) {
   LOG_DEBUG("\n");
+  m_listener.onAttached(device);
 }
 
 void TransportAdapter::onDettached(Device *device) {
   LOG_DEBUG("\n");
+  m_listener.onDettached(device);
 }
 
 void TransportAdapter::setAccessoryManufacturerName(string accessory_manufacturer_name) {

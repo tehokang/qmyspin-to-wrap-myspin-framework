@@ -43,6 +43,7 @@ public:
       ProjectionHandler::PIXEL_FORMAT format, unsigned char *frame_buffer,
       unsigned int width, unsigned height, unsigned int dpi);
 
+  virtual void requestFrameBuffer();
   virtual void sendHomeKey(PRESS_TYPE press);
   virtual void sendBackKey(PRESS_TYPE press);
   virtual void sendMenuKey(PRESS_TYPE press);
