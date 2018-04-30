@@ -36,7 +36,7 @@ void Connection::setAccessorySerialNumber(string accessory_serial_number) {
 }
 
 void Connection::__logging_buffer__(unsigned char *buffer, unsigned int size) {
-#if 0
+#if 1
   fprintf(stdout, "Buffering data(%d) : \n", size);
   for ( unsigned int i = 0 ; i < size ; i++ ) {
     fprintf(stdout, "%x ", buffer[i]);

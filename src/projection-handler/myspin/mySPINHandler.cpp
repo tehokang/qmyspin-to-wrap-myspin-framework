@@ -75,7 +75,7 @@ bool MySPINHandler::start(void *connected_device) {
   mySpin_SetCustomKeysSupported(m_myspin_handle, 4, keys);
   mySpin_SetClientCapabilities(m_myspin_handle, eCLIENTCAPABILITIES_All, eFLAG_TRUE);
   mySpin_SetISO639LanguageCode(m_myspin_handle, (UInt8*)"eng");
-  mySpin_SetInitialisationTimeout(m_myspin_handle, 0);
+  mySpin_SetInitialisationTimeout(m_myspin_handle, 10);
 
   Int32 retErr;
   if ( mySpin_StartMainThreadEx(m_myspin_handle, &retErr) == eFLAG_FALSE ) {

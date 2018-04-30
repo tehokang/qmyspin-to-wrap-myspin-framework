@@ -78,7 +78,7 @@ void QmySPINImpl::stop() {
 
 bool QmySPINImpl::scan() {
   LOG_DEBUG("\n");
-
+  m_projection_handler.stop();
   RETURN_FALSE_IF_FALSE(m_usb_aoa_transport_adapter.scan());
 
   return true;
