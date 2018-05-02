@@ -86,7 +86,8 @@ bool MySPINHandler::start(void *connected_device) {
 }
 
 void MySPINHandler::stop() {
-  LOG_DEBUG("m_myspin_handle : %p \n", m_myspin_handle);
+  m_mtx_for_thread_safe.lock();
+  LOG_DEBUG("Begin of stop, m_myspin_handle : %p \n", m_myspin_handle);
   if ( m_myspin_handle != nullptr ) {
     mySpin_SetProtocolCallback(m_myspin_handle, nullptr);
     mySpin_SetFrameUpdateStartCallback(m_myspin_handle, nullptr);
@@ -109,6 +110,8 @@ void MySPINHandler::stop() {
   }
 
   ProjectionHandler::stop();
+  LOG_DEBUG("End of stop \n");
+  m_mtx_for_thread_safe.unlock();
 }
 
 void MySPINHandler::sendHomeKey(PRESS_TYPE press) {

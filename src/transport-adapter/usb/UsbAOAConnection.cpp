@@ -26,7 +26,6 @@ void UsbAOAConnection::disconnect(Device &device) {
 }
 
 bool UsbAOAConnection::send(Device &device, unsigned char *buffer, unsigned int size) {
-  LOG_DEBUG("\n");
   UsbDevice *usb = static_cast<UsbDevice*>(&device);
   RETURN_FALSE_IF_TRUE( !usb || !usb->getDeviceHandle() );
 
@@ -47,7 +46,6 @@ bool UsbAOAConnection::send(Device &device, unsigned char *buffer, unsigned int 
 }
 
 unsigned int UsbAOAConnection::receive(Device &device, unsigned char *buffer, unsigned int size) {
-  LOG_DEBUG("\n");
   UsbDevice *usb = static_cast<UsbDevice*>(&device);
   if ( !usb || !usb->getDeviceHandle() ) return 0;
 

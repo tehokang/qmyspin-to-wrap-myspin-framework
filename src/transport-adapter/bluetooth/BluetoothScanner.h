@@ -3,6 +3,7 @@
 
 #include "../Scanner.h"
 
+class Device;
 class BluetoothScanner : public Scanner {
 public:
   BluetoothScanner(ScannerListener &listener);
@@ -11,7 +12,7 @@ public:
   virtual bool init() override;
   virtual bool scan() override;
   virtual void run() override;
-
+  virtual list<Device*> getDevices() override;
 protected:
 
 };

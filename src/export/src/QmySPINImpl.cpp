@@ -84,6 +84,10 @@ bool QmySPINImpl::scan() {
   return true;
 }
 
+list<Device*> QmySPINImpl::getDevices() {
+  return m_usb_aoa_transport_adapter.getDevices();
+}
+
 void QmySPINImpl::setFrameBuffer(
     PIXEL_FORMAT format, unsigned char *frame_buffer,
     unsigned int width, unsigned height, unsigned int dpi) {
@@ -223,7 +227,6 @@ bool QmySPINImpl::onReqSend(unsigned char *buffer, unsigned int size, void *conn
 }
 
 unsigned int QmySPINImpl::onReqReceive(unsigned char *buffer, unsigned int size, void *connection) {
-  LOG_DEBUG("\n");
   Device *device = static_cast<Device*>(connection);
   LOG_DEBUG("device : %p \n", device);
   return m_usb_aoa_transport_adapter.receive(*device, buffer, size);

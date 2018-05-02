@@ -26,6 +26,7 @@ public:
   virtual bool start();
   virtual void stop();
   virtual bool scan();
+  virtual list<Device*> getDevices();
   virtual bool connect(Device &device);
   virtual void disconnect(Device &device);
   virtual bool send(Device &device, unsigned char *buffer, unsigned int size);
