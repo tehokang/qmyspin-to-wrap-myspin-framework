@@ -22,3 +22,8 @@ bool TcpScanner::scan() {
 void TcpScanner::run() {
 
 }
+
+list<Device*> TcpScanner::getDevices() {
+  list<Device*> test;
+  return test;
+}

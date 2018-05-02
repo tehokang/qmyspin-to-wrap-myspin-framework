@@ -22,3 +22,8 @@ bool BluetoothScanner::scan() {
 void BluetoothScanner::run() {
 
 }
+
+list<Device*> BluetoothScanner::getDevices() {
+  list<Device*> test;
+  return test;
+}

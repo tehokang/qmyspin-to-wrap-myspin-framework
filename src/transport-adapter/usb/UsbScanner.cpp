@@ -30,6 +30,11 @@ bool UsbScanner::scan() {
   return pushMsg(new ScannerMsg(ScannerMsgType::SCAN, nullptr));
 }
 
+list<Device*> UsbScanner::getDevices() {
+  __scan__();
+  return m_devices;
+}
+
 void UsbScanner::run() {
   ScannerMsg *msg = nullptr;
 
@@ -81,7 +86,7 @@ void UsbScanner::__scan__() {
 
   for ( int idx = 0; idx < count; ++idx ) {
     libusb_device *device = list[idx];
-    __createUsbDevice__(device);
+    __updateUsbDevice__(device);
   }
 }
 
@@ -147,7 +152,7 @@ Device* UsbScanner::__findUsbDevice__(libusb_device *device) {
   return nullptr;
 }
 
-Device* UsbScanner::__createUsbDevice__(libusb_device *device) {
+Device* UsbScanner::__updateUsbDevice__(libusb_device *device) {
   libusb_device_descriptor desc = {0};
   libusb_device_handle *device_handle = nullptr;
 
@@ -225,7 +230,7 @@ int UsbScanner::__onUsbHotplugged__(struct libusb_context* ctx, struct libusb_de
     case LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED:
       {
         LOG_DEBUG("LIBUSB_HOTPLUG_EVENT_DEVICE_ARRIVED \n");
-        UsbDevice* plugin_device = static_cast<UsbDevice*>(scanner->__createUsbDevice__(device));
+        UsbDevice* plugin_device = static_cast<UsbDevice*>(scanner->__updateUsbDevice__(device));
         if ( plugin_device) scanner->__notify_attached__(plugin_device);
       }
       break;

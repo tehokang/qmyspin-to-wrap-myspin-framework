@@ -34,6 +34,11 @@ bool TransportAdapter::scan() {
   return false;
 }
 
+list<Device*> TransportAdapter::getDevices() {
+  list<Device*> test;
+  return test;
+}
+
 bool TransportAdapter::connect(Device &device) {
   LOG_DEBUG("\n");
   return false;

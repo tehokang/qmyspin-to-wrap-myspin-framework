@@ -46,7 +46,7 @@ public:
   virtual bool unselect(Device *device) = 0;
 
   virtual void requestFrameBuffer() = 0;
-
+  virtual list<Device*> getDevices() = 0;
   virtual void sendHomeKey(PRESS_TYPE press) = 0;
   virtual void sendBackKey(PRESS_TYPE press) = 0;
   virtual void sendMenuKey(PRESS_TYPE press) = 0;

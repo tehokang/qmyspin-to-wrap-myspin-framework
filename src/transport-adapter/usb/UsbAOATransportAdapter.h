@@ -12,6 +12,7 @@ public:
   virtual bool start() override;
   virtual void stop() override;
   virtual bool scan() override;
+  virtual list<Device*> getDevices() override;
   virtual bool connect(Device &device) override;
   virtual void disconnect(Device &device) override;
   virtual bool send(Device &device, unsigned char *buffer, unsigned int size) override;

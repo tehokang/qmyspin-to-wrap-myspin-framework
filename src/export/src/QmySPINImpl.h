@@ -22,6 +22,7 @@ public:
   virtual bool scan() override;
   virtual bool select(Device *device) override;
   virtual bool unselect(Device *device) override;
+  virtual list<Device*> getDevices() override;
 
   virtual void setFrameBuffer(
       PIXEL_FORMAT format, unsigned char *frame_buffer,

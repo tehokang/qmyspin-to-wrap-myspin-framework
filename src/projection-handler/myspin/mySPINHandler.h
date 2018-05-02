@@ -6,6 +6,8 @@
 #include "../ProjectionHandler.h"
 #include <stdio.h>
 #include <mySPIN-Core.h>
+#include <mutex>
+using namespace std;
 
 class MySPINHandler : public ProjectionHandler {
 public:
@@ -61,6 +63,7 @@ protected:
 
   void* __get_myspin_handle__() { return m_myspin_handle; }
   void *m_myspin_handle;
+  mutex m_mtx_for_thread_safe;;
 };
 
 #endif

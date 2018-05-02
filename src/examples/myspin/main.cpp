@@ -30,6 +30,28 @@ public:
     }
   }
 
+  static void getDevices() {
+    list<Device*> devices = myspin->getDevices();
+
+    printf("[%s:%d] \n", __FUNCTION__, __LINE__);
+    int counter = 0;
+    for ( list<Device*>::iterator it=devices.begin();
+        it!=devices.end(); ++it ) {
+      Device *device = (Device*)(*it);
+      printf("[%d] key : %x, product : %s, manufacturer : %s \n",
+          ++counter,
+          device->getKey(),
+          device->getProductName().c_str(),
+          device->getManufacturerName().c_str() );
+
+      if ( device->getProductName().compare("SAMSUNG_Android") == 0 ) {
+        m_android_device = device;
+        printf("!!!\n");
+      }
+    }
+  }
+
+
   virtual void onSelect(Device *device) {
     printf("[%s:%d] \n", __FUNCTION__, __LINE__);
     m_android_device = device;
@@ -86,8 +108,9 @@ int main(int argc, char ** argv) {
   char menu = '\0';
   while ( true ) {
 SHOW_MENU:
-    printf("######################## \n");
-    printf(" s : scan usb devices \n");
+    printf("############################################ \n");
+    printf(" s : scan usb devices (deprecated for USB) \n");
+    printf(" g : get usb devices \n");
     printf(" c : connect \n");
     printf(" d : disconnect \n");
     printf(" f : request frame buffer \n");
@@ -97,7 +120,7 @@ SHOW_MENU:
     printf(" 4 : send search key \n");
     printf(" x : exit \n");
     printf(" ? : show menu\n");
-    printf("######################## \n");
+    printf("############################################ \n");
 INPUT_MENU:
     printf("Select menu : " );
 
@@ -105,6 +128,7 @@ NOTHING_MENU:
     menu = getchar();
     switch ( menu ) {
       case 's' : myspin->scan(); break;
+      case 'g' : QmySPINListenerImpl::getDevices(); break;
       case 'c' : myspin->select(m_android_device); break;
       case 'd' : myspin->unselect(m_android_device); break;
       case 'f' : myspin->requestFrameBuffer(); break;
