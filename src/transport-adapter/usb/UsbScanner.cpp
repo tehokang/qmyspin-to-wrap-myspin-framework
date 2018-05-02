@@ -35,6 +35,20 @@ list<Device*> UsbScanner::getDevices() {
   return m_devices;
 }
 
+void UsbScanner::removeUsbDevice(Device *device) {
+  list<Device*>::iterator it = m_devices.begin();
+
+  while ( it != m_devices.end() ) {
+    UsbDevice *usb = static_cast<UsbDevice*>(*it);
+    if ( usb->getDevice() == ((UsbDevice*)device)->getDevice() ) {
+      m_devices.remove(*it);
+      delete usb;
+      usb = nullptr;
+      return;
+    }
+  }
+}
+
 void UsbScanner::run() {
   ScannerMsg *msg = nullptr;
 
@@ -113,20 +127,6 @@ void UsbScanner::__removeAllUsbDevice__() {
     delete device;
     device = nullptr;
     it = m_devices.erase(it);
-  }
-}
-
-void UsbScanner::removeUsbDevice(Device *device) {
-  list<Device*>::iterator it = m_devices.begin();
-
-  while ( it != m_devices.end() ) {
-    UsbDevice *usb = static_cast<UsbDevice*>(*it);
-    if ( usb->getDevice() == ((UsbDevice*)device)->getDevice() ) {
-      m_devices.remove(*it);
-      delete usb;
-      usb = nullptr;
-      return;
-    }
   }
 }
 
