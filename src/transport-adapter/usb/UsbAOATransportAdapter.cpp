@@ -56,6 +56,7 @@ bool UsbAOATransportAdapter::connect(Device &device) {
 void UsbAOATransportAdapter::disconnect(Device &device) {
   LOG_DEBUG("\n");
   m_connection->disconnect(device);
+  m_scanner->removeUsbDevice(&device);
 }
 
 bool UsbAOATransportAdapter::send(Device &device, unsigned char *buffer, unsigned int size) {

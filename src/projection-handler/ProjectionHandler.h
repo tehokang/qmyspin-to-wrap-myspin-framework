@@ -29,6 +29,8 @@ public:
   typedef enum PRESS_TYPE {
     PRESS,
     RELEASE,
+    MOVE,
+    CANCEL,
   } PRESS_TYPE;
 
   ProjectionHandler();
@@ -49,7 +51,7 @@ public:
   virtual void sendMenuKey(PRESS_TYPE press);
   virtual void sendSearchKey(PRESS_TYPE press);
   virtual void sendCustomKey(PRESS_TYPE press, int key);
-  virtual void sendTouch(unsigned int x, unsigned int y, int finger, int action);
+  virtual void sendTouch(unsigned int x, unsigned int y, int finger, PRESS_TYPE action);
 
   string getAccessoryManufacturerName() { return m_accessory_manufacturer_name; }
   string getAccessoryModelName() { return m_accessory_model_name; }

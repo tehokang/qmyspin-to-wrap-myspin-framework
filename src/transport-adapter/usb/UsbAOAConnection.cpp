@@ -177,6 +177,7 @@ bool UsbAOAConnection::__turn_on_communication__(libusb_device *d, libusb_device
   RETURN_FALSE_IF_TRUE(m_interface == -1);
   RETURN_FALSE_IF_FALSE(libusb_set_configuration(d_h, 1) == LIBUSB_SUCCESS);
   RETURN_FALSE_IF_FALSE(libusb_claim_interface(d_h, m_interface) == LIBUSB_SUCCESS);
+  m_interface = -1;
   return true;
 }
 

@@ -36,6 +36,8 @@ public:
   typedef enum PRESS_TYPE {
     PRESS,
     RELEASE,
+    MOVE,
+    CANCEL,
   } PRESS_TYPE;
 
   virtual bool init() = 0;
@@ -52,7 +54,7 @@ public:
   virtual void sendMenuKey(PRESS_TYPE press) = 0;
   virtual void sendSearchKey(PRESS_TYPE press) = 0;
   virtual void sendCustomKey(PRESS_TYPE press, int key) = 0;
-  virtual void sendTouch(int x, int y, int finger, int action) = 0;
+  virtual void sendTouch(int x, int y, int finger, PRESS_TYPE action) = 0;
   virtual void setFrameBuffer(
       PIXEL_FORMAT format, unsigned char *frame_buffer,
       unsigned int width, unsigned height, unsigned int dpi) = 0;

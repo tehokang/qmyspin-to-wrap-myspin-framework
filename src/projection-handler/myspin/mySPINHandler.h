@@ -25,7 +25,7 @@ public:
   virtual void sendMenuKey(PRESS_TYPE press) override;
   virtual void sendSearchKey(PRESS_TYPE press) override;
   virtual void sendCustomKey(PRESS_TYPE press, int key) override;
-  virtual void sendTouch(unsigned int x, unsigned int y, int finger, int action) override;
+  virtual void sendTouch(unsigned int x, unsigned int y, int finger, PRESS_TYPE action) override;
 
 protected:
   virtual void __request_to_notify_ready__();

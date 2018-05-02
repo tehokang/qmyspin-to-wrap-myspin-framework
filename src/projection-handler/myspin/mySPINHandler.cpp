@@ -152,8 +152,28 @@ void MySPINHandler::sendCustomKey(PRESS_TYPE press, int key) {
    */
 }
 
-void MySPINHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
+void MySPINHandler::sendTouch(unsigned int x, unsigned int y, int finger, PRESS_TYPE action) {
   LOG_DEBUG("\n");
+  TouchEvent touch;
+  touch.xPosition = x;
+  touch.yPosition = y;
+  touch.fingerId = finger;
+
+  switch ( action ) {
+    case PRESS_TYPE::MOVE:
+      touch.event = eTOUCHTYPE_Moved;
+      break;
+    case PRESS_TYPE::PRESS:
+      touch.event = eTOUCHTYPE_Down;
+      break;
+    case PRESS_TYPE::RELEASE:
+      touch.event = eTOUCHTYPE_Up;
+      break;
+    case PRESS_TYPE::CANCEL:
+      touch.event = eTOUCHTYPE_Cancelled;
+      break;
+  }
+  mySpin_TouchEventsTimed(m_myspin_handle, &touch, 1, 0);
 }
 
 void MySPINHandler::requestFrameBuffer() {

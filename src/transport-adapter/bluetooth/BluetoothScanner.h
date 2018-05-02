@@ -13,6 +13,7 @@ public:
   virtual bool scan() override;
   virtual void run() override;
   virtual list<Device*> getDevices() override;
+  virtual void removeUsbDevice(Device *device) override;
 protected:
 
 };

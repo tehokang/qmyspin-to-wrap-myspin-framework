@@ -27,3 +27,7 @@ list<Device*> TcpScanner::getDevices() {
   list<Device*> test;
   return test;
 }
+
+void TcpScanner::removeUsbDevice(Device *device) {
+
+}

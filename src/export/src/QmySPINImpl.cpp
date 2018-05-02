@@ -157,8 +157,24 @@ void QmySPINImpl::sendCustomKey(PRESS_TYPE press, int key) {
       ProjectionHandler::PRESS_TYPE::PRESS : ProjectionHandler::PRESS_TYPE::RELEASE, key);
 }
 
-void QmySPINImpl::sendTouch(int x, int y, int finger, int action) {
+void QmySPINImpl::sendTouch(int x, int y, int finger, PRESS_TYPE action) {
   LOG_DEBUG("\n");
+  ProjectionHandler::PRESS_TYPE type;
+  switch ( action ) {
+    case QmySPIN::PRESS_TYPE::PRESS:
+      type = ProjectionHandler::PRESS_TYPE::PRESS;
+      break;
+    case QmySPIN::PRESS_TYPE::RELEASE:
+      type = ProjectionHandler::PRESS_TYPE::RELEASE;
+      break;
+    case QmySPIN::PRESS_TYPE::MOVE:
+      type = ProjectionHandler::PRESS_TYPE::MOVE;
+      break;
+    case QmySPIN::PRESS_TYPE::CANCEL:
+      type = ProjectionHandler::PRESS_TYPE::CANCEL;
+      break;
+  }
+  m_projection_handler.sendTouch(x, y, finger, type);
 }
 
 bool QmySPINImpl::sendVehicle(string message) {

@@ -41,6 +41,7 @@ public:
   virtual bool init() = 0;
   virtual bool scan() = 0;
   virtual list<Device*> getDevices() = 0;
+  virtual void removeUsbDevice(Device *device) = 0;
 
 protected:
   list<Device*> m_devices;

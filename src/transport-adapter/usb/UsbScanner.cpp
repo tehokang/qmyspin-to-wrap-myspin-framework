@@ -116,6 +116,20 @@ void UsbScanner::__removeAllUsbDevice__() {
   }
 }
 
+void UsbScanner::removeUsbDevice(Device *device) {
+  list<Device*>::iterator it = m_devices.begin();
+
+  while ( it != m_devices.end() ) {
+    UsbDevice *usb = static_cast<UsbDevice*>(*it);
+    if ( usb->getDevice() == ((UsbDevice*)device)->getDevice() ) {
+      m_devices.remove(*it);
+      delete usb;
+      usb = nullptr;
+      return;
+    }
+  }
+}
+
 void UsbScanner::__removeUsbDevice__(libusb_device *device) {
   libusb_device_descriptor desc = {0};
 

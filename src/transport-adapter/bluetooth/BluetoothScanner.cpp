@@ -27,3 +27,7 @@ list<Device*> BluetoothScanner::getDevices() {
   list<Device*> test;
   return test;
 }
+
+void BluetoothScanner::removeUsbDevice(Device *device) {
+
+}

@@ -16,6 +16,7 @@ public:
 
   virtual bool start() override;
   virtual list<Device*> getDevices() override;
+  virtual void removeUsbDevice(Device *device) override;
 protected:
 
   bool __init_usb_hotplug_callback__();

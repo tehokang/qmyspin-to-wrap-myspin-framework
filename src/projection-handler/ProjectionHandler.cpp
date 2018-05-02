@@ -77,7 +77,7 @@ void ProjectionHandler::sendCustomKey(PRESS_TYPE press, int key) {
    */
 }
 
-void ProjectionHandler::sendTouch(unsigned int x, unsigned int y, int finger, int action) {
+void ProjectionHandler::sendTouch(unsigned int x, unsigned int y, int finger, PRESS_TYPE action) {
   /**
    * @warning PLEASE OVERRIDE ON YOUR OWN PROJECT HANDLER
    * DO NOTHING HERE
