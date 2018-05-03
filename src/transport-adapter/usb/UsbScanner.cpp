@@ -10,6 +10,7 @@ UsbScanner::UsbScanner(ScannerListener &listener)
 
 UsbScanner::~UsbScanner() {
   __removeAllUsbDevice__();
+  libusb_exit(nullptr);
 }
 
 bool UsbScanner::init() {

@@ -98,15 +98,19 @@ void QmySPINImpl::setFrameBuffer(
   switch ( format ) {
     case QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_RGB888:
       pixel_format = ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_RGB888;
+      LOG_DEBUG("ePIXELFORMAT_RGB888 \n");
       break;
     case QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_RGB565:
       pixel_format = ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_RGB565;
+      LOG_DEBUG("ePIXELFORMAT_RGB565 \n");
       break;
     case QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_ARGB8888:
       pixel_format = ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_ARGB8888;
+      LOG_DEBUG("ePIXELFORMAT_ARGB8888 \n");
       break;
     case QmySPIN::PIXEL_FORMAT::ePIXELFORMAT_RGBA8888:
       pixel_format = ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_RGBA8888;
+      LOG_DEBUG("ePIXELFORMAT_RGBA8888 \n");
       break;
   }
   m_projection_handler.setFrameBuffer(pixel_format, pixel_bytes, frame_buffer, width, height, dpi);

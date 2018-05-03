@@ -63,7 +63,7 @@ bool MySPINHandler::start(void *connected_device) {
 #endif
 
   mySpin_SetFrameOutputType(m_myspin_handle, eFLAG_FALSE);
-  mySpin_SetPixelFormat(m_myspin_handle, m_pixel_format, m_pixel_bytes, ePIXELENDIANESS_LittleEndian);
+  mySpin_SetPixelFormat(m_myspin_handle, m_pixel_format, m_pixel_bytes, ePIXELENDIANESS_BigEndian);
   mySpin_SetFrameSize(m_myspin_handle, m_width, m_height,
       (((m_width* 10000)/m_dpi)/254), (((m_height*10000)/m_dpi)/254));
 
