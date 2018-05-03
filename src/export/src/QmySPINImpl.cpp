@@ -241,8 +241,8 @@ void QmySPINImpl::onError(int error) {
 }
 
 bool QmySPINImpl::onReqSend(unsigned char *buffer, unsigned int size, void *connection) {
-  LOG_DEBUG("\n");
   Device *device = static_cast<Device*>(connection);
+  LOG_DEBUG("device : %p \n", device);
   return m_usb_aoa_transport_adapter.send(*device, buffer, size);
 }
 

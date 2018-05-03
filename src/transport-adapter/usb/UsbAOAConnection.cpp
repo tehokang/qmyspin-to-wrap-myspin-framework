@@ -5,7 +5,7 @@
 
 UsbAOAConnection::UsbAOAConnection(ConnectionListener &listener)
   : Connection(listener)
-  , m_interface(-1)
+  , m_interface(0xff)
   , m_read_endpoint(-1)
   , m_write_endpoint(-1) {
 
@@ -35,13 +35,11 @@ bool UsbAOAConnection::send(Device &device, unsigned char *buffer, unsigned int 
   int ret = libusb_bulk_transfer(usb->getDeviceHandle(), m_write_endpoint,
           (uint8_t*) buffer, size, &sizeout, 1000);
 
-  if ( ret != LIBUSB_SUCCESS && ret != LIBUSB_ERROR_TIMEOUT ) {
-      // LOG_WARNING("Error when writing to usb: %s\n", libusb_error_name(ret));
-      return false;
-  } else if (ret == LIBUSB_ERROR_TIMEOUT) {
-      // LOG_ERROR("Timeout on usb write\n");
+  if ( ret != LIBUSB_SUCCESS ) {
+      LOG_WARNING("Error when writing to usb: %s\n", libusb_error_name(ret));
       return false;
   }
+  LOG_DEBUG("sent ? %s \n", size == (unsigned int)sizeout ? "good" : "bad");
   return true;
 }
 
@@ -53,9 +51,8 @@ unsigned int UsbAOAConnection::receive(Device &device, unsigned char *buffer, un
   int ret = libusb_bulk_transfer(usb->getDeviceHandle(), m_read_endpoint,
       buffer, size, &sizeout, 1000);
 
-  if ( ret != LIBUSB_SUCCESS && ret != LIBUSB_ERROR_TIMEOUT )
-  {
-      // LOG_ERROR("Error when reading from usb: %s\n", libusb_error_name(ret));
+  if ( ret != LIBUSB_SUCCESS && ret != LIBUSB_ERROR_TIMEOUT ) {
+      LOG_ERROR("Error when reading from usb: %s\n", libusb_error_name(ret));
   }
 
   __logging_buffer__(buffer, sizeout);
@@ -91,7 +88,6 @@ void UsbAOAConnection::__disconnect__(UsbDevice *device) {
     __turn_off_communication__(device->getDevice(), device->getDeviceHandle());
     libusb_close(device->getDeviceHandle());
   }
-
   m_listener.onDisconnect(device);
 }
 
@@ -167,17 +163,17 @@ int UsbAOAConnection::__parse_interfaces__(libusb_device* dev) {
 }
 
 void UsbAOAConnection::__turn_off_communication__(libusb_device *d, libusb_device_handle *d_h) {
-  LOG_DEBUG("\n");
-  RETURN_IF_TRUE(m_interface == -1);
+  LOG_DEBUG("m_interface : %d \n", m_interface);
+  RETURN_IF_TRUE(m_interface == 0xff);
   libusb_release_interface(d_h, m_interface);
+  m_interface = 0xff;
 }
 
 bool UsbAOAConnection::__turn_on_communication__(libusb_device *d, libusb_device_handle *d_h) {
   LOG_DEBUG("\n");
-  RETURN_FALSE_IF_TRUE(m_interface == -1);
+  RETURN_FALSE_IF_TRUE(m_interface == 0xff);
   RETURN_FALSE_IF_FALSE(libusb_set_configuration(d_h, 1) == LIBUSB_SUCCESS);
   RETURN_FALSE_IF_FALSE(libusb_claim_interface(d_h, m_interface) == LIBUSB_SUCCESS);
-  m_interface = -1;
   return true;
 }
 

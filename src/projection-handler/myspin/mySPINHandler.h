@@ -58,7 +58,7 @@ protected:
     static void __on_vehicle_data_request__(
         void* context, Flag request, UInt8 length, UInt32* keyList);
     static void __on_launcher_state_changed__(void *context, LauncherState value);
-
+    static void __on_phone_call_status_changed__(void *context, Flag callStarts);
   };
 
   void* __get_myspin_handle__() { return m_myspin_handle; }

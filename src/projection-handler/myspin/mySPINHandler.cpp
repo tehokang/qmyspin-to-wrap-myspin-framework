@@ -51,19 +51,27 @@ bool MySPINHandler::start(void *connected_device) {
   mySpin_SetAppTransitionStatusCallback(m_myspin_handle,
       MySPINHandler::CoreCallBack::__on_app_transition_status__);
   mySpin_SetAppInactiveCallback(m_myspin_handle, MySPINHandler::CoreCallBack::__on_app_inactive__);
+  mySpin_SetPhonecallStatusCallback(m_myspin_handle,
+      MySPINHandler::CoreCallBack::__on_phone_call_status_changed__);
   mySpin_SetCustomDataStringCallback(m_myspin_handle,
       MySPINHandler::CoreCallBack::__on_custom_data_string__);
   mySpin_SetCustomDataIntCallback(m_myspin_handle,
       MySPINHandler::CoreCallBack::__on_custom_data_int__);
   mySpin_SetLauncherStateCallback(m_myspin_handle,
       MySPINHandler::CoreCallBack::__on_launcher_state_changed__);
+  mySpin_SetSupportedCustomData(m_myspin_handle, 0, nullptr);
+  mySpin_VoiceSupportInfo(m_myspin_handle,
+      eVOICESUPPORT_NotSupported, eVOICESUPPORTCONSTRAINT_NoConstraint);
+  mySpin_EnablePingWatchdog(m_myspin_handle, eFLAG_TRUE, 1);
+  mySpin_SetWaitForJoinTimeout(m_myspin_handle, 5);
+
 #if 0
   mySpin_SetVehicleDataRequestCallback(m_myspin_handle,
       MySPINHandler::CoreCallBack::__on_vehicle_data_request__);
 #endif
 
   mySpin_SetFrameOutputType(m_myspin_handle, eFLAG_FALSE);
-  mySpin_SetPixelFormat(m_myspin_handle, m_pixel_format, m_pixel_bytes, ePIXELENDIANESS_BigEndian);
+  mySpin_SetPixelFormat(m_myspin_handle, m_pixel_format, m_pixel_bytes, ePIXELENDIANESS_LittleEndian);
   mySpin_SetFrameSize(m_myspin_handle, m_width, m_height,
       (((m_width* 10000)/m_dpi)/254), (((m_height*10000)/m_dpi)/254));
 
@@ -73,9 +81,10 @@ bool MySPINHandler::start(void *connected_device) {
   keys[2] = eCLIENTCUSTOMDATAKEYCODE_KnobTickCW;
   keys[3] = eCLIENTCUSTOMDATAKEYCODE_KnobTickCCW;
   mySpin_SetCustomKeysSupported(m_myspin_handle, 4, keys);
-  mySpin_SetClientCapabilities(m_myspin_handle, eCLIENTCAPABILITIES_All, eFLAG_TRUE);
+  mySpin_SetClientCapabilities(m_myspin_handle, eCLIENTCAPABILITIES_RequiresFocusControl, eFLAG_TRUE);
+  mySpin_SetClientCapabilities(m_myspin_handle, eCLIENTCAPABILITIES_PartialFrameUpdate, eFLAG_TRUE);
   mySpin_SetISO639LanguageCode(m_myspin_handle, (UInt8*)"eng");
-  mySpin_SetInitialisationTimeout(m_myspin_handle, 10);
+  mySpin_SetInitialisationTimeout(m_myspin_handle, 0);
 
   Int32 retErr;
   if ( mySpin_StartMainThreadEx(m_myspin_handle, &retErr) == eFLAG_FALSE ) {
@@ -153,7 +162,9 @@ void MySPINHandler::sendCustomKey(PRESS_TYPE press, int key) {
 }
 
 void MySPINHandler::sendTouch(unsigned int x, unsigned int y, int finger, PRESS_TYPE action) {
-  LOG_DEBUG("\n");
+  // LOG_DEBUG("\n");
+  RETURN_IF_NULL(m_myspin_handle);
+
   TouchEvent touch;
   touch.xPosition = x;
   touch.yPosition = y;
@@ -178,7 +189,8 @@ void MySPINHandler::sendTouch(unsigned int x, unsigned int y, int finger, PRESS_
 
 void MySPINHandler::requestFrameBuffer() {
   LOG_DEBUG("\n");
-  mySpin_FramebufferUpdateRequest(__get_myspin_handle__(),
+  RETURN_IF_NULL(m_myspin_handle);
+  mySpin_FramebufferUpdateRequest(m_myspin_handle,
       (UInt16)(0 & 0xFFFF), (UInt16)(0 & 0xFFFF),
       (UInt16)(getWidth() & 0xFFFF), (UInt16)(getHeight() & 0xFFFF), eFLAG_TRUE);
 }
@@ -249,6 +261,14 @@ void MySPINHandler::CoreCallBack::__on_protocol__(void* context, eProtocolState 
 	switch(newState) {
     case ePROTOCOL_STATE_RUN:
       LOG_DEBUG("ePROTOCOL_STATE_RUN \n");
+      {
+        UInt8 numberOfKeys = 0;
+        Softkey *softkeys;
+        mySpin_GetAvailableSoftkeys(handler->__get_myspin_handle__(), &numberOfKeys, &softkeys);
+        for ( int i=0; i<numberOfKeys; i++ ) {
+          LOG_DEBUG("Support Soft Key[%d] : %d \n", i, softkeys[i]);
+        }
+      }
       handler->__request_to_notify_ready__();
       mySpin_FramebufferUpdateRequest(handler->__get_myspin_handle__(),
           (UInt16)(0 & 0xFFFF), (UInt16)(0 & 0xFFFF),
@@ -305,6 +325,44 @@ void MySPINHandler::CoreCallBack::__on_frame_update_end__(void* context) {
 
 void MySPINHandler::CoreCallBack::__on_error__(void* context, eErrorCode error) {
 	LOG_ERROR("error callback with code %d\n", error);
+  switch ( error ) {
+    case eERRORCODE_CONNECTION_TIMEOUT:
+      LOG_ERROR("eERRORCODE_CONNECTION_TIMEOUT\n");
+      break;
+    case eERRORCODE_CONNECTION_EOF_ZERO:
+      LOG_ERROR("eERRORCODE_CONNECTION_EOF_ZERO\n");
+      break;
+    case eERRORCODE_PROTOCOL_STOP:
+      LOG_ERROR("eERRORCODE_PROTOCOL_STOP\n");
+      break;
+    case eERRORCODE_Z_DATA_ERROR:
+      LOG_ERROR("eERRORCODE_Z_DATA_ERROR\n");
+      break;
+    case eERRORCODE_MEM_ALLOC:
+      LOG_ERROR("eERRORCODE_MEM_ALLOC\n");
+      break;
+    case eERRORCODE_FRAME_SIZE_MISMATCH:
+      LOG_ERROR("eERRORCODE_FRAME_SIZE_MISMATCH\n");
+      break;
+    case eERRORCODE_INITIALIZATION_TIMEOUT:
+      LOG_ERROR("eERRORCODE_INITIALIZATION_TIMEOUT\n");
+      break;
+    case eERRORCODE_RECEIVER_START_FAILED:
+      LOG_ERROR("eERRORCODE_RECEIVER_START_FAILED\n");
+      break;
+    case eERRORCODE_MESSAGE_PROCESSING_FAILED:
+      LOG_ERROR("eERRORCODE_MESSAGE_PROCESSING_FAILED\n");
+      break;
+    case eERRORCODE_JPEG_ERROR:
+      LOG_ERROR("eERRORCODE_JPEG_ERROR\n");
+      break;
+    case eERRORCODE_INITIALIZATION_ABORT:
+      LOG_ERROR("eERRORCODE_INITIALIZATION_ABORT\n");
+      break;
+    case eERRORCODE_NONE:
+    default:
+      break;
+  }
 }
 
 void MySPINHandler::CoreCallBack::__on_app_transition_status__(void* context, Flag transitionStarts) {
@@ -348,4 +406,10 @@ void MySPINHandler::CoreCallBack::__on_launcher_state_changed__(
       LOG_DEBUG("eLAUNCHERSTATE_VisibleOther\n");
       break;
   }
+}
+
+void MySPINHandler::CoreCallBack::__on_phone_call_status_changed__(
+    void *context, Flag callStarts) {
+  LOG_DEBUG("callStarts : %d \n", callStarts);
+
 }
