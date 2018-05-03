@@ -224,9 +224,7 @@ void MySPINHandler::__request_to_notify_frameupdate_ended__() {
   RETURN_IF_FALSE(m_listener);
   m_listener->onFrameUpdateEnded();
 #if 1
-  mySpin_FramebufferUpdateRequest(__get_myspin_handle__(),
-      (UInt16)(0 & 0xFFFF), (UInt16)(0 & 0xFFFF),
-      (UInt16)(getWidth() & 0xFFFF), (UInt16)(getHeight() & 0xFFFF), eFLAG_TRUE);
+  requestFrameBuffer();
 #endif
 }
 
@@ -270,10 +268,7 @@ void MySPINHandler::CoreCallBack::__on_protocol__(void* context, eProtocolState 
         }
       }
       handler->__request_to_notify_ready__();
-      mySpin_FramebufferUpdateRequest(handler->__get_myspin_handle__(),
-          (UInt16)(0 & 0xFFFF), (UInt16)(0 & 0xFFFF),
-          (UInt16)(handler->getWidth() & 0xFFFF), (UInt16)(handler->getHeight() & 0xFFFF),
-          eFLAG_TRUE);
+      handler->requestFrameBuffer();
       break;
     case ePROTOCOL_STATE_STOP:
       LOG_DEBUG("ePROTOCOL_STATE_STOP \n");
