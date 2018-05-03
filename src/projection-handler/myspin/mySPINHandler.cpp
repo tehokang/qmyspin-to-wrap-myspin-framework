@@ -244,13 +244,13 @@ void* MySPINHandler::CoreCallBack::__on_send__(
   return nullptr;
 }
 
-unsigned int MySPINHandler::CoreCallBack::__on_receive__(
+size_t MySPINHandler::CoreCallBack::__on_receive__(
   void* context, UInt8* buffer, size_t bufferSize, void* connection) {
   auto *handler = static_cast<MySPINHandler*>(context);
   if ( handler ) {
     return handler->__request_to_receive__(buffer, bufferSize, connection);
   }
-  return 0;
+  return -1;
 }
 
 void MySPINHandler::CoreCallBack::__on_protocol__(void* context, eProtocolState newState) {
