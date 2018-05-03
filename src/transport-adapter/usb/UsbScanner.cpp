@@ -36,8 +36,8 @@ list<Device*> UsbScanner::getDevices() {
 }
 
 void UsbScanner::removeUsbDevice(Device *device) {
+  LOG_DEBUG("\n");
   list<Device*>::iterator it = m_devices.begin();
-
   while ( it != m_devices.end() ) {
     UsbDevice *usb = static_cast<UsbDevice*>(*it);
     if ( usb->getDevice() == ((UsbDevice*)device)->getDevice() ) {
@@ -46,6 +46,7 @@ void UsbScanner::removeUsbDevice(Device *device) {
       usb = nullptr;
       return;
     }
+    it++;
   }
 }
 
