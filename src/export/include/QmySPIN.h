@@ -56,7 +56,7 @@ public:
   virtual void sendCustomKey(PRESS_TYPE press, int key) = 0;
   virtual void sendTouch(int x, int y, int finger, PRESS_TYPE action) = 0;
   virtual void setFrameBuffer(
-      PIXEL_FORMAT format, unsigned char *frame_buffer,
+      PIXEL_FORMAT format, unsigned char pixel_bytes, unsigned char *frame_buffer,
       unsigned int width, unsigned height, unsigned int dpi) = 0;
 
   virtual bool sendVehicle(string message) = 0;

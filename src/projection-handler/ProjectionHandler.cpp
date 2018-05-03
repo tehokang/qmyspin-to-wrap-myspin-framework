@@ -1,13 +1,13 @@
 #include "ProjectionHandler.h"
 
 ProjectionHandler::ProjectionHandler()
-  : m_connected_device(nullptr)
-  , m_accessory_manufacturer_name("Please assign in your projection handler, not here")
+  : m_accessory_manufacturer_name("Please assign in your projection handler, not here")
   , m_accessory_model_name("Please assign in your projection handler, not here")
   , m_accessory_description("Please assign in your projection handler, not here")
   , m_accessory_version("Please assign in your projection handler, not here")
   , m_accessory_uri("Please assign in your projection handler, not here")
-  , m_accessory_serial_number("Please assign in your projection handler, not here") {
+  , m_accessory_serial_number("Please assign in your projection handler, not here")
+  , m_connected_device(nullptr) {
   /**
    * @note NOTHING TO DO
    */
@@ -85,9 +85,11 @@ void ProjectionHandler::sendTouch(unsigned int x, unsigned int y, int finger, PR
 }
 
 void ProjectionHandler::setFrameBuffer(
-    ProjectionHandler::PIXEL_FORMAT format, unsigned char *frame_buffer,
+    ProjectionHandler::PIXEL_FORMAT format, unsigned char pixel_bytes,
+    unsigned char *frame_buffer,
     unsigned int width, unsigned height, unsigned int dpi) {
   m_pixel_format = format;
+  m_pixel_bytes = pixel_bytes;
   m_frame_buffer = frame_buffer;
   m_width = width;
   m_height = height;

@@ -94,11 +94,12 @@ int main(int argc, char ** argv) {
   unsigned int width = 800;
   unsigned int height = 480;
   unsigned int dpi = 96;
-  unsigned char frame_buffer[width*height*4];
-  QmySPIN::PIXEL_FORMAT pixel_format = QmySPIN::ePIXELFORMAT_RGBA8888;
+  unsigned char frame_buffer[width*height*10];
+  QmySPIN::PIXEL_FORMAT pixel_format = QmySPIN::ePIXELFORMAT_ARGB8888;
+  unsigned char pixel_bytes = 4;
 
   myspin->setLogLevel(true, true, true, true);
-  myspin->setFrameBuffer(pixel_format, frame_buffer, width, height, dpi);
+  myspin->setFrameBuffer(pixel_format, pixel_bytes, frame_buffer, width, height, dpi);
   myspin->addEventListener(new QmySPINListenerImpl());
 
   if ( !myspin->init() ||  !myspin->start() ) {

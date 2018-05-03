@@ -42,7 +42,8 @@ public:
 
   void setEventListener(ProjectionListener *listener);
   virtual void setFrameBuffer(
-      ProjectionHandler::PIXEL_FORMAT format, unsigned char *frame_buffer,
+      ProjectionHandler::PIXEL_FORMAT format, unsigned char pixel_bytes,
+      unsigned char *frame_buffer,
       unsigned int width, unsigned height, unsigned int dpi);
 
   virtual void requestFrameBuffer();
@@ -70,6 +71,7 @@ protected:
   ProjectionListener* m_listener;
 
   PIXEL_FORMAT m_pixel_format;
+  unsigned char m_pixel_bytes;
   unsigned char *m_frame_buffer;
   unsigned int m_width;
   unsigned int m_height;

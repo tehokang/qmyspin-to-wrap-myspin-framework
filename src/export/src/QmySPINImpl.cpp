@@ -89,7 +89,7 @@ list<Device*> QmySPINImpl::getDevices() {
 }
 
 void QmySPINImpl::setFrameBuffer(
-    PIXEL_FORMAT format, unsigned char *frame_buffer,
+    PIXEL_FORMAT format, unsigned char pixel_bytes, unsigned char *frame_buffer,
     unsigned int width, unsigned height, unsigned int dpi) {
   LOG_DEBUG("\n");
   ProjectionHandler::PIXEL_FORMAT pixel_format =
@@ -109,7 +109,7 @@ void QmySPINImpl::setFrameBuffer(
       pixel_format = ProjectionHandler::PIXEL_FORMAT::ePIXELFORMAT_RGBA8888;
       break;
   }
-  m_projection_handler.setFrameBuffer(pixel_format, frame_buffer, width, height, dpi);
+  m_projection_handler.setFrameBuffer(pixel_format, pixel_bytes, frame_buffer, width, height, dpi);
   /**
    * @todo Do we need to pass frame buffer into PPCoordinator
    */

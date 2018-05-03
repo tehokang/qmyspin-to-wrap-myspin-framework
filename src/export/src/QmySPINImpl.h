@@ -25,7 +25,7 @@ public:
   virtual list<Device*> getDevices() override;
 
   virtual void setFrameBuffer(
-      PIXEL_FORMAT format, unsigned char *frame_buffer,
+      PIXEL_FORMAT format, unsigned char pixel_bytes, unsigned char *frame_buffer,
       unsigned int width, unsigned height, unsigned int dpi) override;
 
   virtual void requestFrameBuffer() override;
