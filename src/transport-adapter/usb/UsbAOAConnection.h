@@ -51,17 +51,12 @@ protected:
 
   virtual bool __connect__(UsbDevice *device);
   virtual void __disconnect__(UsbDevice *device);
-  virtual bool __is_google_accessory__(libusb_device *d);
-  virtual bool __is_support_aoap_mode__(libusb_device* d, libusb_device_handle *d_h);
-  virtual void __request_turn_on_aoap_mode__(libusb_device* d, libusb_device_handle *d_h);
-  virtual bool __turn_on_communication__(libusb_device *d, libusb_device_handle *d_h);
-  virtual void __turn_off_communication__(libusb_device *d, libusb_device_handle *d_h);
-  virtual int __parse_interfaces__(libusb_device* dev);
-
-  uint8_t m_configure;
-  uint8_t m_interface;
-  uint8_t m_read_endpoint;
-  uint8_t m_write_endpoint;
+  virtual bool __is_google_accessory__(UsbDevice *device);
+  virtual bool __is_support_aoap_mode__(UsbDevice *device);
+  virtual void __request_turn_on_aoap_mode__(UsbDevice *device);
+  virtual bool __turn_on_communication__(UsbDevice *device);
+  virtual void __turn_off_communication__(UsbDevice *device);
+  virtual int __parse_interfaces__(UsbDevice *device);
 
 };
 
