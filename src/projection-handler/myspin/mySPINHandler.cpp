@@ -64,7 +64,9 @@ bool MySPINHandler::start(void *connected_device) {
       eVOICESUPPORT_NotSupported, eVOICESUPPORTCONSTRAINT_NoConstraint);
   mySpin_EnablePingWatchdog(m_myspin_handle, eFLAG_TRUE, 1);
   mySpin_SetWaitForJoinTimeout(m_myspin_handle, 5);
-
+#if 1
+  mySpin_SetDumpProperties(m_myspin_handle, eFLAG_TRUE, eFLAG_TRUE, 1, (char*)"myspin-core.dump");
+#endif
 #if 0
   mySpin_SetVehicleDataRequestCallback(m_myspin_handle,
       MySPINHandler::CoreCallBack::__on_vehicle_data_request__);

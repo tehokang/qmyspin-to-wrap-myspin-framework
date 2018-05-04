@@ -58,6 +58,7 @@ protected:
   virtual void __turn_off_communication__(libusb_device *d, libusb_device_handle *d_h);
   virtual int __parse_interfaces__(libusb_device* dev);
 
+  uint8_t m_configure;
   uint8_t m_interface;
   uint8_t m_read_endpoint;
   uint8_t m_write_endpoint;

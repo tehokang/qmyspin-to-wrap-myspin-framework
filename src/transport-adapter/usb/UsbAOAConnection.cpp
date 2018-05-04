@@ -113,6 +113,7 @@ int UsbAOAConnection::__parse_interfaces__(libusb_device* dev) {
     int ret = LIBUSB_ERROR_OTHER;
     libusb_config_descriptor* config_descriptor;
     libusb_get_active_config_descriptor(dev, &config_descriptor);
+    m_configure = config_descriptor->bConfigurationValue;
 
     LOG_DEBUG("number of interfaces : %d \n", config_descriptor->bNumInterfaces);
 
@@ -172,7 +173,7 @@ void UsbAOAConnection::__turn_off_communication__(libusb_device *d, libusb_devic
 bool UsbAOAConnection::__turn_on_communication__(libusb_device *d, libusb_device_handle *d_h) {
   LOG_DEBUG("\n");
   RETURN_FALSE_IF_TRUE(m_interface == 0xff);
-  RETURN_FALSE_IF_FALSE(libusb_set_configuration(d_h, 1) == LIBUSB_SUCCESS);
+  RETURN_FALSE_IF_FALSE(libusb_set_configuration(d_h, m_configure) == LIBUSB_SUCCESS);
   RETURN_FALSE_IF_FALSE(libusb_claim_interface(d_h, m_interface) == LIBUSB_SUCCESS);
   return true;
 }
