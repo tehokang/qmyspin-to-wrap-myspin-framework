@@ -62,7 +62,9 @@ bool MySPINHandler::start(void *connected_device) {
   mySpin_SetSupportedCustomData(m_myspin_handle, 0, nullptr);
   mySpin_VoiceSupportInfo(m_myspin_handle,
       eVOICESUPPORT_NotSupported, eVOICESUPPORTCONSTRAINT_NoConstraint);
+#if 0
   mySpin_EnablePingWatchdog(m_myspin_handle, eFLAG_TRUE, 1);
+#endif
   mySpin_SetWaitForJoinTimeout(m_myspin_handle, 5);
 #if 1
   mySpin_SetDumpProperties(m_myspin_handle, eFLAG_TRUE, eFLAG_TRUE, 1, (char*)"myspin-core.dump");
