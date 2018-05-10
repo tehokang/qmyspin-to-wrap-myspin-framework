@@ -19,7 +19,7 @@ void MySPINLabel::mousePressEvent(QMouseEvent *ev)
   emit Mouse_Pressed();
 }
 
-void MySPINLabel::mouseReleaseEvent()
+void MySPINLabel::mouseReleaseEvent(QMouseEvent *ev)
 {
   emit Mouse_Released();
 }

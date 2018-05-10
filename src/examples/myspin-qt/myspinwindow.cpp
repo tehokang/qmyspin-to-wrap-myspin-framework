@@ -94,8 +94,6 @@ mySPINWindow::mySPINWindow(QWidget *parent) :
 {
     ui->setupUi(this);
 
-
-
     connect(ui->drawLabel, SIGNAL(Mouse_Pressed()), this, SLOT(on_Mouse_pressed()));
     connect(ui->drawLabel, SIGNAL(Mouse_Move()), this, SLOT(on_Mouse_move()));
     connect(ui->drawLabel, SIGNAL(Mouse_Released()), this, SLOT(on_Mouse_released()));

@@ -14,7 +14,7 @@ public:
 
   void mouseMoveEvent(QMouseEvent *ev);
   void mousePressEvent(QMouseEvent *ev);
-  void mouseReleaseEvent();
+  void mouseReleaseEvent(QMouseEvent *ev);
 
   int x;
   int y;
