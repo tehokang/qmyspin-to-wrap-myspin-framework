@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/tehokang/qmyspin.svg?token=tukzKYpBaAzTzcPeGfcg&branch=master)](https://travis-ci.com/tehokang/qmyspin)
 
 # QmySPIN Tutorial
 ## 1 .What QmySPIN is
