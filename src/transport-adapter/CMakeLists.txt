@@ -15,7 +15,7 @@ set(INCPATHS
     ${CMAKE_SOURCE_DIR}/src/export/include
     ${CMAKE_SOURCE_DIR}/src/utility
     ${CMAKE_SOURCE_DIR}/src/transport-adapter
-    ${LIBUSB_INC}
+    ${LIBUSB_LIB}/../include/
 )
 
 include_directories(
